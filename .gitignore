@@ -1,2 +1,12 @@
 /.idea
 /*.yaml
+
+#忽略各模块的配置文件
+/app/api/client/etc/*.yaml
+/app/api/store/etc/*.yaml
+/app/api/rpc/etc/*.yaml
+
+/app/store/rpc/etc/*.yaml
+
+/app/user/rpc/etc/*.yaml
+#忽略各模块的配置文件END
