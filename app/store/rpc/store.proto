@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package store;
+option go_package="./store";
+
+message Response{
+  string errMsg = 1;
+  string code = 2;
+  string message = 3;
+}
+
+/*
+  * 申请创建店铺
+ */
+message CreateStoreReq{
+  string UserId = 1;
+  string Name = 2;
+  string Desc = 3;
+}
+message CreateStoreRes{
+  Response result = 1;
+  string userId = 2;
+  string token = 3;
+}
+/*
+  * 成为门店会员
+ */
+message JoinStoreMemberReq{
+  string StoreId = 1;
+  string UserId = 2;
+}
+message JoinStoreMemberRes{
+  Response result = 1;
+  string userId = 2;
+  string token = 3;
+}
+service StoreService{
+  rpc CreateStore(CreateStoreReq) returns (CreateStoreRes);
+  rpc JoinStoreMember(JoinStoreMemberReq) returns (JoinStoreMemberRes);
+}

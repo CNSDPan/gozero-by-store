@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package user;
+option go_package="./user";
+
+message Response{
+  string errMsg = 1;
+  string code = 2;
+  string message = 3;
+}
+
+/*
+  * 注册业务
+ */
+message RegisterReq{
+  string Mobile = 1;
+  string Name = 2;
+  string Password = 3;
+}
+message RegisterRes{
+  Response result = 1;
+  string userId = 2;
+  string token = 3;
+}
+service RegisterService{
+  rpc Register(RegisterReq) returns (RegisterRes);
+}

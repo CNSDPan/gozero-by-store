@@ -1,0 +1,127 @@
+syntax = "v1"
+
+info (
+	title:   "api.client" // TODO: add title
+	desc:    "用户|顾客服务接口" // TODO: add description
+	version: "v1.0.0"
+)
+
+type Token {
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+}
+
+type (
+	RegisterReq {
+		Mobile   string `json:"mobile,omitempty"`
+		Name     string `json:"name,omitempty"`
+		Password string `json:"password,omitempty"`
+	}
+	RegisterRes {
+		UserId string `json:"userId"`
+		Token  string `json:"token"`
+	}
+)
+
+type (
+	LoginReq {
+		Mobile   string `json:"mobile,omitempty"`
+		Password string `json:"password,omitempty"`
+	}
+	LoginRes {
+		UserId string `json:"userId"`
+		Token  string `json:"token"`
+	}
+	UserInfoReq {
+		UserId string `json:"userId,omitempty"`
+	}
+	UserInfoRes {
+		UserId string `json:"userId"`
+		Name   string `json:"name"`
+		Avatar string `json:"avatar"`
+	}
+)
+
+type (
+	StoreListRes {
+		Total   int64       `json:"total"`
+		Page    int64       `json:"page"`
+		Limit   int64       `json:"limit"`
+		Offset  int64       `json:"offset"`
+		Current int64       `json:"current"`
+		Rows    interface{} `json:"rows"`
+	}
+	StoreInfoReq {
+		StoreId string `json:"storeId,omitempty"`
+	}
+	StoreInfoRes {
+		StoreId  string `json:"storeId"`
+		Name     string `json:"name"`
+		Avatar   string `json:"avatar"`
+		Contacts int64  `json:"contacts"`
+	}
+	StoreUsersReq {
+		StoreId string `json:"storeId,omitempty"`
+		Limit   int64  `json:"limit"`
+		Offset  int64  `json:"offset"`
+	}
+	StoreUsersRes {
+		Total   int64       `json:"total"`
+		Page    int64       `json:"page"`
+		Limit   int64       `json:"limit"`
+		Offset  int64       `json:"offset"`
+		Current int64       `json:"current"`
+		Rows    interface{} `json:"rows"`
+	}
+)
+
+@server (
+	prefix:     /v1/client
+	group:      user
+	timeout:    3s
+	middleware: XHeaderMiddleware
+)
+service client {
+	@doc "注册"
+	@handler UserRegister
+	post /user/register (RegisterReq) returns (RegisterRes)
+
+	@doc "登录"
+	@handler UserLogin
+	post /user/login (LoginReq) returns (LoginRes)
+}
+
+@server (
+	jwt:        Auth
+	prefix:     /v1/client
+	group:      user
+	timeout:    3s
+	middleware: XHeaderMiddleware
+)
+service client {
+	@doc "用户信息"
+	@handler UserInfo
+	post /user/info (UserInfoReq) returns (UserInfoRes)
+}
+
+@server (
+	jwt:        Auth
+	prefix:     /v1/client
+	group:      store
+	timeout:    3s
+	middleware: XHeaderMiddleware
+)
+service client {
+	@doc "店铺列表"
+	@handler StoreList
+	post /store/list returns (StoreListRes)
+
+	@doc "店铺信息"
+	@handler StoreInfo
+	post /store/info (StoreInfoReq) returns (StoreInfoRes)
+
+	@doc "店铺会员列表"
+	@handler StoreUserList
+	post /store/user/list (StoreUsersReq) returns (StoreUsersRes)
+}
+

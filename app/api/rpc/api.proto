@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package api;
+option go_package="./api";
+
+message Response{
+  string errMsg = 1;
+  string code = 2;
+  string message = 3;
+}
+
+/*
+  * 注册业务
+ */
+message RegisterReq{
+  string Mobile = 1;
+  string Name = 2;
+  string Password = 3;
+}
+message RegisterRes{
+  Response result = 1;
+  string userId = 2;
+  string token = 3;
+}
+service RegisterService{
+  rpc Register(RegisterReq) returns (RegisterRes);
+}
+
+/*
+  * 用户业务
+ */
+message UserLoginReq{
+  string Mobile = 1;
+  string Password = 2;
+}
+message UserLoginRes{
+  Response result = 1;
+  string userId = 2;
+  string token = 3;
+}
+message UserInfoReq{
+  string userId = 1;
+}
+message UserInfoRes{
+  Response result = 1;
+  string userId = 2;
+  string name = 3;
+  string avatar = 4;
+}
+message UserItem{
+  string userId = 1;
+  string name = 2;
+  string avatar = 3;
+}
+message UsersMap {
+  int64 total = 1;
+  int64 page = 2;
+  int64 limit = 3;
+  int64 offset = 4;
+  int64 current = 5;
+  map<string,UserItem> rows = 6;
+}
+
+service UserService{
+  rpc Login(UserLoginReq) returns (UserLoginRes);
+  rpc Info(UserInfoReq) returns (UserLoginRes);
+}
+
+/*
+  * 店铺业务
+ */
+message StoreItem{
+  string storeId = 1;
+  string name = 2;
+  string avatar = 3;
+  string desc = 4;
+}
+message StoresMap{
+  int64 total = 2;
+  int64 page = 3;
+  int64 limit = 4;
+  int64 offset = 5;
+  int64 current = 6;
+  map<string,StoreItem> rows = 7;
+}
+message StoreListReq{}
+message StoreListRes{
+  Response result = 1;
+  StoresMap data = 2;
+}
+message StoreInfoReq{
+  string storeId = 1;
+}
+message StoreInfoRes {
+  Response result = 1;
+  string storeId = 2;
+  string name = 3;
+  string avatar = 4;
+  string contacts = 5;
+}
+message StoreUsersReq {
+  string storeId = 1;
+  string limit = 2;
+  string offset = 3;
+}
+message StoreUsersRes {
+  Response result = 1;
+  UsersMap data = 2;
+}
+service StoreService{
+  rpc List(StoreListReq) returns (StoreListRes);
+  rpc Info(StoreInfoReq) returns (StoreInfoRes);
+  rpc UserList(StoreUsersReq) returns (StoreUsersRes);
+}

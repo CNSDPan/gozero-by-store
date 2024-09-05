@@ -1,0 +1,23 @@
+Name: store.api.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+    - 192.168.33.10:20001
+    - 192.168.33.10:20003
+  Key: store.api.rpc
+# apiRPC类型服务ID范围 152
+ServiceId: "152" #客户端服务ID
+ServiceName: "API.RPC.服务:"
+# 业务Redis连接
+BizRedis:
+  Addr: "192.168.33.10:6379"
+  Password:
+  DB: 10
+# 缓存Redis连接
+CacheRedis:
+  Addr: "192.168.33.10:6379"
+  Password:
+  DB: 11
+# mysql配置，只有用读权限
+SqlSource:
+  Addr: "root:root@tcp(192.168.33.10:3307)/store?loc=Local&parseTime=True&charset=utf8mb4"
