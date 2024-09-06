@@ -22,7 +22,7 @@ message RegisterRes{
   string userId = 2;
   string token = 3;
 }
-service RegisterService{
+service ApiRegister{
   rpc Register(RegisterReq) returns (RegisterRes);
 }
 
@@ -61,7 +61,7 @@ message UsersMap {
   map<string,UserItem> rows = 6;
 }
 
-service UserService{
+service ApiUser{
   rpc Login(UserLoginReq) returns (UserLoginRes);
   rpc Info(UserInfoReq) returns (UserLoginRes);
 }
@@ -107,7 +107,7 @@ message StoreUsersRes {
   Response result = 1;
   UsersMap data = 2;
 }
-service StoreService{
+service ApiStore{
   rpc List(StoreListReq) returns (StoreListRes);
   rpc Info(StoreInfoReq) returns (StoreInfoRes);
   rpc UserList(StoreUsersReq) returns (StoreUsersRes);

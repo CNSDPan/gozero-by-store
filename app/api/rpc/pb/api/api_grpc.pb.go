@@ -19,126 +19,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_Login_FullMethodName = "/api.UserService/Login"
-	UserService_Info_FullMethodName  = "/api.UserService/Info"
+	ApiRegister_Register_FullMethodName = "/api.ApiRegister/Register"
 )
 
-// UserServiceClient is the client API for UserService service.
+// ApiRegisterClient is the client API for ApiRegister service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserServiceClient interface {
-	Login(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginRes, error)
-	Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error)
+type ApiRegisterClient interface {
+	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterRes, error)
 }
 
-type userServiceClient struct {
+type apiRegisterClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
-	return &userServiceClient{cc}
+func NewApiRegisterClient(cc grpc.ClientConnInterface) ApiRegisterClient {
+	return &apiRegisterClient{cc}
 }
 
-func (c *userServiceClient) Login(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginRes, error) {
-	out := new(UserLoginRes)
-	err := c.cc.Invoke(ctx, UserService_Login_FullMethodName, in, out, opts...)
+func (c *apiRegisterClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterRes, error) {
+	out := new(RegisterRes)
+	err := c.cc.Invoke(ctx, ApiRegister_Register_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userServiceClient) Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error) {
-	out := new(UserLoginRes)
-	err := c.cc.Invoke(ctx, UserService_Info_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// UserServiceServer is the server API for UserService service.
-// All implementations must embed UnimplementedUserServiceServer
+// ApiRegisterServer is the server API for ApiRegister service.
+// All implementations must embed UnimplementedApiRegisterServer
 // for forward compatibility
-type UserServiceServer interface {
-	Login(context.Context, *UserLoginReq) (*UserLoginRes, error)
-	Info(context.Context, *UserInfoReq) (*UserLoginRes, error)
-	mustEmbedUnimplementedUserServiceServer()
+type ApiRegisterServer interface {
+	Register(context.Context, *RegisterReq) (*RegisterRes, error)
+	mustEmbedUnimplementedApiRegisterServer()
 }
 
-// UnimplementedUserServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedUserServiceServer struct {
+// UnimplementedApiRegisterServer must be embedded to have forward compatible implementations.
+type UnimplementedApiRegisterServer struct {
 }
 
-func (UnimplementedUserServiceServer) Login(context.Context, *UserLoginReq) (*UserLoginRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+func (UnimplementedApiRegisterServer) Register(context.Context, *RegisterReq) (*RegisterRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedUserServiceServer) Info(context.Context, *UserInfoReq) (*UserLoginRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
-}
-func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
+func (UnimplementedApiRegisterServer) mustEmbedUnimplementedApiRegisterServer() {}
 
-// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserServiceServer will
+// UnsafeApiRegisterServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ApiRegisterServer will
 // result in compilation errors.
-type UnsafeUserServiceServer interface {
-	mustEmbedUnimplementedUserServiceServer()
+type UnsafeApiRegisterServer interface {
+	mustEmbedUnimplementedApiRegisterServer()
 }
 
-func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
-	s.RegisterService(&UserService_ServiceDesc, srv)
+func RegisterApiRegisterServer(s grpc.ServiceRegistrar, srv ApiRegisterServer) {
+	s.RegisterService(&ApiRegister_ServiceDesc, srv)
 }
 
-func _UserService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserLoginReq)
+func _ApiRegister_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).Login(ctx, in)
+		return srv.(ApiRegisterServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_Login_FullMethodName,
+		FullMethod: ApiRegister_Register_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).Login(ctx, req.(*UserLoginReq))
+		return srv.(ApiRegisterServer).Register(ctx, req.(*RegisterReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserInfoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).Info(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_Info_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).Info(ctx, req.(*UserInfoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
+// ApiRegister_ServiceDesc is the grpc.ServiceDesc for ApiRegister service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.UserService",
-	HandlerType: (*UserServiceServer)(nil),
+var ApiRegister_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.ApiRegister",
+	HandlerType: (*ApiRegisterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Login",
-			Handler:    _UserService_Login_Handler,
-		},
-		{
-			MethodName: "Info",
-			Handler:    _UserService_Info_Handler,
+			MethodName: "Register",
+			Handler:    _ApiRegister_Register_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -146,163 +109,290 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	StoreService_List_FullMethodName     = "/api.StoreService/List"
-	StoreService_Info_FullMethodName     = "/api.StoreService/Info"
-	StoreService_UserList_FullMethodName = "/api.StoreService/UserList"
+	ApiUser_Login_FullMethodName = "/api.ApiUser/Login"
+	ApiUser_Info_FullMethodName  = "/api.ApiUser/Info"
 )
 
-// StoreServiceClient is the client API for StoreService service.
+// ApiUserClient is the client API for ApiUser service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type StoreServiceClient interface {
+type ApiUserClient interface {
+	Login(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginRes, error)
+	Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error)
+}
+
+type apiUserClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewApiUserClient(cc grpc.ClientConnInterface) ApiUserClient {
+	return &apiUserClient{cc}
+}
+
+func (c *apiUserClient) Login(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginRes, error) {
+	out := new(UserLoginRes)
+	err := c.cc.Invoke(ctx, ApiUser_Login_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiUserClient) Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error) {
+	out := new(UserLoginRes)
+	err := c.cc.Invoke(ctx, ApiUser_Info_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ApiUserServer is the server API for ApiUser service.
+// All implementations must embed UnimplementedApiUserServer
+// for forward compatibility
+type ApiUserServer interface {
+	Login(context.Context, *UserLoginReq) (*UserLoginRes, error)
+	Info(context.Context, *UserInfoReq) (*UserLoginRes, error)
+	mustEmbedUnimplementedApiUserServer()
+}
+
+// UnimplementedApiUserServer must be embedded to have forward compatible implementations.
+type UnimplementedApiUserServer struct {
+}
+
+func (UnimplementedApiUserServer) Login(context.Context, *UserLoginReq) (*UserLoginRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedApiUserServer) Info(context.Context, *UserInfoReq) (*UserLoginRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
+}
+func (UnimplementedApiUserServer) mustEmbedUnimplementedApiUserServer() {}
+
+// UnsafeApiUserServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ApiUserServer will
+// result in compilation errors.
+type UnsafeApiUserServer interface {
+	mustEmbedUnimplementedApiUserServer()
+}
+
+func RegisterApiUserServer(s grpc.ServiceRegistrar, srv ApiUserServer) {
+	s.RegisterService(&ApiUser_ServiceDesc, srv)
+}
+
+func _ApiUser_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLoginReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiUserServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiUser_Login_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiUserServer).Login(ctx, req.(*UserLoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApiUser_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiUserServer).Info(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiUser_Info_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiUserServer).Info(ctx, req.(*UserInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ApiUser_ServiceDesc is the grpc.ServiceDesc for ApiUser service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ApiUser_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.ApiUser",
+	HandlerType: (*ApiUserServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Login",
+			Handler:    _ApiUser_Login_Handler,
+		},
+		{
+			MethodName: "Info",
+			Handler:    _ApiUser_Info_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "api.proto",
+}
+
+const (
+	ApiStore_List_FullMethodName     = "/api.ApiStore/List"
+	ApiStore_Info_FullMethodName     = "/api.ApiStore/Info"
+	ApiStore_UserList_FullMethodName = "/api.ApiStore/UserList"
+)
+
+// ApiStoreClient is the client API for ApiStore service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ApiStoreClient interface {
 	List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error)
 	Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
 	UserList(ctx context.Context, in *StoreUsersReq, opts ...grpc.CallOption) (*StoreUsersRes, error)
 }
 
-type storeServiceClient struct {
+type apiStoreClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewStoreServiceClient(cc grpc.ClientConnInterface) StoreServiceClient {
-	return &storeServiceClient{cc}
+func NewApiStoreClient(cc grpc.ClientConnInterface) ApiStoreClient {
+	return &apiStoreClient{cc}
 }
 
-func (c *storeServiceClient) List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error) {
+func (c *apiStoreClient) List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error) {
 	out := new(StoreListRes)
-	err := c.cc.Invoke(ctx, StoreService_List_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ApiStore_List_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *storeServiceClient) Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error) {
+func (c *apiStoreClient) Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error) {
 	out := new(StoreInfoRes)
-	err := c.cc.Invoke(ctx, StoreService_Info_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ApiStore_Info_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *storeServiceClient) UserList(ctx context.Context, in *StoreUsersReq, opts ...grpc.CallOption) (*StoreUsersRes, error) {
+func (c *apiStoreClient) UserList(ctx context.Context, in *StoreUsersReq, opts ...grpc.CallOption) (*StoreUsersRes, error) {
 	out := new(StoreUsersRes)
-	err := c.cc.Invoke(ctx, StoreService_UserList_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ApiStore_UserList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// StoreServiceServer is the server API for StoreService service.
-// All implementations must embed UnimplementedStoreServiceServer
+// ApiStoreServer is the server API for ApiStore service.
+// All implementations must embed UnimplementedApiStoreServer
 // for forward compatibility
-type StoreServiceServer interface {
+type ApiStoreServer interface {
 	List(context.Context, *StoreListReq) (*StoreListRes, error)
 	Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error)
 	UserList(context.Context, *StoreUsersReq) (*StoreUsersRes, error)
-	mustEmbedUnimplementedStoreServiceServer()
+	mustEmbedUnimplementedApiStoreServer()
 }
 
-// UnimplementedStoreServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedStoreServiceServer struct {
+// UnimplementedApiStoreServer must be embedded to have forward compatible implementations.
+type UnimplementedApiStoreServer struct {
 }
 
-func (UnimplementedStoreServiceServer) List(context.Context, *StoreListReq) (*StoreListRes, error) {
+func (UnimplementedApiStoreServer) List(context.Context, *StoreListReq) (*StoreListRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedStoreServiceServer) Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error) {
+func (UnimplementedApiStoreServer) Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
 }
-func (UnimplementedStoreServiceServer) UserList(context.Context, *StoreUsersReq) (*StoreUsersRes, error) {
+func (UnimplementedApiStoreServer) UserList(context.Context, *StoreUsersReq) (*StoreUsersRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserList not implemented")
 }
-func (UnimplementedStoreServiceServer) mustEmbedUnimplementedStoreServiceServer() {}
+func (UnimplementedApiStoreServer) mustEmbedUnimplementedApiStoreServer() {}
 
-// UnsafeStoreServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to StoreServiceServer will
+// UnsafeApiStoreServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ApiStoreServer will
 // result in compilation errors.
-type UnsafeStoreServiceServer interface {
-	mustEmbedUnimplementedStoreServiceServer()
+type UnsafeApiStoreServer interface {
+	mustEmbedUnimplementedApiStoreServer()
 }
 
-func RegisterStoreServiceServer(s grpc.ServiceRegistrar, srv StoreServiceServer) {
-	s.RegisterService(&StoreService_ServiceDesc, srv)
+func RegisterApiStoreServer(s grpc.ServiceRegistrar, srv ApiStoreServer) {
+	s.RegisterService(&ApiStore_ServiceDesc, srv)
 }
 
-func _StoreService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApiStore_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoreListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServiceServer).List(ctx, in)
+		return srv.(ApiStoreServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StoreService_List_FullMethodName,
+		FullMethod: ApiStore_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServiceServer).List(ctx, req.(*StoreListReq))
+		return srv.(ApiStoreServer).List(ctx, req.(*StoreListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StoreService_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApiStore_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoreInfoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServiceServer).Info(ctx, in)
+		return srv.(ApiStoreServer).Info(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StoreService_Info_FullMethodName,
+		FullMethod: ApiStore_Info_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServiceServer).Info(ctx, req.(*StoreInfoReq))
+		return srv.(ApiStoreServer).Info(ctx, req.(*StoreInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StoreService_UserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApiStore_UserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoreUsersReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServiceServer).UserList(ctx, in)
+		return srv.(ApiStoreServer).UserList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StoreService_UserList_FullMethodName,
+		FullMethod: ApiStore_UserList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServiceServer).UserList(ctx, req.(*StoreUsersReq))
+		return srv.(ApiStoreServer).UserList(ctx, req.(*StoreUsersReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// StoreService_ServiceDesc is the grpc.ServiceDesc for StoreService service.
+// ApiStore_ServiceDesc is the grpc.ServiceDesc for ApiStore service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var StoreService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.StoreService",
-	HandlerType: (*StoreServiceServer)(nil),
+var ApiStore_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.ApiStore",
+	HandlerType: (*ApiStoreServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "List",
-			Handler:    _StoreService_List_Handler,
+			Handler:    _ApiStore_List_Handler,
 		},
 		{
 			MethodName: "Info",
-			Handler:    _StoreService_Info_Handler,
+			Handler:    _ApiStore_Info_Handler,
 		},
 		{
 			MethodName: "UserList",
-			Handler:    _StoreService_UserList_Handler,
+			Handler:    _ApiStore_UserList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

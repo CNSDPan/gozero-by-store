@@ -2,7 +2,7 @@
 package types
 
 type LoginReq struct {
-	Mobile   string `json:"mobile,omitempty"`
+	Mobile   int64  `json:"mobile,omitempty,string"`
 	Password string `json:"password,omitempty"`
 }
 
@@ -12,7 +12,7 @@ type LoginRes struct {
 }
 
 type RegisterReq struct {
-	Mobile   string `json:"mobile,omitempty"`
+	Mobile   int64  `json:"mobile,omitempty,string"`
 	Name     string `json:"name,omitempty"`
 	Password string `json:"password,omitempty"`
 }
@@ -22,8 +22,14 @@ type RegisterRes struct {
 	Token  string `json:"token"`
 }
 
+type Response struct {
+	ErrMsg  string `json:"errMsg`
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
 type StoreInfoReq struct {
-	StoreId string `json:"storeId,omitempty"`
+	StoreId int64 `json:"storeId,omitempty,string"`
 }
 
 type StoreInfoRes struct {
@@ -43,9 +49,9 @@ type StoreListRes struct {
 }
 
 type StoreUsersReq struct {
-	StoreId string `json:"storeId,omitempty"`
-	Limit   int64  `json:"limit"`
-	Offset  int64  `json:"offset"`
+	StoreId int64 `json:"storeId,omitempty,string"`
+	Limit   int64 `json:"limit"`
+	Offset  int64 `json:"offset"`
 }
 
 type StoreUsersRes struct {
@@ -63,7 +69,7 @@ type Token struct {
 }
 
 type UserInfoReq struct {
-	UserId string `json:"userId,omitempty"`
+	UserId int64 `json:"userId,omitempty,string"`
 }
 
 type UserInfoRes struct {

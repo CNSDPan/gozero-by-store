@@ -1,4 +1,4 @@
-package storeservicelogic
+package apistorelogic
 
 import (
 	"context"
@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type ListLogic struct {
+type UserListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
-	return &ListLogic{
+func NewUserListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserListLogic {
+	return &UserListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *ListLogic) List(in *api.StoreListReq) (*api.StoreListRes, error) {
+func (l *UserListLogic) UserList(in *api.StoreUsersReq) (*api.StoreUsersRes, error) {
 	// todo: add your logic here and delete this line
 
-	return &api.StoreListRes{}, nil
+	return &api.StoreUsersRes{}, nil
 }

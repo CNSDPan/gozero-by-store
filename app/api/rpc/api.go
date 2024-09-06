@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	"store/app/api/rpc/internal/config"
-	storeserviceServer "store/app/api/rpc/internal/server/storeservice"
-	userserviceServer "store/app/api/rpc/internal/server/userservice"
+	apiregisterServer "store/app/api/rpc/internal/server/apiregister"
+	apistoreServer "store/app/api/rpc/internal/server/apistore"
+	apiuserServer "store/app/api/rpc/internal/server/apiuser"
 	"store/app/api/rpc/internal/svc"
 	"store/app/api/rpc/pb/api"
 
@@ -27,8 +28,9 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		api.RegisterUserServiceServer(grpcServer, userserviceServer.NewUserServiceServer(ctx))
-		api.RegisterStoreServiceServer(grpcServer, storeserviceServer.NewStoreServiceServer(ctx))
+		api.RegisterApiRegisterServer(grpcServer, apiregisterServer.NewApiRegisterServer(ctx))
+		api.RegisterApiUserServer(grpcServer, apiuserServer.NewApiUserServer(ctx))
+		api.RegisterApiStoreServer(grpcServer, apistoreServer.NewApiStoreServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

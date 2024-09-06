@@ -1,4 +1,4 @@
-package storeservicelogic
+package apiregisterlogic
 
 import (
 	"context"
@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type InfoLogic struct {
+type RegisterLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *InfoLogic {
-	return &InfoLogic{
+func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
+	return &RegisterLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *InfoLogic) Info(in *api.StoreInfoReq) (*api.StoreInfoRes, error) {
+func (l *RegisterLogic) Register(in *api.RegisterReq) (*api.RegisterRes, error) {
 	// todo: add your logic here and delete this line
 
-	return &api.StoreInfoRes{}, nil
+	return &api.RegisterRes{}, nil
 }
