@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"store/app/api/rpc/internal/config"
-	apiregisterServer "store/app/api/rpc/internal/server/apiregister"
 	apistoreServer "store/app/api/rpc/internal/server/apistore"
 	apiuserServer "store/app/api/rpc/internal/server/apiuser"
 	"store/app/api/rpc/internal/svc"
@@ -28,7 +27,6 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		api.RegisterApiRegisterServer(grpcServer, apiregisterServer.NewApiRegisterServer(ctx))
 		api.RegisterApiUserServer(grpcServer, apiuserServer.NewApiUserServer(ctx))
 		api.RegisterApiStoreServer(grpcServer, apistoreServer.NewApiStoreServer(ctx))
 

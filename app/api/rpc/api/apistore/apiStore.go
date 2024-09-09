@@ -13,8 +13,6 @@ import (
 )
 
 type (
-	RegisterReq   = api.RegisterReq
-	RegisterRes   = api.RegisterRes
 	Response      = api.Response
 	StoreInfoReq  = api.StoreInfoReq
 	StoreInfoRes  = api.StoreInfoRes

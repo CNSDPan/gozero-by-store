@@ -3,6 +3,8 @@ package util
 import (
 	"fmt"
 	"github.com/shopspring/decimal"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net"
 )
 
@@ -57,4 +59,32 @@ func GetServerIP() (string, error) {
 	ipAddress := conn.LocalAddr().(*net.UDPAddr)
 	ip := fmt.Sprintf("%s", ipAddress.IP.String())
 	return ip, nil
+}
+
+// HashPassword
+// @Desc：用户密码加密
+// @param：password
+// @return：string
+// @return：error
+func HashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedPassword), nil
+}
+
+// CheckPasswordHash
+// @Desc：用户密码验证
+// @param：password
+// @param：hash
+// @return：bool
+// CheckPasswordHash compares a hashed password with a plain text password
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	if err != nil {
+		log.Println("Password comparison failed:", err)
+		return false
+	}
+	return true
 }

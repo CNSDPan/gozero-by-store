@@ -5,7 +5,6 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"store/app/api/client/internal/config"
 	"store/app/api/client/internal/middleware"
-	"store/app/api/rpc/api/apiregister"
 	"store/app/api/rpc/api/apistore"
 	"store/app/api/rpc/api/apiuser"
 	"store/app/user/rpc/user/userRegister"
@@ -18,9 +17,8 @@ type ServiceContext struct {
 	UserRpcCl         UserRpc
 }
 type ApiRpc struct {
-	Register apiregister.ApiRegister
-	Store    apistore.ApiStore
-	User     apiuser.ApiUser
+	Store apistore.ApiStore
+	User  apiuser.ApiUser
 }
 type UserRpc struct {
 	Register userregister.UserRegister
@@ -33,9 +31,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:            c,
 		XHeaderMiddleware: middleware.NewXHeaderMiddleware().Handle,
 		ApiRpcCl: ApiRpc{
-			Register: apiregister.NewApiRegister(apiRPC),
-			Store:    apistore.NewApiStore(apiRPC),
-			User:     apiuser.NewApiUser(apiRPC),
+			Store: apistore.NewApiStore(apiRPC),
+			User:  apiuser.NewApiUser(apiRPC),
 		},
 		UserRpcCl: UserRpc{
 			Register: userregister.NewUserRegister(userRPC),

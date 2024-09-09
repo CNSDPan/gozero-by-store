@@ -6,6 +6,7 @@ import (
 	"store/app/user/model/sqls"
 	"store/pkg/biz"
 	"store/pkg/jwt"
+	"store/pkg/util"
 	"store/pkg/xcode"
 	"time"
 
@@ -36,8 +37,8 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 	)
 	code := "200"
 	info := sqls.UsersApi{}
-
 	token := ""
+	password := ""
 	res = &user.RegisterRes{
 		Result: &user.Response{},
 	}
@@ -60,21 +61,30 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 		code = xcode.USER_CREAT_FAIL
 		goto Result
 	}
+	password, e = util.HashPassword(in.Password)
+	if e != nil {
+		code = xcode.USER_CREAT_FAIL
+		goto Result
+	}
 	userId = l.svcCtx.Node.Generate().Int64()
+	token, e = jwt.GetJwtToken(in.JwtSecret, time.Now().Unix(), in.Seconds, map[string]interface{}{
+		"userId": userId,
+	})
+	if e != nil {
+		code = xcode.USER_CREAT_FAIL
+		goto Result
+	}
 	e = l.svcCtx.UserModel.CreatUser(sqls.Users{
 		UserID:   userId,
 		Mobile:   int32(in.Mobile),
 		Name:     in.Name,
-		Password: in.Password,
+		Password: password,
 		Avatar:   "",
 	})
 	if e != nil {
 		code = xcode.USER_CREAT_FAIL
 		goto Result
 	}
-	token, e = jwt.GetJwtToken(in.JwtSecret, time.Now().Unix(), in.Seconds, map[string]interface{}{
-		"userId": userId,
-	})
 	e = l.svcCtx.CacheConnApi.User.SetInfo(userId, map[string]interface{}{
 		"userId": userId,
 		"mobile": int32(in.Mobile),

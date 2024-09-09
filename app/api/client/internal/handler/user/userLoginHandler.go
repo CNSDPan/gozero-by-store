@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"store/pkg/xcode"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"store/app/api/client/internal/logic/user"
@@ -13,16 +14,32 @@ func UserLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.LoginReq
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			code, msg := xcode.GetCodeMessage(xcode.RESPONSE_NOT_FOUND)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  err.Error(),
+				Code:    code,
+				Message: msg,
+				Data:    map[string]interface{}{},
+			})
 			return
 		}
 
 		l := user.NewUserLoginLogic(r.Context(), svcCtx)
-		resp, err := l.UserLogin(&req)
+		res, resp, err := l.UserLogin(&req)
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  res.ErrMsg,
+				Code:    res.Code,
+				Message: res.Message,
+				Data:    map[string]interface{}{},
+			})
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  res.ErrMsg,
+				Code:    res.Code,
+				Message: res.Message,
+				Data:    resp,
+			})
 		}
 	}
 }

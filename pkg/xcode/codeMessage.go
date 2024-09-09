@@ -15,6 +15,7 @@ var codeMessage = map[string]string{
 	RESPONSE_SIGN_FAIL:         "无效sign",
 
 	/***************************************/
+	USER_LOGIN_FAIL:         "用户账号密码不正确",
 	USER_LOGINED:            "用户已登录",
 	USER_INFO_FAIL:          "用户信息不存在",
 	USER_ID_FAIL:            "用户ID不存在|错误",

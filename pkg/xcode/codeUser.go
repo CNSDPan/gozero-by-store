@@ -2,6 +2,7 @@ package xcode
 
 // Desc：user模块code
 const (
+	USER_LOGIN_FAIL         = "10199"
 	USER_LOGINED            = "10100"
 	USER_INFO_FAIL          = "10101"
 	USER_ID_FAIL            = "10102"
