@@ -13,13 +13,15 @@ message Response{
   * 注册业务
  */
 message RegisterReq{
-  int64 Mobile = 1;
-  string Name = 2;
-  string Password = 3;
+  int64 mobile = 1;
+  string name = 2;
+  string password = 3;
+  string jwtSecret = 4;
+  int64 seconds = 5;
 }
 message RegisterRes{
   Response result = 1;
-  string userId = 2;
+  int64 userId = 2;
   string token = 3;
 }
 service UserRegister{

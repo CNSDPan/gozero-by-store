@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"regexp"
 	"store/app/user/rpc/pb/user"
 	"store/pkg/xcode"
 
@@ -26,16 +29,23 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 }
 
 func (l *UserRegisterLogic) UserRegister(req *types.RegisterReq) (res *types.Response, resp *types.RegisterRes, err error) {
-	var (
-		register = &user.RegisterRes{}
-	)
+	code := ""
+	register := &user.RegisterRes{}
+	res = &types.Response{}
+	resp = &types.RegisterRes{}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	defer func() {
 		if err != nil {
-			res.ErrMsg = err.Error()
-			res.Code, res.Message = xcode.GetCodeMessage(xcode.RESPONSE_FAIL)
+			if code == "" {
+				l.Logger.Errorf("%s 系统错误 fail:%v", l.svcCtx.Config.ServiceName, err.Error())
+				res.Code, res.Message = xcode.GetCodeMessage(xcode.RESPONSE_FAIL)
+			} else {
+				res.ErrMsg = err.Error()
+				res.Code, res.Message = xcode.GetCodeMessage(code)
+			}
 		} else {
+			l.Logger.Errorf("输出内容：%+v --- UserId:%v", register, register.UserId)
 			res.ErrMsg = register.Result.ErrMsg
 			res.Code = register.Result.Code
 			res.Message = register.Result.Message
@@ -43,10 +53,18 @@ func (l *UserRegisterLogic) UserRegister(req *types.RegisterReq) (res *types.Res
 			resp.Token = register.Token
 		}
 	}()
+	if !regexp.MustCompile("^1[345789]{1}\\d{9}$").MatchString(fmt.Sprintf("%d", req.Mobile)) {
+		code = xcode.USER_CREAT_MOBILE_RULER
+		err = errors.New("mobile is invalid")
+		return
+	}
 	register, err = l.svcCtx.UserRpcCl.Register.Register(ctx, &user.RegisterReq{
-		Mobile:   req.Mobile,
-		Name:     req.Name,
-		Password: req.Password,
+		Mobile:    req.Mobile,
+		Name:      req.Name,
+		Password:  req.Password,
+		JwtSecret: l.svcCtx.Config.Auth.AccessSecret,
+		Seconds:   l.svcCtx.Config.Auth.AccessExpire,
 	})
+
 	return
 }

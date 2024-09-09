@@ -24,7 +24,7 @@ type (
 		Password string `json:"password,omitempty"`
 	}
 	RegisterRes {
-		UserId string `json:"userId"`
+		UserId int64  `json:"userId,string"`
 		Token  string `json:"token"`
 	}
 )
@@ -35,14 +35,14 @@ type (
 		Password string `json:"password,omitempty"`
 	}
 	LoginRes {
-		UserId string `json:"userId"`
+		UserId int64  `json:"userId,string"`
 		Token  string `json:"token"`
 	}
 	UserInfoReq {
 		UserId int64 `json:"userId,omitempty,string"`
 	}
 	UserInfoRes {
-		UserId string `json:"userId"`
+		UserId int64  `json:"userId,string"`
 		Name   string `json:"name"`
 		Avatar string `json:"avatar"`
 	}
@@ -61,7 +61,7 @@ type (
 		StoreId int64 `json:"storeId,omitempty,string"`
 	}
 	StoreInfoRes {
-		StoreId  string `json:"storeId"`
+		StoreId  int64  `json:"storeId,string"`
 		Name     string `json:"name"`
 		Avatar   string `json:"avatar"`
 		Contacts int64  `json:"contacts"`

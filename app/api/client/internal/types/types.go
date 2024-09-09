@@ -7,7 +7,7 @@ type LoginReq struct {
 }
 
 type LoginRes struct {
-	UserId string `json:"userId"`
+	UserId int64  `json:"userId,string"`
 	Token  string `json:"token"`
 }
 
@@ -18,7 +18,7 @@ type RegisterReq struct {
 }
 
 type RegisterRes struct {
-	UserId string `json:"userId"`
+	UserId int64  `json:"userId,string"`
 	Token  string `json:"token"`
 }
 
@@ -33,7 +33,7 @@ type StoreInfoReq struct {
 }
 
 type StoreInfoRes struct {
-	StoreId  string `json:"storeId"`
+	StoreId  int64  `json:"storeId,string"`
 	Name     string `json:"name"`
 	Avatar   string `json:"avatar"`
 	Contacts int64  `json:"contacts"`
@@ -73,7 +73,7 @@ type UserInfoReq struct {
 }
 
 type UserInfoRes struct {
-	UserId string `json:"userId"`
+	UserId int64  `json:"userId,string"`
 	Name   string `json:"name"`
 	Avatar string `json:"avatar"`
 }

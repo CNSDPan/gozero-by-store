@@ -15,15 +15,16 @@ var codeMessage = map[string]string{
 	RESPONSE_SIGN_FAIL:         "无效sign",
 
 	/***************************************/
-	USER_LOGINED:           "用户已登录",
-	USER_INFO_FAIL:         "用户信息不存在",
-	USER_ID_FAIL:           "用户ID不存在|错误",
-	USER_TOKEN_FAIL:        "用户Token不存在|错误",
-	USER_TOKEN_CREATE:      "用户Token创建错误",
-	USER_TOKEN_GET:         "用户Token获取错误",
-	USER_TOKEN_DEL:         "用户Token删除错误",
-	USER_CREAT_FAIL:        "用户创建失败",
-	USER_CREAT_MOBILE_FAIL: "用户手机号已创建",
+	USER_LOGINED:            "用户已登录",
+	USER_INFO_FAIL:          "用户信息不存在",
+	USER_ID_FAIL:            "用户ID不存在|错误",
+	USER_TOKEN_FAIL:         "用户Token不存在|错误",
+	USER_TOKEN_CREATE:       "用户Token创建错误",
+	USER_TOKEN_GET:          "用户Token获取错误",
+	USER_TOKEN_DEL:          "用户Token删除错误",
+	USER_CREAT_FAIL:         "用户创建失败",
+	USER_CREAT_MOBILE_FAIL:  "用户手机号已创建",
+	USER_CREAT_MOBILE_RULER: "手机号无效",
 }
 
 // GetCodeMessage

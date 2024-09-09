@@ -19,19 +19,19 @@ var UserStatusName = map[int8]string{
 // Users 用户表
 type Users struct {
 	ID        uint32    `gorm:"primaryKey;column:id" json:"-"`
-	UserID    int64     `gorm:"column:user_id" json:"userId"`       // 用户IID
-	Status    int8      `gorm:"column:status" json:"status"`        // 1-启用、2-禁用
-	Mobile    int       `gorm:"column:mobile" json:"mobile"`        // 手机号
-	Password  string    `gorm:"column:password" json:"password"`    // 密码
-	Name      string    `gorm:"column:name" json:"name"`            // 昵称
-	Avatar    string    `gorm:"column:avatar" json:"avatar"`        // 头像
-	CreatedAt time.Time `gorm:"column:created_at" json:"createdAt"` // 创建时间
-	UpdatedAt time.Time `gorm:"column:updated_at" json:"updatedAt"` // 更新时间
+	UserID    int64     `gorm:"column:user_id" json:"userId"`          // 用户IID
+	Status    int8      `gorm:"column:status;default:1" json:"status"` // 1-启用、2-禁用
+	Mobile    int32     `gorm:"column:mobile" json:"mobile"`           // 手机号
+	Password  string    `gorm:"column:password" json:"password"`       // 密码
+	Name      string    `gorm:"column:name" json:"name"`               // 昵称
+	Avatar    string    `gorm:"column:avatar" json:"avatar"`           // 头像
+	CreatedAt time.Time `gorm:"column:created_at" json:"createdAt"`    // 创建时间
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"updatedAt"`    // 更新时间
 }
 type UsersApi struct {
 	UserID   int64  `gorm:"column:user_id" json:"userId,string"` // 用户IID
 	Status   int8   `gorm:"column:status" json:"status"`         // 1-启用、2-禁用
-	Mobile   int    `gorm:"column:mobile" json:"mobile,string"`  // 手机号
+	Mobile   int32  `gorm:"column:mobile" json:"mobile,string"`  // 手机号
 	Password string `gorm:"column:password" json:"password"`     // 密码
 	Name     string `gorm:"column:name" json:"name"`             // 昵称
 	Avatar   string `gorm:"column:avatar" json:"avatar"`         // 头像
@@ -123,5 +123,23 @@ func (obj *UsersMgr) SelectPageApi(page IPage, opts ...Option) (resultPage IPage
 	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Find(&results).Error
 
 	resultPage.SetRecords(results)
+	return
+}
+
+// GetFromUserID 通过user_id获取内容 用户IID
+func (obj *UsersMgr) GetFromUserID(userID int64) (result UsersApi, err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`user_id` = ?", userID).Find(&result).Error
+	return
+}
+
+// GetBatchFromUserID 批量查找 用户IID
+func (obj *UsersMgr) GetBatchFromUserID(userIDs []int64) (results []*UsersApi, err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`user_id` IN (?)", userIDs).Find(&results).Error
+	return
+}
+
+// GetFromMobile 通过mobil获取内容
+func (obj *UsersMgr) GetFromMobile(mobile int32) (result UsersApi, err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`mobile` = ?", mobile).Find(&result).Error
 	return
 }
