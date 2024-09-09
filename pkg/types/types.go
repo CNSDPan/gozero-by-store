@@ -25,10 +25,10 @@ type SqlSourceConf struct {
 type BizRedisConf struct {
 	Addr     string `json:",omitempty"`
 	Password string `json:",omitempty"`
-	DB       int8   `json:",omitempty"`
+	DB       int    `json:",omitempty"`
 }
 type CacheRedisConf struct {
 	Addr     string `json:",omitempty"`
 	Password string `json:",omitempty"`
-	DB       int8   `json:",omitempty"`
+	DB       int    `json:",omitempty"`
 }

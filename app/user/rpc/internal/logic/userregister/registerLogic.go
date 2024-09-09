@@ -2,7 +2,9 @@ package userregisterlogic
 
 import (
 	"context"
+	"fmt"
 	"store/app/user/model/sqls"
+	"store/pkg/biz"
 	"store/pkg/jwt"
 	"store/pkg/xcode"
 	"time"
@@ -73,7 +75,22 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 	token, e = jwt.GetJwtToken(in.JwtSecret, time.Now().Unix(), in.Seconds, map[string]interface{}{
 		"userId": userId,
 	})
-
+	e = l.svcCtx.CacheConnApi.User.SetInfo(userId, map[string]interface{}{
+		"userId": userId,
+		"mobile": int32(in.Mobile),
+		"name":   in.Name,
+		"avatar": "",
+	}, in.Seconds)
+	if e != nil {
+		code = xcode.USER_SET_INFOCACHE_FAIL
+		l.Logger.Errorf("%s 存储用户缓存 fail:%s", l.svcCtx.Config.ServiceName, e.Error())
+		goto Result
+	}
+	e = l.svcCtx.BizConn.Set(l.ctx, fmt.Sprintf("%s%s", biz.Biz_Key_USER_TOKEN, token), userId, time.Duration(in.Seconds)*time.Second).Err()
+	if e != nil {
+		code = xcode.USER_SET_INFOCACHE_FAIL
+		l.Logger.Errorf("%s 存储用户token fail:%s", l.svcCtx.Config.ServiceName, e.Error())
+	}
 Result:
 	return res, nil
 }

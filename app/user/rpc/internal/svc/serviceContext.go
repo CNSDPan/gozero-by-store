@@ -1,18 +1,24 @@
 package svc
 
 import (
+	"context"
 	"fmt"
 	"github.com/bwmarrin/snowflake"
+	"github.com/redis/go-redis/v9"
 	"store/app/user/model/sqls"
 	"store/app/user/rpc/internal/config"
+	"store/pkg/cache"
 	"store/pkg/inital"
 	"strconv"
 )
 
 type ServiceContext struct {
-	Config    config.Config
-	Node      *snowflake.Node
-	UserModel *sqls.UsersMgr
+	Config       config.Config
+	Node         *snowflake.Node
+	CacheConn    *redis.Client
+	CacheConnApi *cache.CacheItem
+	BizConn      *redis.Client
+	UserModel    *sqls.UsersMgr
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -26,9 +32,15 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(fmt.Sprintf("%s node节点池初始化失败 fail:%s", c.ServiceName, err.Error()))
 	}
 
+	cacheConn := inital.NewCacheRedisConn(c.CacheRedis, c.Name)
+	bizConn := inital.NewBizRedisConn(c.BizRedis, c.Name)
+
 	return &ServiceContext{
-		Config:    c,
-		Node:      node,
-		UserModel: sqls.NewUserMgr(inital.NewSqlDB(c.Sql, "userModel")),
+		Config:       c,
+		Node:         node,
+		CacheConn:    cacheConn,
+		CacheConnApi: cache.NewCache(cache.NewCacheUser(context.Background(), cacheConn), cache.NewCacheStore(context.Background(), cacheConn)),
+		BizConn:      bizConn,
+		UserModel:    sqls.NewUserMgr(inital.NewSqlDB(c.Sql, "userModel")),
 	}
 }

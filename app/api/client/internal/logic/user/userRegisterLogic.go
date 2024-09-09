@@ -45,7 +45,6 @@ func (l *UserRegisterLogic) UserRegister(req *types.RegisterReq) (res *types.Res
 				res.Code, res.Message = xcode.GetCodeMessage(code)
 			}
 		} else {
-			l.Logger.Errorf("输出内容：%+v --- UserId:%v", register, register.UserId)
 			res.ErrMsg = register.Result.ErrMsg
 			res.Code = register.Result.Code
 			res.Message = register.Result.Message

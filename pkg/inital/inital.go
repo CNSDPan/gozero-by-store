@@ -1,15 +1,21 @@
 package inital
 
 import (
+	"context"
 	"fmt"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
 	"store/pkg/types"
+	"sync"
 	"time"
 )
 
+var syncLock sync.Mutex
 var DBMap = make(map[string]*gorm.DB)
+var CacheRedisMap = make(map[string]*redis.Client)
+var BizRedisMap = make(map[string]*redis.Client)
 
 // NewSqlDB
 // @Desc：公共初始化GORM连接，若各模块设置不一样，通过传参配置
@@ -17,6 +23,8 @@ var DBMap = make(map[string]*gorm.DB)
 // @param：model		模块;例如：user、store
 // @return：*gorm.DB
 func NewSqlDB(sqlConf types.SqlConf, model string) *gorm.DB {
+	syncLock.Lock()
+	defer syncLock.Unlock()
 	if dbConn, ok := DBMap[model]; ok {
 		return dbConn
 	}
@@ -65,4 +73,58 @@ func NewSqlDB(sqlConf types.SqlConf, model string) *gorm.DB {
 		DBMap[model] = dbConn
 		return dbConn
 	}
+}
+
+// NewCacheRedisConn
+// @Desc：公共初始化 缓存redis连接，若各模块设置不一样，通过传参配置
+// @param：cacheConf
+// @param：model	模块;例如：user、store
+// @return：*redis.Client
+func NewCacheRedisConn(cacheConf types.CacheRedisConf, model string) *redis.Client {
+	syncLock.Lock()
+	defer syncLock.Unlock()
+	if _, ok := CacheRedisMap[model]; ok {
+		return CacheRedisMap[model]
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     cacheConf.Addr,
+		Password: cacheConf.Password,
+		DB:       cacheConf.DB,
+	})
+
+	err := redisClient.Ping(ctx).Err()
+	if err != nil {
+		panic(fmt.Sprintf("%s 初始化 缓存redis异常 fail:%s", model, err.Error()))
+	}
+	CacheRedisMap[model] = redisClient
+	return CacheRedisMap[model]
+}
+
+// NewBizRedisConn
+// @Desc：公共初始化 业务redis连接，若各模块设置不一样，通过传参配置
+// @param：cacheConf
+// @param：model	模块;例如：user、store
+// @return：*redis.Client
+func NewBizRedisConn(cacheConf types.BizRedisConf, model string) *redis.Client {
+	syncLock.Lock()
+	defer syncLock.Unlock()
+	if _, ok := BizRedisMap[model]; ok {
+		return BizRedisMap[model]
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     cacheConf.Addr,
+		Password: cacheConf.Password,
+		DB:       cacheConf.DB,
+	})
+
+	err := redisClient.Ping(ctx).Err()
+	if err != nil {
+		panic(fmt.Sprintf("%s 初始化 业务redis异常 fail:%s", model, err.Error()))
+	}
+	BizRedisMap[model] = redisClient
+	return BizRedisMap[model]
 }
