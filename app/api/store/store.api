@@ -7,18 +7,75 @@ info (
 	email: "panlehua@dehannet.com"
 )
 
-type request {
-	// TODO: add members here and delete this comment
+type Response {
+	ErrMsg  string `json:"errMsg`
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
-type response {
-	// TODO: add members here and delete this comment
+type (
+	LoginReq {
+		Mobile   int64  `json:"mobile,omitempty,string"`
+		Password string `json:"password,omitempty"`
+	}
+	LoginRes {
+		UserId int64  `json:"userId,string"`
+		Token  string `json:"token"`
+	}
+)
+
+@server (
+	prefix:     /v1/store
+	group:      store
+	timeout:    3s
+	middleware: XHeaderMiddleware
+)
+service store {
+	@doc "店铺店主登录"
+	@handler StoreLogin
+	post /store/login (LoginReq) returns (LoginRes)
 }
 
-service store-api {
-	@handler GetUser // TODO: set handler name and delete this comment
-	get /users/id/:userId(request) returns(response)
+type (
+	StoreInfoReq{
+		StoreId int64  `json:"storeId,string"`
+		Token  string `header:"authorization"`
+	}
+	StoreInfoRes{
+		StoreId int64  `json:"storeId,string"`
+		Name string `json:"name"`
+		Desc string `json:"desc"`
+		Avatar string `json:"avatar"`
+		Contacts int64 `json:"contacts"`
+	}
 
-	@handler CreateUser // TODO: set handler name and delete this comment
-	post /users/create(request)
+	StoreUsersReq {
+		StoreId int64 `json:"storeId,omitempty,string"`
+		Limit   int64 `json:"limit"`
+		Offset  int64 `json:"offset"`
+	}
+	StoreUsersRes {
+		Total   int64       `json:"total"`
+		Page    int64       `json:"page"`
+		Limit   int64       `json:"limit"`
+		Offset  int64       `json:"offset"`
+		Current int64       `json:"current"`
+		Rows    interface{} `json:"rows"`
+	}
+)
+
+@server (
+	prefix:     /v1/store
+	group:      store
+	timeout:    3s
+	middleware: XHeaderMiddleware,AuthMiddleware
+)
+service store {
+	@doc "获取店铺信息"
+	@handler StoreInfo
+	post /store/info (StoreUsersReq) returns (StoreUsersRes)
+
+	@doc "店铺会员列表"
+	@handler StoreUserList
+	post /store/user/list (StoreUsersReq) returns (StoreUsersRes)
 }

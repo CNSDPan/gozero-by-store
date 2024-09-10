@@ -28,6 +28,11 @@ type Response struct {
 	Message string `json:"message"`
 }
 
+type StoreBecomeReq struct {
+	Name string `json:"name,omitempty"`
+	Desc string `json:"desc,omitempty"`
+}
+
 type StoreInfoReq struct {
 	StoreId int64 `json:"storeId,omitempty,string"`
 }
@@ -70,7 +75,7 @@ type Token struct {
 
 type UserInfoReq struct {
 	UserId int64  `json:"userId,omitempty,string"`
-	Token  string `header:"authorization,"`
+	Token  string `header:"authorization"`
 }
 
 type UserInfoRes struct {

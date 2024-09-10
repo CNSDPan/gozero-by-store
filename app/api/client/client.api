@@ -40,7 +40,7 @@ type (
 	}
 	UserInfoReq {
 		UserId int64  `json:"userId,omitempty,string"`
-		Token  string `header:"authorization,"`
+		Token  string `header:"authorization"`
 	}
 	UserInfoRes {
 		UserId int64  `json:"userId,string"`
@@ -51,6 +51,10 @@ type (
 )
 
 type (
+	StoreBecomeReq {
+		Name string `json:"name,omitempty"`
+		Desc string `json:"desc,omitempty"`
+	}
 	StoreListRes {
 		Total   int64       `json:"total"`
 		Page    int64       `json:"page"`
@@ -120,6 +124,10 @@ service client {
 	middleware: XHeaderMiddleware,AuthMiddleware
 )
 service client {
+	@doc "申请店铺"
+	@handler StoreBecome
+	post /store/become (StoreBecomeReq) returns (Response)
+
 	@doc "店铺列表"
 	@handler StoreList
 	post /store/list returns (StoreListRes)
