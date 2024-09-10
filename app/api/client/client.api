@@ -39,10 +39,12 @@ type (
 		Token  string `json:"token"`
 	}
 	UserInfoReq {
-		UserId int64 `json:"userId,omitempty,string"`
+		UserId int64  `json:"userId,omitempty,string"`
+		Token  string `header:"authorization,"`
 	}
 	UserInfoRes {
 		UserId int64  `json:"userId,string"`
+		Mobile int64  `json:"mobile,omitempty,string"`
 		Name   string `json:"name"`
 		Avatar string `json:"avatar"`
 	}
@@ -102,7 +104,7 @@ service client {
 	prefix:     /v1/client
 	group:      user
 	timeout:    3s
-	middleware: XHeaderMiddleware
+	middleware: XHeaderMiddleware,AuthMiddleware
 )
 service client {
 	@doc "用户信息"
@@ -115,7 +117,7 @@ service client {
 	prefix:     /v1/client
 	group:      store
 	timeout:    3s
-	middleware: XHeaderMiddleware
+	middleware: XHeaderMiddleware,AuthMiddleware
 )
 service client {
 	@doc "店铺列表"

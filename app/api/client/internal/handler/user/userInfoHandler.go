@@ -18,11 +18,21 @@ func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := user.NewUserInfoLogic(r.Context(), svcCtx)
-		resp, err := l.UserInfo(&req)
+		res, resp, err := l.UserInfo(&req)
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  res.ErrMsg,
+				Code:    res.Code,
+				Message: res.Message,
+				Data:    map[string]interface{}{},
+			})
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  res.ErrMsg,
+				Code:    res.Code,
+				Message: res.Message,
+				Data:    resp,
+			})
 		}
 	}
 }

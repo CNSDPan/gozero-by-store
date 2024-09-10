@@ -52,7 +52,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 			res.Token = token
 		}
 	}()
-	info, e = l.svcCtx.UserModel.GetFromMobile(int32(in.Mobile))
+	info, e = l.svcCtx.UserModel.GetFromMobileApi(int32(in.Mobile))
 	if info.UserID > 0 {
 		code = xcode.USER_CREAT_MOBILE_FAIL
 		goto Result
@@ -76,7 +76,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 	}
 	e = l.svcCtx.UserModel.CreatUser(sqls.Users{
 		UserID:   userId,
-		Mobile:   int32(in.Mobile),
+		Mobile:   in.Mobile,
 		Name:     in.Name,
 		Password: password,
 		Avatar:   "",
@@ -87,7 +87,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 	}
 	e = l.svcCtx.CacheConnApi.User.SetInfo(userId, map[string]interface{}{
 		"userId": userId,
-		"mobile": int32(in.Mobile),
+		"mobile": in.Mobile,
 		"name":   in.Name,
 		"avatar": "",
 	}, in.Seconds)

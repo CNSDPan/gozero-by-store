@@ -69,11 +69,13 @@ type Token struct {
 }
 
 type UserInfoReq struct {
-	UserId int64 `json:"userId,omitempty,string"`
+	UserId int64  `json:"userId,omitempty,string"`
+	Token  string `header:"authorization,"`
 }
 
 type UserInfoRes struct {
 	UserId int64  `json:"userId,string"`
+	Mobile int64  `json:"mobile,omitempty,string"`
 	Name   string `json:"name"`
 	Avatar string `json:"avatar"`
 }

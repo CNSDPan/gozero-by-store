@@ -35,7 +35,7 @@ func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err err
 		e error
 	)
 	code := "200"
-	info := sqls.UsersApi{}
+	info := sqls.Users{}
 
 	token := ""
 	res = &apiuser.UserLoginRes{

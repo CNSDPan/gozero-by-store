@@ -13,6 +13,7 @@ import (
 type ServiceContext struct {
 	Config            config.Config
 	XHeaderMiddleware rest.Middleware
+	AuthMiddleware    rest.Middleware
 	ApiRpcCl          ApiRpc
 	UserRpcCl         UserRpc
 }
@@ -30,6 +31,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:            c,
 		XHeaderMiddleware: middleware.NewXHeaderMiddleware().Handle,
+		AuthMiddleware:    middleware.NewAuthMiddleware().Handle,
 		ApiRpcCl: ApiRpc{
 			Store: apistore.NewApiStore(apiRPC),
 			User:  apiuser.NewApiUser(apiRPC),

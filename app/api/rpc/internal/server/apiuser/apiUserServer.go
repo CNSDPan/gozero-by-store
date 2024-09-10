@@ -27,7 +27,7 @@ func (s *ApiUserServer) Login(ctx context.Context, in *api.UserLoginReq) (*api.U
 	return l.Login(in)
 }
 
-func (s *ApiUserServer) Info(ctx context.Context, in *api.UserInfoReq) (*api.UserLoginRes, error) {
+func (s *ApiUserServer) Info(ctx context.Context, in *api.UserInfoReq) (*api.UserInfoRes, error) {
 	l := apiuserlogic.NewInfoLogic(ctx, s.svcCtx)
 	return l.Info(in)
 }

@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ApiUserClient interface {
 	Login(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginRes, error)
-	Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error)
+	Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoRes, error)
 }
 
 type apiUserClient struct {
@@ -48,8 +48,8 @@ func (c *apiUserClient) Login(ctx context.Context, in *UserLoginReq, opts ...grp
 	return out, nil
 }
 
-func (c *apiUserClient) Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserLoginRes, error) {
-	out := new(UserLoginRes)
+func (c *apiUserClient) Info(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoRes, error) {
+	out := new(UserInfoRes)
 	err := c.cc.Invoke(ctx, ApiUser_Info_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (c *apiUserClient) Info(ctx context.Context, in *UserInfoReq, opts ...grpc.
 // for forward compatibility
 type ApiUserServer interface {
 	Login(context.Context, *UserLoginReq) (*UserLoginRes, error)
-	Info(context.Context, *UserInfoReq) (*UserLoginRes, error)
+	Info(context.Context, *UserInfoReq) (*UserInfoRes, error)
 	mustEmbedUnimplementedApiUserServer()
 }
 
@@ -73,7 +73,7 @@ type UnimplementedApiUserServer struct {
 func (UnimplementedApiUserServer) Login(context.Context, *UserLoginReq) (*UserLoginRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedApiUserServer) Info(context.Context, *UserInfoReq) (*UserLoginRes, error) {
+func (UnimplementedApiUserServer) Info(context.Context, *UserInfoReq) (*UserInfoRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
 }
 func (UnimplementedApiUserServer) mustEmbedUnimplementedApiUserServer() {}

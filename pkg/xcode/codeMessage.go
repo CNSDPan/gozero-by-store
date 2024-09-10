@@ -27,6 +27,7 @@ var codeMessage = map[string]string{
 	USER_CREAT_MOBILE_FAIL:  "用户手机号已创建",
 	USER_CREAT_MOBILE_RULER: "手机号无效",
 	USER_SET_INFOCACHE_FAIL: "用户信息存储缓存错误",
+	USER_INFO_ERR:           "用户信息获取异常",
 }
 
 // GetCodeMessage
