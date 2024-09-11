@@ -7,6 +7,7 @@ import (
 	"store/app/api/client/internal/middleware"
 	"store/app/api/rpc/api/apistore"
 	"store/app/api/rpc/api/apiuser"
+	"store/app/store/rpc/store/storebecome"
 	"store/app/user/rpc/user/userRegister"
 )
 
@@ -16,6 +17,7 @@ type ServiceContext struct {
 	AuthMiddleware    rest.Middleware
 	ApiRpcCl          ApiRpc
 	UserRpcCl         UserRpc
+	StoreRpcCl        StoreRpc
 }
 type ApiRpc struct {
 	Store apistore.ApiStore
@@ -24,10 +26,14 @@ type ApiRpc struct {
 type UserRpc struct {
 	Register userregister.UserRegister
 }
+type StoreRpc struct {
+	Become storebecome.StoreBecome
+}
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	apiRPC := zrpc.MustNewClient(c.ApiRPC)
 	userRPC := zrpc.MustNewClient(c.UserRPC)
+	storeRPC := zrpc.MustNewClient(c.StoreRPC)
 	return &ServiceContext{
 		Config:            c,
 		XHeaderMiddleware: middleware.NewXHeaderMiddleware().Handle,
@@ -38,6 +44,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		},
 		UserRpcCl: UserRpc{
 			Register: userregister.NewUserRegister(userRPC),
+		},
+		StoreRpcCl: StoreRpc{
+			Become: storebecome.NewStoreBecome(storeRPC),
 		},
 	}
 }

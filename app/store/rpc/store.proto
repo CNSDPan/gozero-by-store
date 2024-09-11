@@ -13,28 +13,24 @@ message Response{
   * 申请创建店铺
  */
 message CreateStoreReq{
-  string UserId = 1;
+  int64 UserId = 1;
   string Name = 2;
   string Desc = 3;
 }
 message CreateStoreRes{
   Response result = 1;
-  string userId = 2;
-  string token = 3;
 }
 /*
   * 成为门店会员
  */
 message JoinStoreMemberReq{
-  string StoreId = 1;
-  string UserId = 2;
+  int64 StoreId = 1;
+  int64 UserId = 2;
 }
 message JoinStoreMemberRes{
   Response result = 1;
-  string userId = 2;
-  string token = 3;
 }
-service StoreService{
+service StoreBecome{
   rpc CreateStore(CreateStoreReq) returns (CreateStoreRes);
   rpc JoinStoreMember(JoinStoreMemberReq) returns (JoinStoreMemberRes);
 }

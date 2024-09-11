@@ -51,13 +51,13 @@ func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err err
 			res.Token = token
 		}
 	}()
-	info, e = l.svcCtx.UserModel.GetFromMobile(int32(in.Mobile))
+	info, e = l.svcCtx.UserModel.GetFromMobile(in.Mobile)
 	if info.UserID == 0 {
 		code = xcode.USER_INFO_FAIL
 		goto Result
 	}
 	if ok := util.CheckPasswordHash(in.Password, info.Password); !ok {
-		code = xcode.USER_INFO_FAIL
+		code = xcode.USER_LOGIN_FAIL
 		goto Result
 	}
 	token, e = jwt.GetJwtToken(in.JwtSecret, time.Now().Unix(), in.Seconds, map[string]interface{}{

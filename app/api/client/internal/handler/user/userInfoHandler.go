@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"store/pkg/xcode"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"store/app/api/client/internal/logic/user"
@@ -13,7 +14,13 @@ func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.UserInfoReq
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			code, msg := xcode.GetCodeMessage(xcode.RESPONSE_NOT_FOUND)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  err.Error(),
+				Code:    code,
+				Message: msg,
+				Data:    map[string]interface{}{},
+			})
 			return
 		}
 

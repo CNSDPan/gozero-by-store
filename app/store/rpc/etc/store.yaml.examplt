@@ -18,6 +18,8 @@ CacheRedis:
   Addr: "XXX.XXX.XXX:XXX"
   Password:
   DB: 11
+# 缓存Redis 有效时间
+CacheSeconds: 604800
 # mysql配置，兼容读写分离、单机
 Sql:
   Separation: 2 #1-读写分离（需要具备主从库）、2-单个数据库实例

@@ -1,1 +1,17 @@
 package xcode
+
+// Desc：store模块code
+const (
+	STORE_CREAT        = "10200"
+	STORE_CREATED      = "10201"
+	STORE_INFO         = "10202"
+	STORE_CREATED_NAME = "10203"
+)
+
+const (
+	STORE_USER_INFO         = "10230"
+	STORE_USER_TOKEN_CREATE = "10231"
+	STORE_USER_TOKEN_GET    = "10232"
+	STORE_USER_TOKEN_DEL    = "10233"
+	STORE_USER_TOKEN_RULER  = "10234"
+)

@@ -105,7 +105,8 @@ func (obj *UsersMgr) GetBatchFromUserID(userIDs []int64) (results []*Users, err 
 }
 
 // GetFromMobile 通过mobil获取内容
-func (obj *UsersMgr) GetFromMobile(mobile int32) (result Users, err error) {
+func (obj *UsersMgr) GetFromMobile(mobile int64) (result Users, err error) {
+
 	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`mobile` = ?", mobile).Find(&result).Error
 	return
 }
@@ -161,7 +162,7 @@ func (obj *UsersMgr) GetBatchFromUserIDApi(userIDs []int64) (results []*UsersApi
 }
 
 // GetFromMobileApi 通过mobil获取内容
-func (obj *UsersMgr) GetFromMobileApi(mobile int32) (result UsersApi, err error) {
+func (obj *UsersMgr) GetFromMobileApi(mobile int64) (result UsersApi, err error) {
 	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`mobile` = ?", mobile).Find(&result).Error
 	return
 }

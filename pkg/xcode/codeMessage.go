@@ -14,7 +14,7 @@ var codeMessage = map[string]string{
 	RESPONSE_SECRET_FAIL:       "无效secret",
 	RESPONSE_SIGN_FAIL:         "无效sign",
 
-	/***************************************/
+	/*****************用户模块**********************/
 	USER_LOGIN_FAIL:         "用户账号密码不正确",
 	USER_LOGINED:            "用户已登录",
 	USER_INFO_FAIL:          "用户信息不存在",
@@ -28,6 +28,20 @@ var codeMessage = map[string]string{
 	USER_CREAT_MOBILE_RULER: "手机号无效",
 	USER_SET_INFOCACHE_FAIL: "用户信息存储缓存错误",
 	USER_INFO_ERR:           "用户信息获取异常",
+	/***************************************/
+
+	/*****************店铺模块**********************/
+	STORE_CREAT:        "店铺创建失败",
+	STORE_CREATED:      "已创建过店铺",
+	STORE_INFO:         "店铺信息不存在",
+	STORE_CREATED_NAME: "店铺名已存在",
+
+	STORE_USER_INFO:         "店长信息不存在",
+	STORE_USER_TOKEN_CREATE: "店长Token创建错误",
+	STORE_USER_TOKEN_GET:    "店长Token获取错误",
+	STORE_USER_TOKEN_DEL:    "店长Token删除错误",
+	STORE_USER_TOKEN_RULER:  "店长Token不存在|错误",
+	/***************************************/
 }
 
 // GetCodeMessage
