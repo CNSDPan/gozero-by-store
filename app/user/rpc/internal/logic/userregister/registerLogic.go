@@ -52,7 +52,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (res *user.RegisterRes, e
 			res.Token = token
 		}
 	}()
-	info, e = l.svcCtx.UserModel.GetFromMobileApi(int32(in.Mobile))
+	info, e = l.svcCtx.UserModel.GetFromMobileApi(in.Mobile)
 	if info.UserID > 0 {
 		code = xcode.USER_CREAT_MOBILE_FAIL
 		goto Result

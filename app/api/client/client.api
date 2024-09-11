@@ -55,6 +55,9 @@ type (
 		Name string `json:"name,omitempty"`
 		Desc string `json:"desc,omitempty"`
 	}
+	StoreBecomeRes {
+		Url string `json:"url"`
+	}
 	StoreListRes {
 		Total   int64       `json:"total"`
 		Page    int64       `json:"page"`
@@ -126,7 +129,7 @@ service client {
 service client {
 	@doc "申请店铺"
 	@handler StoreBecome
-	post /store/become (StoreBecomeReq) returns (Response)
+	post /store/become (StoreBecomeReq) returns (StoreBecomeRes)
 
 	@doc "店铺列表"
 	@handler StoreList

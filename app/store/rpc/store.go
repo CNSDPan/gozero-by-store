@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"store/app/store/rpc/internal/config"
-	storeserviceServer "store/app/store/rpc/internal/server/storeservice"
+	storebecomeServer "store/app/store/rpc/internal/server/storebecome"
 	"store/app/store/rpc/internal/svc"
 	"store/app/store/rpc/pb/store"
 
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		store.RegisterStoreServiceServer(grpcServer, storeserviceServer.NewStoreServiceServer(ctx))
+		store.RegisterStoreBecomeServer(grpcServer, storebecomeServer.NewStoreBecomeServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

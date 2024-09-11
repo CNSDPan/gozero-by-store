@@ -21,8 +21,8 @@ type CacheUser struct {
 // @Desc：初始化 user 结构
 // @param：ctx
 // @param：redisConn
-// @return：*CacheUser
-func NewCacheUser(ctx context.Context, redisConn *redis.Client) CacheApi {
+// @return：*CacheUserApi
+func NewCacheUser(ctx context.Context, redisConn *redis.Client) CacheUserApi {
 	return &CacheUser{
 		ctx:       ctx,
 		cacheConn: redisConn,

@@ -9,7 +9,8 @@ import (
 
 const (
 	// Cache_Key_STORE_INFO 店铺信息缓存
-	Cache_Key_STORE_INFO Cache_Key = "store:"
+	Cache_Key_STORE_INFO      Cache_Key = "store:"
+	Cache_Key_STORE_USER_INFO Cache_Key = "storeUser:"
 )
 
 type CacheStore struct {
@@ -21,8 +22,8 @@ type CacheStore struct {
 // @Desc：初始化 store 结构
 // @param：ctx
 // @param：redisConn
-// @return：CacheApi
-func NewCacheStore(ctx context.Context, redisConn *redis.Client) CacheApi {
+// @return：CacheStoreApi
+func NewCacheStore(ctx context.Context, redisConn *redis.Client) CacheStoreApi {
 	return &CacheStore{
 		ctx:       ctx,
 		cacheConn: redisConn,
@@ -50,8 +51,28 @@ func (store *CacheStore) GetInfo(storeId int64) (map[string]string, error) {
 // @return：error
 func (store *CacheStore) SetInfo(storeId int64, info map[string]interface{}, seconds int64) error {
 	_, err := store.cacheConn.Pipelined(store.ctx, func(pipe redis.Pipeliner) error {
-		pipe.HMSet(store.ctx, fmt.Sprintf("%s%d", Cache_Key_USER_INFO, storeId), info)
-		pipe.Expire(store.ctx, fmt.Sprintf("%s%d", Cache_Key_USER_INFO, storeId), time.Duration(seconds)*time.Second)
+		pipe.HMSet(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_INFO, storeId), info)
+		pipe.Expire(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_INFO, storeId), time.Duration(seconds)*time.Second)
+		return nil
+	})
+	return err
+}
+
+// SetStoreAndStoreUser
+// @Desc： 存储店铺信息和店主信息缓存
+// @param：storeId
+// @param：storeInfo
+// @param：storeUserId
+// @param：storeUserInfo
+// @param：seconds
+// @return：error
+func (store *CacheStore) SetStoreAndStoreUser(storeId int64, storeInfo map[string]interface{}, storeUserId int64, storeUserInfo map[string]interface{}, seconds int64) error {
+	_, err := store.cacheConn.TxPipelined(store.ctx, func(pipe redis.Pipeliner) error {
+		pipe.HMSet(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_INFO, storeId), storeInfo)
+		pipe.Expire(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_INFO, storeId), time.Duration(seconds)*time.Second)
+
+		pipe.HMSet(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_USER_INFO, storeUserId), storeUserInfo)
+		pipe.Expire(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_USER_INFO, storeUserId), time.Duration(seconds)*time.Second)
 		return nil
 	})
 	return err

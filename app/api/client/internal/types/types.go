@@ -33,6 +33,10 @@ type StoreBecomeReq struct {
 	Desc string `json:"desc,omitempty"`
 }
 
+type StoreBecomeRes struct {
+	Url string `json:"url"`
+}
+
 type StoreInfoReq struct {
 	StoreId int64 `json:"storeId,omitempty,string"`
 }
