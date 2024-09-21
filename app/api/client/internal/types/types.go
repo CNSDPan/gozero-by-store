@@ -42,10 +42,11 @@ type StoreInfoReq struct {
 }
 
 type StoreInfoRes struct {
-	StoreId  int64  `json:"storeId,string"`
-	Name     string `json:"name"`
-	Avatar   string `json:"avatar"`
-	Contacts int64  `json:"contacts"`
+	StoreId   int64     `json:"storeId,string"`
+	Name      string    `json:"name"`
+	Avatar    string    `json:"avatar"`
+	Contacts  int64     `json:"contacts"`
+	StoreUser StoreUser `json:"storeUser"`
 }
 
 type StoreListRes struct {
@@ -55,6 +56,14 @@ type StoreListRes struct {
 	Offset  int64       `json:"offset"`
 	Current int64       `json:"current"`
 	Rows    interface{} `json:"rows"`
+}
+
+type StoreUser struct {
+	StoreUserId int64  `json:"storeUserId,string"`
+	UserId      int64  `json:"userId,string"`
+	Mobile      int64  `json:"mobile,string"`
+	Name        string `json:"name"`
+	Avatar      string `json:"avatar"`
 }
 
 type StoreUsersReq struct {
@@ -84,7 +93,7 @@ type UserInfoReq struct {
 
 type UserInfoRes struct {
 	UserId int64  `json:"userId,string"`
-	Mobile int64  `json:"mobile,omitempty,string"`
+	Mobile int64  `json:"mobile,string"`
 	Name   string `json:"name"`
 	Avatar string `json:"avatar"`
 }

@@ -31,7 +31,7 @@ func NewCacheStore(ctx context.Context, redisConn *redis.Client) CacheStoreApi {
 }
 
 // GetInfo
-// @Desc：获取店铺信息
+// @Desc：获取店铺信息&店长信息
 // @param：storeId
 // @return：map[string]string
 // @return：error
@@ -39,9 +39,21 @@ func (store *CacheStore) GetInfo(storeId int64) (map[string]string, error) {
 	info, err := store.cacheConn.HGetAll(store.ctx, fmt.Sprintf("%s%d", Cache_Key_STORE_INFO, storeId)).Result()
 	if err == redis.Nil {
 		return info, nil
-	} else {
-		return info, err
+	} else if err != nil {
+		return nil, err
+	} else if len(info) == 0 {
+		return map[string]string{}, nil
 	}
+	suInfo, err := store.cacheConn.HGetAll(store.ctx, fmt.Sprintf("%s%s", Cache_Key_STORE_USER_INFO, info["storeUserId"])).Result()
+	if err == redis.Nil {
+		return info, nil
+	} else if err != nil {
+		return nil, err
+	} else if len(suInfo) == 0 {
+		suInfo["userId"] = ""
+	}
+	info["userId"] = suInfo["userId"]
+	return info, nil
 }
 
 // SetInfo

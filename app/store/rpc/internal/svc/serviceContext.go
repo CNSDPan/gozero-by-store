@@ -42,7 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		CacheConn:      cacheConn,
 		CacheConnApi:   cache.NewCache(cache.NewCacheUser(context.Background(), cacheConn), cache.NewCacheStore(context.Background(), cacheConn)),
 		BizConn:        bizConn,
-		StoreModel:     sqls.NewUserMgr(inital.NewSqlDB(c.Sql, "storeModel")),
+		StoreModel:     sqls.NewStoresMgr(inital.NewSqlDB(c.Sql, "storeModel")),
 		StoreUserModel: sqls.NewStoreUsersMgr(inital.NewSqlDB(c.Sql, "storeUserModel")),
 	}
 }

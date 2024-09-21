@@ -57,7 +57,10 @@ func (l *InfoLogic) Info(in *api.UserInfoReq) (res *api.UserInfoRes, err error) 
 			res.Avatar = info.Avatar
 		}
 	}()
-
+	if in.UserId != 0 {
+		userIdStr = strconv.FormatInt(in.UserId, 10)
+		goto GetCache
+	}
 	userIdStr, e = l.svcCtx.BizConn.Get(l.ctx, fmt.Sprintf("%s%s", biz.Biz_Key_USER_TOKEN, in.Token)).Result()
 	if e != nil && e != redis.Nil {
 		code = xcode.USER_TOKEN_GET
@@ -67,6 +70,7 @@ func (l *InfoLogic) Info(in *api.UserInfoReq) (res *api.UserInfoRes, err error) 
 		code = xcode.USER_TOKEN_FAIL
 		goto Result
 	}
+GetCache:
 	userId, _ = strconv.ParseInt(userIdStr, 10, 64)
 	infoM, e = l.svcCtx.CacheConnApi.User.GetInfo(userId)
 	if e != nil || len(infoM) == 0 {

@@ -146,9 +146,9 @@ var ApiUser_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ApiStore_List_FullMethodName     = "/api.ApiStore/List"
-	ApiStore_Info_FullMethodName     = "/api.ApiStore/Info"
-	ApiStore_UserList_FullMethodName = "/api.ApiStore/UserList"
+	ApiStore_List_FullMethodName           = "/api.ApiStore/List"
+	ApiStore_Info_FullMethodName           = "/api.ApiStore/Info"
+	ApiStore_MemberUserList_FullMethodName = "/api.ApiStore/MemberUserList"
 )
 
 // ApiStoreClient is the client API for ApiStore service.
@@ -157,7 +157,7 @@ const (
 type ApiStoreClient interface {
 	List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error)
 	Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
-	UserList(ctx context.Context, in *StoreUsersReq, opts ...grpc.CallOption) (*StoreUsersRes, error)
+	MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error)
 }
 
 type apiStoreClient struct {
@@ -186,9 +186,9 @@ func (c *apiStoreClient) Info(ctx context.Context, in *StoreInfoReq, opts ...grp
 	return out, nil
 }
 
-func (c *apiStoreClient) UserList(ctx context.Context, in *StoreUsersReq, opts ...grpc.CallOption) (*StoreUsersRes, error) {
-	out := new(StoreUsersRes)
-	err := c.cc.Invoke(ctx, ApiStore_UserList_FullMethodName, in, out, opts...)
+func (c *apiStoreClient) MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error) {
+	out := new(MemberUsersItemRes)
+	err := c.cc.Invoke(ctx, ApiStore_MemberUserList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +201,7 @@ func (c *apiStoreClient) UserList(ctx context.Context, in *StoreUsersReq, opts .
 type ApiStoreServer interface {
 	List(context.Context, *StoreListReq) (*StoreListRes, error)
 	Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error)
-	UserList(context.Context, *StoreUsersReq) (*StoreUsersRes, error)
+	MemberUserList(context.Context, *MemberUsersItemReq) (*MemberUsersItemRes, error)
 	mustEmbedUnimplementedApiStoreServer()
 }
 
@@ -215,8 +215,8 @@ func (UnimplementedApiStoreServer) List(context.Context, *StoreListReq) (*StoreL
 func (UnimplementedApiStoreServer) Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
 }
-func (UnimplementedApiStoreServer) UserList(context.Context, *StoreUsersReq) (*StoreUsersRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserList not implemented")
+func (UnimplementedApiStoreServer) MemberUserList(context.Context, *MemberUsersItemReq) (*MemberUsersItemRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MemberUserList not implemented")
 }
 func (UnimplementedApiStoreServer) mustEmbedUnimplementedApiStoreServer() {}
 
@@ -267,20 +267,20 @@ func _ApiStore_Info_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApiStore_UserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StoreUsersReq)
+func _ApiStore_MemberUserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MemberUsersItemReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApiStoreServer).UserList(ctx, in)
+		return srv.(ApiStoreServer).MemberUserList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ApiStore_UserList_FullMethodName,
+		FullMethod: ApiStore_MemberUserList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApiStoreServer).UserList(ctx, req.(*StoreUsersReq))
+		return srv.(ApiStoreServer).MemberUserList(ctx, req.(*MemberUsersItemReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -301,8 +301,8 @@ var ApiStore_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApiStore_Info_Handler,
 		},
 		{
-			MethodName: "UserList",
-			Handler:    _ApiStore_UserList_Handler,
+			MethodName: "MemberUserList",
+			Handler:    _ApiStore_MemberUserList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

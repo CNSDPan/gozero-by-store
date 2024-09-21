@@ -38,6 +38,7 @@ message UserItem{
   int64 userId = 1;
   string name = 2;
   string avatar = 3;
+  int64 mobile = 4;
 }
 message UsersMap {
   int64 total = 1;
@@ -45,7 +46,7 @@ message UsersMap {
   int64 limit = 3;
   int64 offset = 4;
   int64 current = 5;
-  map<string,UserItem> rows = 6;
+  repeated UserItem rows = 7;
 }
 
 service ApiUser{
@@ -61,6 +62,7 @@ message StoreItem{
   string name = 2;
   string avatar = 3;
   string desc = 4;
+  optional int64 contacts = 5;
 }
 message StoresMap{
   int64 total = 2;
@@ -68,7 +70,7 @@ message StoresMap{
   int64 limit = 4;
   int64 offset = 5;
   int64 current = 6;
-  map<string,StoreItem> rows = 7;
+  repeated StoreItem rows = 7;
 }
 message StoreListReq{}
 message StoreListRes{
@@ -83,19 +85,23 @@ message StoreInfoRes {
   int64 storeId = 2;
   string name = 3;
   string avatar = 4;
-  string contacts = 5;
+  string desc = 5;
+  optional int64 contacts = 6;
+  int64 storeUserId = 7;
+  int64 userId = 8;
 }
-message StoreUsersReq {
+message MemberUsersItemReq {
   int64 storeId = 1;
   string limit = 2;
   string offset = 3;
 }
-message StoreUsersRes {
+message MemberUsersItemRes {
   Response result = 1;
   UsersMap data = 2;
 }
+
 service ApiStore{
   rpc List(StoreListReq) returns (StoreListRes);
   rpc Info(StoreInfoReq) returns (StoreInfoRes);
-  rpc UserList(StoreUsersReq) returns (StoreUsersRes);
+  rpc MemberUserList(MemberUsersItemReq) returns (MemberUsersItemRes);
 }

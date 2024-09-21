@@ -1,10 +1,10 @@
-Name: api.rpc
-ListenOn: 0.0.0.0:8080
+Name: store.api.rpc
+ListenOn: 0.0.0.0:8082
 Etcd:
   Hosts:
     - 192.168.33.10:20001
     - 192.168.33.10:20003
-  Key: api.rpc
+  Key: store.api.rpc
 # apiRPC类型服务ID范围 152
 ServiceId: "152" #客户端服务ID
 ServiceName: "API.RPC.服务:"
@@ -18,6 +18,19 @@ CacheRedis:
   Addr: "192.168.33.10:6379"
   Password:
   DB: 11
+# 缓存Redis 有效时间
+CacheSeconds: 604800
 # mysql配置，只有用读权限
-SqlSource:
-  Addr: "root:root@tcp(192.168.33.10:3307)/store?loc=Local&parseTime=True&charset=utf8mb4"
+Sql:
+  Separation: 2 #1-读写分离（需要具备主从库）、2-单个数据库实例
+  # 读写分离（需要具备主从库）
+  MasterSlave:
+    MasterAddr: ""
+    SlaveAddr:
+      Tag:
+        - ""
+      Connect:
+        - ""
+  # 单机数据库实例
+  SqlSource:
+    Addr: "root:root@tcp(192.168.33.10:3307)/store2?loc=Local&parseTime=True&charset=utf8mb4"

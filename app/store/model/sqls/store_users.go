@@ -8,33 +8,32 @@ import (
 
 // StoreUsers 店主表
 type StoreUsers struct {
-	ID          uint32    `gorm:"primaryKey;column:id" json:"-"`
-	StoreUserID int64     `gorm:"column:store_user_id" json:"storeUserId"` // 店主ID
-	StoreID     int64     `gorm:"column:store_id" json:"storeId"`          // 店铺ID
-	UserID      int64     `gorm:"column:user_id" json:"userId"`            // 用户ID
+	Id          uint32    `gorm:"primaryKey;column:id" json:"-"`
+	StoreUserId int64     `gorm:"column:store_user_id" json:"storeUserId"` // 店主ID
+	StoreId     int64     `gorm:"column:store_id" json:"storeId"`          // 店铺ID
+	UserId      int64     `gorm:"column:user_id" json:"userId"`            // 用户ID
 	CreatedAt   time.Time `gorm:"column:created_at" json:"createdAt"`      // 创建时间
 	UpdatedAt   time.Time `gorm:"column:updated_at" json:"updatedAt"`      // 更新时间
 }
 type StoreUsersApi struct {
-	StoreUserID int64  `gorm:"column:store_user_id" json:"storeUserId,string"` // 店主ID
-	StoreID     int64  `gorm:"column:store_id" json:"storeId,string"`          // 店铺ID
-	UserID      int64  `gorm:"column:user_id" json:"userId,string"`            // 用户ID
-	StoreInfo   Stores `gorm:"foreignkey:StoreID"`
+	StoreUserId int64 `gorm:"column:store_user_id" json:"storeUserId,string"` // 店主ID
+	StoreId     int64 `gorm:"column:store_id" json:"storeId,string"`          // 店铺ID
+	UserId      int64 `gorm:"column:user_id" json:"userId,string"`            // 用户ID
 }
 
 // StoreUsersColumns get sql column name.获取数据库列名
 var StoreUsersColumns = struct {
-	ID          string
-	StoreUserID string
-	StoreID     string
-	UserID      string
+	Id          string
+	StoreUserId string
+	StoreId     string
+	UserId      string
 	CreatedAt   string
 	UpdatedAt   string
 }{
-	ID:          "id",
-	StoreUserID: "store_user_id",
-	StoreID:     "store_id",
-	UserID:      "user_id",
+	Id:          "id",
+	StoreUserId: "store_user_id",
+	StoreId:     "store_id",
+	UserId:      "user_id",
 	CreatedAt:   "created_at",
 	UpdatedAt:   "updated_at",
 }
@@ -93,8 +92,8 @@ func (obj *StoreUsersMgr) GetFromUserIdApi(userId int64) (result StoreUsersApi, 
 }
 
 // GetFromStoreIdApi 通过store_id获取内容 店铺ID
-func (obj *StoreUsersMgr) GetFromStoreIdApi(storeId int64) (result StoreUsersApi, err error) {
-	err = obj.DB.WithContext(obj.ctx).Model(StoreUsers{}).Where("`store_id` = ?", storeId).Find(&result).Error
+func (obj *StoreUsersMgr) GetFromStoreIdApi(storeId int64) (result StoreUsersApi) {
+	obj.DB.WithContext(obj.ctx).Model(StoreUsers{}).Where("`store_id` = ?", storeId).Find(&result)
 	return
 }
 

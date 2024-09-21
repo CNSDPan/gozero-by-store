@@ -6,6 +6,8 @@ const (
 	STORE_CREATED      = "10201"
 	STORE_INFO         = "10202"
 	STORE_CREATED_NAME = "10203"
+	STORE_ITEM         = "10204"
+	STORE_INFO_FAIL    = "10205"
 )
 
 const (

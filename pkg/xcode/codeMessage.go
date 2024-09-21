@@ -34,7 +34,9 @@ var codeMessage = map[string]string{
 	STORE_CREAT:        "店铺创建失败",
 	STORE_CREATED:      "已创建过店铺",
 	STORE_INFO:         "店铺信息不存在",
+	STORE_INFO_FAIL:    "店铺信息获取异常",
 	STORE_CREATED_NAME: "店铺名已存在",
+	STORE_ITEM:         "店铺列表获取异常",
 
 	STORE_USER_INFO:         "店长信息不存在",
 	STORE_USER_TOKEN_CREATE: "店长Token创建错误",

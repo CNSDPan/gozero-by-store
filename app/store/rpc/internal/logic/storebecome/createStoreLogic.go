@@ -41,39 +41,41 @@ func (l *CreateStoreLogic) CreateStore(in *store.CreateStoreReq) (res *store.Cre
 		}
 	}()
 	storeInfo, e = l.svcCtx.StoreUserModel.GetFromUserIdApi(in.UserId)
-	if storeInfo.StoreUserID > 0 {
+	if storeInfo.StoreUserId > 0 {
 		code = xcode.STORE_CREATED
 		return res, err
 	}
-	if l.svcCtx.StoreModel.GetFromNameApi(in.Name).StoreID > 0 {
+	if l.svcCtx.StoreModel.GetFromNameApi(in.Name).StoreId > 0 {
 		code = xcode.STORE_CREATED_NAME
 		return res, err
 	}
 	stores := sqls.Stores{
-		StoreID: l.svcCtx.Node.Generate().Int64(),
+		StoreId: l.svcCtx.Node.Generate().Int64(),
 		Name:    in.Name,
 		Avatar:  "",
 		Desc:    in.Desc,
 	}
 	time.Sleep(5 * time.Millisecond)
 	storeUsers := sqls.StoreUsers{
-		StoreUserID: l.svcCtx.Node.Generate().Int64(),
-		StoreID:     stores.StoreID,
-		UserID:      in.UserId,
+		StoreUserId: l.svcCtx.Node.Generate().Int64(),
+		StoreId:     stores.StoreId,
+		UserId:      in.UserId,
 	}
 	if e = l.svcCtx.StoreUserModel.CreateStoreUser(storeUsers, stores); e != nil {
 		code = xcode.STORE_CREAT
 		return res, err
 	}
 
-	if e = l.svcCtx.CacheConnApi.Store.SetStoreAndStoreUser(stores.StoreID, map[string]interface{}{
-		"storeID": stores.StoreID,
-		"name":    stores.Name,
-		"avatar":  stores.Avatar,
-		"desc":    stores.Desc,
-	}, storeUsers.StoreUserID, map[string]interface{}{
-		"storeUserID": storeUsers.StoreUserID,
-		"storeID":     stores.StoreID,
+	if e = l.svcCtx.CacheConnApi.Store.SetStoreAndStoreUser(stores.StoreId, map[string]interface{}{
+		"storeUserID": storeUsers.StoreUserId,
+		"storeID":     stores.StoreId,
+		"name":        stores.Name,
+		"avatar":      stores.Avatar,
+		"desc":        stores.Desc,
+		"contacts":    0,
+	}, storeUsers.StoreUserId, map[string]interface{}{
+		"storeUserID": storeUsers.StoreUserId,
+		"storeID":     stores.StoreId,
 		"userId":      in.UserId,
 	}, l.svcCtx.Config.CacheSeconds); e != nil {
 		l.Logger.Errorf("%s 存储门店和店长数据缓存 fail:%s", l.svcCtx.Config.ServiceName, e.Error())

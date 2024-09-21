@@ -44,13 +44,20 @@ type (
 	}
 	UserInfoRes {
 		UserId int64  `json:"userId,string"`
-		Mobile int64  `json:"mobile,omitempty,string"`
+		Mobile int64  `json:"mobile,string"`
 		Name   string `json:"name"`
 		Avatar string `json:"avatar"`
 	}
 )
 
 type (
+	StoreUser {
+		StoreUserId int64  `json:"storeUserId,string"`
+		UserId      int64  `json:"userId,string"`
+		Mobile      int64  `json:"mobile,string"`
+		Name        string `json:"name"`
+		Avatar      string `json:"avatar"`
+	}
 	StoreBecomeReq {
 		Name string `json:"name,omitempty"`
 		Desc string `json:"desc,omitempty"`
@@ -70,10 +77,11 @@ type (
 		StoreId int64 `json:"storeId,omitempty,string"`
 	}
 	StoreInfoRes {
-		StoreId  int64  `json:"storeId,string"`
-		Name     string `json:"name"`
-		Avatar   string `json:"avatar"`
-		Contacts int64  `json:"contacts"`
+		StoreId   int64     `json:"storeId,string"`
+		Name      string    `json:"name"`
+		Avatar    string    `json:"avatar"`
+		Contacts  int64     `json:"contacts"`
+		StoreUser StoreUser `json:"storeUser"`
 	}
 	StoreUsersReq {
 		StoreId int64 `json:"storeId,omitempty,string"`

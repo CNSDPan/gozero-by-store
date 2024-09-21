@@ -32,7 +32,7 @@ func (s *ApiStoreServer) Info(ctx context.Context, in *api.StoreInfoReq) (*api.S
 	return l.Info(in)
 }
 
-func (s *ApiStoreServer) UserList(ctx context.Context, in *api.StoreUsersReq) (*api.StoreUsersRes, error) {
-	l := apistorelogic.NewUserListLogic(ctx, s.svcCtx)
-	return l.UserList(in)
+func (s *ApiStoreServer) MemberUserList(ctx context.Context, in *api.MemberUsersItemReq) (*api.MemberUsersItemRes, error) {
+	l := apistorelogic.NewMemberUserListLogic(ctx, s.svcCtx)
+	return l.MemberUserList(in)
 }
