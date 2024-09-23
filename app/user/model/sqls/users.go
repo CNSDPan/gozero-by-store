@@ -19,7 +19,7 @@ var UserStatusName = map[int8]string{
 // Users 用户表
 type Users struct {
 	ID        uint32    `gorm:"primaryKey;column:id" json:"-"`
-	UserID    int64     `gorm:"column:user_id" json:"userId"`          // 用户IID
+	UserId    int64     `gorm:"column:user_id" json:"userId"`          // 用户IID
 	Status    int8      `gorm:"column:status;default:1" json:"status"` // 1-启用、2-禁用
 	Mobile    int64     `gorm:"column:mobile" json:"mobile"`           // 手机号
 	Password  string    `gorm:"column:password" json:"password"`       // 密码
@@ -30,7 +30,7 @@ type Users struct {
 }
 
 type UsersApi struct {
-	UserID int64  `gorm:"column:user_id" json:"userId,string"` // 用户IID
+	UserId int64  `gorm:"column:user_id" json:"userId,string"` // 用户IID
 	Status int8   `gorm:"column:status" json:"status"`         // 1-启用、2-禁用
 	Mobile int64  `gorm:"column:mobile" json:"mobile,string"`  // 手机号
 	Name   string `gorm:"column:name" json:"name"`             // 昵称
@@ -39,8 +39,8 @@ type UsersApi struct {
 
 // UsersColumns get sql column name.获取数据库列名
 var UsersColumns = struct {
-	ID        string
-	UserID    string
+	Id        string
+	UserId    string
 	Status    string
 	Mobile    string
 	Password  string
@@ -49,8 +49,8 @@ var UsersColumns = struct {
 	CreatedAt string
 	UpdatedAt string
 }{
-	ID:        "id",
-	UserID:    "user_id",
+	Id:        "id",
+	UserId:    "user_id",
 	Status:    "status",
 	Mobile:    "mobile",
 	Password:  "Password",
@@ -62,6 +62,10 @@ var UsersColumns = struct {
 
 type UsersMgr struct {
 	*_BaseMgr
+}
+
+func (usersA *UsersApi) TableName() string {
+	return "users"
 }
 
 func UsersTableName() string {

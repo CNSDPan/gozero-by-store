@@ -30,6 +30,11 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
+// Login
+// @Desc：登录
+// @param：in
+// @return：res
+// @return：err
 func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err error) {
 	var (
 		e error
@@ -47,12 +52,12 @@ func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err err
 			l.Logger.Errorf("%s 用户登录失败 fail:%s", l.svcCtx.Config.ServiceName, e.Error())
 			res.Result.ErrMsg = e.Error()
 		} else {
-			res.UserId = info.UserID
+			res.UserId = info.UserId
 			res.Token = token
 		}
 	}()
 	info, e = l.svcCtx.UserModel.GetFromMobile(in.Mobile)
-	if info.UserID == 0 {
+	if info.UserId == 0 {
 		code = xcode.USER_INFO_FAIL
 		goto Result
 	}
@@ -61,14 +66,14 @@ func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err err
 		goto Result
 	}
 	token, e = jwt.GetJwtToken(in.JwtSecret, time.Now().Unix(), in.Seconds, map[string]interface{}{
-		"userId": info.UserID,
+		"userId": info.UserId,
 	})
 	if e != nil {
 		code = xcode.USER_TOKEN_CREATE
 		goto Result
 	}
-	e = l.svcCtx.CacheConnApi.User.SetInfo(info.UserID, map[string]interface{}{
-		"userId": info.UserID,
+	e = l.svcCtx.CacheConnApi.User.SetInfo(info.UserId, map[string]interface{}{
+		"userId": info.UserId,
 		"mobile": info.Mobile,
 		"name":   info.Name,
 		"avatar": info.Avatar,
@@ -78,7 +83,7 @@ func (l *LoginLogic) Login(in *api.UserLoginReq) (res *api.UserLoginRes, err err
 		l.Logger.Errorf("%s 存储用户缓存 fail:%s", l.svcCtx.Config.ServiceName, e.Error())
 		goto Result
 	}
-	e = l.svcCtx.BizConn.Set(l.ctx, fmt.Sprintf("%s%s", biz.Biz_Key_USER_TOKEN, token), info.UserID, time.Duration(in.Seconds)*time.Second).Err()
+	e = l.svcCtx.BizConn.Set(l.ctx, fmt.Sprintf("%s%s", biz.Biz_Key_USER_TOKEN, token), info.UserId, time.Duration(in.Seconds)*time.Second).Err()
 	if e != nil {
 		code = xcode.USER_SET_INFOCACHE_FAIL
 		l.Logger.Errorf("%s 存储用户token fail:%s", l.svcCtx.Config.ServiceName, e.Error())

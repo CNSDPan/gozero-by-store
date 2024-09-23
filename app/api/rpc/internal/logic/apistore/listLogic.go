@@ -24,6 +24,11 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
+// List
+// @Desc：店铺列表
+// @param：in
+// @return：res
+// @return：err
 func (l *ListLogic) List(in *api.StoreListReq) (res *api.StoreListRes, err error) {
 	var (
 		e    error

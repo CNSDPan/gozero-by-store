@@ -43,6 +43,8 @@ var codeMessage = map[string]string{
 	STORE_USER_TOKEN_GET:    "店长Token获取错误",
 	STORE_USER_TOKEN_DEL:    "店长Token删除错误",
 	STORE_USER_TOKEN_RULER:  "店长Token不存在|错误",
+
+	STORE_MEMBER_ITEM_FAIL: "店铺会员列表获取异常",
 	/***************************************/
 }
 

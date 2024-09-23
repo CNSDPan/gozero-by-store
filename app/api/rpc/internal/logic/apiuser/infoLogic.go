@@ -32,6 +32,11 @@ func NewInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *InfoLogic {
 	}
 }
 
+// Info
+// @Desc：用户详情
+// @param：in
+// @return：res
+// @return：err
 func (l *InfoLogic) Info(in *api.UserInfoReq) (res *api.UserInfoRes, err error) {
 	var (
 		e         error
@@ -51,7 +56,7 @@ func (l *InfoLogic) Info(in *api.UserInfoReq) (res *api.UserInfoRes, err error) 
 			l.Logger.Errorf("%s 获取用户信息 fail:%s", l.svcCtx.Config.ServiceName, e.Error())
 			res.Result.ErrMsg = e.Error()
 		} else {
-			res.UserId = info.UserID
+			res.UserId = info.UserId
 			res.Mobile = info.Mobile
 			res.Name = info.Name
 			res.Avatar = info.Avatar
@@ -78,7 +83,7 @@ GetCache:
 		if e != nil {
 			code = xcode.USER_INFO_FAIL
 			goto Result
-		} else if info.UserID == 0 {
+		} else if info.UserId == 0 {
 			code = xcode.USER_INFO_FAIL
 			goto Result
 		}

@@ -68,8 +68,8 @@ type StoreUser struct {
 
 type StoreUsersReq struct {
 	StoreId int64 `json:"storeId,omitempty,string"`
-	Limit   int64 `json:"limit"`
-	Offset  int64 `json:"offset"`
+	Limit   int32 `json:"limit"`
+	Offset  int32 `json:"offset"`
 }
 
 type StoreUsersRes struct {

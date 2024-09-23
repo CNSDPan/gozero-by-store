@@ -27,6 +27,11 @@ func NewInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *InfoLogic {
 	}
 }
 
+// Info
+// @Desc：店铺详情
+// @param：in
+// @return：res
+// @return：err
 func (l *InfoLogic) Info(in *api.StoreInfoReq) (res *api.StoreInfoRes, err error) {
 	var (
 		e          error
