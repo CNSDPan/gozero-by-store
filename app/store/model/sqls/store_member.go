@@ -69,3 +69,9 @@ func (obj *StoresMemberMgr) SelectPageApi(page IPage, opts ...Option) (resultPag
 func (obj *StoresMemberMgr) WithStoreId(storeId int64) Option {
 	return optionFunc(func(o *options) { o.query["store_id"] = storeId })
 }
+
+func (obj *StoresMemberMgr) GetStoreIdsByUserId(userId int64) []int64 {
+	storeIds := make([]int64, 0)
+	obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("user_id = ?", userId).Select("store_id").Find(&storeIds)
+	return storeIds
+}

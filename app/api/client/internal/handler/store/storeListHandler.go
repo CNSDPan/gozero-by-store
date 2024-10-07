@@ -11,8 +11,19 @@ import (
 
 func StoreListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var req types.StoreListReq
+		if err := httpx.Parse(r, &req); err != nil {
+			code, msg := xcode.GetCodeMessage(xcode.RESPONSE_NOT_FOUND)
+			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
+				ErrMsg:  err.Error(),
+				Code:    code,
+				Message: msg,
+				Data:    map[string]interface{}{},
+			})
+			return
+		}
 		l := store.NewStoreListLogic(r.Context(), svcCtx)
-		res, resp, err := l.StoreList()
+		res, resp, err := l.StoreList(&req)
 		if err != nil || res.Code != xcode.RESPONSE_SUCCESS {
 			httpx.OkJsonCtx(r.Context(), w, types.JSONResponseCtx{
 				ErrMsg:  res.ErrMsg,

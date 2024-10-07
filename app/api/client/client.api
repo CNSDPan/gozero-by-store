@@ -65,6 +65,9 @@ type (
 	StoreBecomeRes {
 		Url string `json:"url"`
 	}
+	StoreListReq {
+		UserId int64 `json:"userId,string,optional"`
+	}
 	StoreListRes {
 		Total   int64       `json:"total"`
 		Page    int64       `json:"page"`
@@ -74,7 +77,8 @@ type (
 		Rows    interface{} `json:"rows"`
 	}
 	StoreInfoReq {
-		StoreId int64 `json:"storeId,omitempty,string"`
+		UserId  int64 `json:"userId,string,optional"`
+		StoreId int64 `json:"storeId,string,omitempty"`
 	}
 	StoreInfoRes {
 		StoreId   int64     `json:"storeId,string"`
@@ -141,7 +145,7 @@ service client {
 
 	@doc "店铺列表"
 	@handler StoreList
-	post /store/list returns (StoreListRes)
+	post /store/list (StoreListReq) returns (StoreListRes)
 
 	@doc "店铺信息"
 	@handler StoreInfo

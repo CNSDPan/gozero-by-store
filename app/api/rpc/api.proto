@@ -72,13 +72,16 @@ message StoresMap{
   int64 current = 6;
   repeated StoreItem rows = 7;
 }
-message StoreListReq{}
+message StoreListReq{
+  int64 userId = 1;
+}
 message StoreListRes{
   Response result = 1;
   StoresMap data = 2;
 }
 message StoreInfoReq{
   int64 storeId = 1;
+  int64 userId = 2;
 }
 message StoreInfoRes {
   Response result = 1;

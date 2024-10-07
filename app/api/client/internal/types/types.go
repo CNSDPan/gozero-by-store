@@ -38,7 +38,8 @@ type StoreBecomeRes struct {
 }
 
 type StoreInfoReq struct {
-	StoreId int64 `json:"storeId,omitempty,string"`
+	UserId  int64 `json:"userId,string,optional"`
+	StoreId int64 `json:"storeId,string,omitempty"`
 }
 
 type StoreInfoRes struct {
@@ -47,6 +48,10 @@ type StoreInfoRes struct {
 	Avatar    string    `json:"avatar"`
 	Contacts  int64     `json:"contacts"`
 	StoreUser StoreUser `json:"storeUser"`
+}
+
+type StoreListReq struct {
+	UserId int64 `json:"userId,string,optional"`
 }
 
 type StoreListRes struct {

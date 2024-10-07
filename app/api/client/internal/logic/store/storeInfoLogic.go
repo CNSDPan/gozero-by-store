@@ -63,7 +63,7 @@ func (l *StoreInfoLogic) StoreInfo(req *types.StoreInfoReq) (res *types.Response
 			}
 		}
 	}()
-	if rpcRes, err = l.svcCtx.ApiRpcCl.Store.Info(ctx, &apistore.StoreInfoReq{StoreId: req.StoreId}); err != nil {
+	if rpcRes, err = l.svcCtx.ApiRpcCl.Store.Info(ctx, &apistore.StoreInfoReq{StoreId: req.StoreId, UserId: req.UserId}); err != nil {
 		return
 	}
 	userRpcRes, err = l.svcCtx.ApiRpcCl.User.Info(ctx, &apiuser.UserInfoReq{

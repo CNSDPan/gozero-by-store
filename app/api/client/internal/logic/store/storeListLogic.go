@@ -25,7 +25,7 @@ func NewStoreListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StoreLi
 	}
 }
 
-func (l *StoreListLogic) StoreList() (res *types.Response, resp *types.StoreListRes, err error) {
+func (l *StoreListLogic) StoreList(req *types.StoreListReq) (res *types.Response, resp *types.StoreListRes, err error) {
 	code := ""
 	res = &types.Response{}
 	resp = &types.StoreListRes{}
@@ -51,9 +51,14 @@ func (l *StoreListLogic) StoreList() (res *types.Response, resp *types.StoreList
 			resp.Page = rpcRes.Data.Page
 			resp.Current = rpcRes.Data.Current
 			resp.Total = rpcRes.Data.Total
-			resp.Rows = rpcRes.Data.Rows
+			if len(rpcRes.Data.Rows) > 0 {
+				resp.Rows = rpcRes.Data.Rows
+			} else {
+				resp.Rows = make([]interface{}, 0)
+			}
+
 		}
 	}()
-	rpcRes, err = l.svcCtx.ApiRpcCl.Store.List(ctx, &apistore.StoreListReq{})
+	rpcRes, err = l.svcCtx.ApiRpcCl.Store.List(ctx, &apistore.StoreListReq{UserId: req.UserId})
 	return
 }

@@ -67,15 +67,15 @@ func (l *CreateStoreLogic) CreateStore(in *store.CreateStoreReq) (res *store.Cre
 	}
 
 	if e = l.svcCtx.CacheConnApi.Store.SetStoreAndStoreUser(stores.StoreId, map[string]interface{}{
-		"storeUserID": storeUsers.StoreUserId,
-		"storeID":     stores.StoreId,
+		"storeUserId": storeUsers.StoreUserId,
+		"storeId":     stores.StoreId,
 		"name":        stores.Name,
 		"avatar":      stores.Avatar,
 		"desc":        stores.Desc,
 		"contacts":    0,
 	}, storeUsers.StoreUserId, map[string]interface{}{
-		"storeUserID": storeUsers.StoreUserId,
-		"storeID":     stores.StoreId,
+		"storeUserId": storeUsers.StoreUserId,
+		"storeId":     stores.StoreId,
 		"userId":      in.UserId,
 	}, l.svcCtx.Config.CacheSeconds); e != nil {
 		l.Logger.Errorf("%s 存储门店和店长数据缓存 fail:%s", l.svcCtx.Config.ServiceName, e.Error())

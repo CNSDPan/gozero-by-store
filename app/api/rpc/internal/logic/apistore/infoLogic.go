@@ -49,6 +49,10 @@ func (l *InfoLogic) Info(in *api.StoreInfoReq) (res *api.StoreInfoRes, err error
 			res.Result.ErrMsg = e.Error()
 		}
 	}()
+	if in.UserId != 0 {
+		in.StoreId = l.svcCtx.StoreModel.StoreUsersMgr.GetStoreIdByUserId(in.UserId)
+	}
+
 	if storeCache, e = l.svcCtx.CacheConnApi.Store.GetInfo(in.StoreId); e != nil {
 		code = xcode.STORE_INFO_FAIL
 		return res, nil
@@ -94,6 +98,7 @@ func (l *InfoLogic) Info(in *api.StoreInfoReq) (res *api.StoreInfoRes, err error
 		res.Contacts = &contacts
 		res.StoreUserId, _ = strconv.ParseInt(storeCache["storeUserId"], 10, 64)
 		res.UserId, _ = strconv.ParseInt(storeCache["userId"], 10, 64)
+		l.Logger.Errorf("用户ID：%+v %+v", res.UserId, storeCache["userId"])
 	}
 	return res, nil
 }

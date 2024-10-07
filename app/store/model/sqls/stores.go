@@ -109,7 +109,7 @@ func (obj *StoresMgr) CreatStore(stores Stores) (err error) {
 // @param：opts
 // @return：resultPage
 // @return：err
-func (obj *StoresMgr) SelectPageApi(page IPage, opts ...Option) (resultPage IPage, err error) {
+func (obj *StoresMgr) SelectPageApi(page IPage, where interface{}, opts ...Option) (resultPage IPage, err error) {
 	options := options{
 		query: make(map[string]interface{}, len(opts)),
 	}
@@ -119,7 +119,7 @@ func (obj *StoresMgr) SelectPageApi(page IPage, opts ...Option) (resultPage IPag
 	resultPage = page
 	results := make([]StoresApi, 0)
 	var count int64 // 统计总的记录数
-	query := obj.DB.WithContext(obj.ctx).Model(Stores{}).Where(options.query)
+	query := obj.DB.WithContext(obj.ctx).Model(Stores{}).Where(options.query).Where(where)
 	query.Count(&count)
 	resultPage.SetTotal(count)
 	if len(page.GetOrederItemsString()) > 0 {

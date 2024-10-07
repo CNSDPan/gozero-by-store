@@ -3,6 +3,7 @@ package apistorelogic
 import (
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
+	"gorm.io/gorm/clause"
 	"store/app/api/rpc/api/apistore"
 	"store/app/api/rpc/internal/svc"
 	"store/app/api/rpc/pb/api"
@@ -31,8 +32,11 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 // @return：err
 func (l *ListLogic) List(in *api.StoreListReq) (res *api.StoreListRes, err error) {
 	var (
-		e    error
-		code = xcode.RESPONSE_SUCCESS
+		e             error
+		code          = xcode.RESPONSE_SUCCESS
+		storeIds      = make([]int64, 0)
+		whereClause   interface{}
+		storeIdsInter = make([]interface{}, 0)
 	)
 	res = &api.StoreListRes{
 		Result: &apistore.Response{},
@@ -45,8 +49,21 @@ func (l *ListLogic) List(in *api.StoreListReq) (res *api.StoreListRes, err error
 			res.Result.ErrMsg = e.Error()
 		}
 	}()
+	if in.UserId > 0 {
+		storeIds = l.svcCtx.StoreModel.StoresMemberMgr.GetStoreIdsByUserId(in.UserId)
+		for _, storeId := range storeIds {
+			storeIdsInter = append(storeIdsInter, storeId)
+		}
+		whereClause = clause.Where{Exprs: []clause.Expression{
+			clause.IN{
+				Column: "store_id",
+				Values: storeIdsInter,
+			},
+		}}
+	}
 	items, e := l.svcCtx.StoreModel.StoresMgr.SelectPageApi(
 		sqlsStore.NewPage(100, 0),
+		whereClause,
 		l.svcCtx.StoreModel.StoresMgr.WithStatusEnable(),
 	)
 	if e != nil {
@@ -70,6 +87,5 @@ func (l *ListLogic) List(in *api.StoreListReq) (res *api.StoreListRes, err error
 		res.Data.Total = items.GetTotal()
 		res.Data.Rows = rows
 	}
-
 	return res, nil
 }

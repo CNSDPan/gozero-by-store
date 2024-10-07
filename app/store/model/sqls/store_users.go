@@ -129,3 +129,8 @@ func (obj *StoreUsersMgr) CreateStoreUser(storeUsers StoreUsers, store Stores) (
 	}
 	return tx.Commit().Error
 }
+
+func (obj *StoreUsersMgr) GetStoreIdByUserId(userId int64) (storeId int64) {
+	obj.DB.WithContext(obj.ctx).Model(StoreUsers{}).Where("`user_id` = ?", userId).Select("store_id").Find(&storeId)
+	return
+}

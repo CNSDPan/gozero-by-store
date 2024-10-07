@@ -50,7 +50,7 @@ func (store *CacheStore) GetInfo(storeId int64) (map[string]string, error) {
 	} else if err != nil {
 		return nil, err
 	} else if len(suInfo) == 0 {
-		suInfo["userId"] = ""
+		suInfo["userId"] = "0"
 	}
 	info["userId"] = suInfo["userId"]
 	return info, nil
