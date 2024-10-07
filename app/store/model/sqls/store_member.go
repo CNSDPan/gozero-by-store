@@ -75,3 +75,26 @@ func (obj *StoresMemberMgr) GetStoreIdsByUserId(userId int64) []int64 {
 	obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("user_id = ?", userId).Select("store_id").Find(&storeIds)
 	return storeIds
 }
+
+func (obj *StoresMemberMgr) MemberJoin(storeId int64, userId int64, storeMemberId int64) (row int64, err error) {
+	obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("user_id = ?", userId).Where("store_id = ?", storeId).Count(&row)
+	if row > 0 {
+		return row, nil
+	}
+	tx := obj.DB.WithContext(obj.ctx).Begin()
+	defer func() {
+		// 防止panic
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	tx.Table(StoreMemberTableName()).Create(&StoreMember{
+		StoreMemberId: storeMemberId,
+		StoreId:       storeId,
+		UserId:        userId,
+	})
+	return 0, tx.Commit().Error
+}

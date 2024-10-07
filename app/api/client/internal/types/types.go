@@ -39,7 +39,7 @@ type StoreBecomeRes struct {
 
 type StoreInfoReq struct {
 	UserId  int64 `json:"userId,string,optional"`
-	StoreId int64 `json:"storeId,string,omitempty"`
+	StoreId int64 `json:"storeId,string,optional"`
 }
 
 type StoreInfoRes struct {
@@ -61,6 +61,13 @@ type StoreListRes struct {
 	Offset  int64       `json:"offset"`
 	Current int64       `json:"current"`
 	Rows    interface{} `json:"rows"`
+}
+
+type StoreMemberJoinReq struct {
+	StoreId int64 `json:"storeId,string"`
+}
+
+type StoreMemberJoinRes struct {
 }
 
 type StoreUser struct {

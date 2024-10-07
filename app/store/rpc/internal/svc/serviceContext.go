@@ -13,13 +13,14 @@ import (
 )
 
 type ServiceContext struct {
-	Config         config.Config
-	Node           *snowflake.Node
-	CacheConn      *redis.Client
-	CacheConnApi   *cache.CacheItem
-	BizConn        *redis.Client
-	StoreModel     *sqls.StoresMgr
-	StoreUserModel *sqls.StoreUsersMgr
+	Config           config.Config
+	Node             *snowflake.Node
+	CacheConn        *redis.Client
+	CacheConnApi     *cache.CacheItem
+	BizConn          *redis.Client
+	StoreModel       *sqls.StoresMgr
+	StoreUserModel   *sqls.StoreUsersMgr
+	StoreMemberModel *sqls.StoresMemberMgr
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -37,12 +38,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	bizConn := inital.NewBizRedisConn(c.BizRedis, c.Name)
 
 	return &ServiceContext{
-		Config:         c,
-		Node:           node,
-		CacheConn:      cacheConn,
-		CacheConnApi:   cache.NewCache(cache.NewCacheUser(context.Background(), cacheConn), cache.NewCacheStore(context.Background(), cacheConn)),
-		BizConn:        bizConn,
-		StoreModel:     sqls.NewStoresMgr(inital.NewSqlDB(c.Sql, "storeModel")),
-		StoreUserModel: sqls.NewStoreUsersMgr(inital.NewSqlDB(c.Sql, "storeUserModel")),
+		Config:           c,
+		Node:             node,
+		CacheConn:        cacheConn,
+		CacheConnApi:     cache.NewCache(cache.NewCacheUser(context.Background(), cacheConn), cache.NewCacheStore(context.Background(), cacheConn)),
+		BizConn:          bizConn,
+		StoreModel:       sqls.NewStoresMgr(inital.NewSqlDB(c.Sql, "storeModel")),
+		StoreUserModel:   sqls.NewStoreUsersMgr(inital.NewSqlDB(c.Sql, "storeUserModel")),
+		StoreMemberModel: sqls.NewStoresMemberMgr(inital.NewSqlDB(c.Sql, "storeMemberModel")),
 	}
 }

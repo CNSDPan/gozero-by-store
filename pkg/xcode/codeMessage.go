@@ -45,6 +45,9 @@ var codeMessage = map[string]string{
 	STORE_USER_TOKEN_RULER:  "店长Token不存在|错误",
 
 	STORE_MEMBER_ITEM_FAIL: "店铺会员列表获取异常",
+	STORE_MEMBER_JOIN_FAIL: "加入会员异常",
+	STORE_MEMBER_JOINED:    "已是会员",
+
 	/***************************************/
 }
 

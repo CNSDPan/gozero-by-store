@@ -34,6 +34,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodPost,
+					Path:    "/store/member/join",
+					Handler: store.StoreMemberJoinHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/store/user/list",
 					Handler: store.StoreUserListHandler(serverCtx),
 				},

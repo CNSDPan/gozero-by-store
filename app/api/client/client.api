@@ -78,7 +78,7 @@ type (
 	}
 	StoreInfoReq {
 		UserId  int64 `json:"userId,string,optional"`
-		StoreId int64 `json:"storeId,string,omitempty"`
+		StoreId int64 `json:"storeId,string,optional"`
 	}
 	StoreInfoRes {
 		StoreId   int64     `json:"storeId,string"`
@@ -100,6 +100,10 @@ type (
 		Current int64       `json:"current"`
 		Rows    interface{} `json:"rows"`
 	}
+	StoreMemberJoinReq {
+		StoreId int64 `json:"storeId,string"`
+	}
+	StoreMemberJoinRes  {}
 )
 
 @server (
@@ -154,5 +158,9 @@ service client {
 	@doc "店铺会员列表"
 	@handler StoreUserList
 	post /store/user/list (StoreUsersReq) returns (StoreUsersRes)
+
+	@doc "店铺会员加入"
+	@handler StoreMemberJoin
+	post /store/member/join (StoreMemberJoinReq) returns (StoreMemberJoinRes)
 }
 
