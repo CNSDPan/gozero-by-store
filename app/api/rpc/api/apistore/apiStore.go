@@ -13,6 +13,8 @@ import (
 )
 
 type (
+	AuthReq            = api.AuthReq
+	AuthRes            = api.AuthRes
 	MemberUsersItemReq = api.MemberUsersItemReq
 	MemberUsersItemRes = api.MemberUsersItemRes
 	Response           = api.Response
