@@ -308,3 +308,93 @@ var ApiStore_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "api.proto",
 }
+
+const (
+	ApiToken_CheckAuth_FullMethodName = "/api.ApiToken/CheckAuth"
+)
+
+// ApiTokenClient is the client API for ApiToken service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ApiTokenClient interface {
+	CheckAuth(ctx context.Context, in *AuthReq, opts ...grpc.CallOption) (*AuthRes, error)
+}
+
+type apiTokenClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewApiTokenClient(cc grpc.ClientConnInterface) ApiTokenClient {
+	return &apiTokenClient{cc}
+}
+
+func (c *apiTokenClient) CheckAuth(ctx context.Context, in *AuthReq, opts ...grpc.CallOption) (*AuthRes, error) {
+	out := new(AuthRes)
+	err := c.cc.Invoke(ctx, ApiToken_CheckAuth_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ApiTokenServer is the server API for ApiToken service.
+// All implementations must embed UnimplementedApiTokenServer
+// for forward compatibility
+type ApiTokenServer interface {
+	CheckAuth(context.Context, *AuthReq) (*AuthRes, error)
+	mustEmbedUnimplementedApiTokenServer()
+}
+
+// UnimplementedApiTokenServer must be embedded to have forward compatible implementations.
+type UnimplementedApiTokenServer struct {
+}
+
+func (UnimplementedApiTokenServer) CheckAuth(context.Context, *AuthReq) (*AuthRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckAuth not implemented")
+}
+func (UnimplementedApiTokenServer) mustEmbedUnimplementedApiTokenServer() {}
+
+// UnsafeApiTokenServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ApiTokenServer will
+// result in compilation errors.
+type UnsafeApiTokenServer interface {
+	mustEmbedUnimplementedApiTokenServer()
+}
+
+func RegisterApiTokenServer(s grpc.ServiceRegistrar, srv ApiTokenServer) {
+	s.RegisterService(&ApiToken_ServiceDesc, srv)
+}
+
+func _ApiToken_CheckAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiTokenServer).CheckAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiToken_CheckAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiTokenServer).CheckAuth(ctx, req.(*AuthReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ApiToken_ServiceDesc is the grpc.ServiceDesc for ApiToken service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ApiToken_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.ApiToken",
+	HandlerType: (*ApiTokenServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CheckAuth",
+			Handler:    _ApiToken_CheckAuth_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "api.proto",
+}

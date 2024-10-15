@@ -108,3 +108,13 @@ service ApiStore{
   rpc Info(StoreInfoReq) returns (StoreInfoRes);
   rpc MemberUserList(MemberUsersItemReq) returns (MemberUsersItemRes);
 }
+
+message AuthReq {
+  string token = 1;
+}
+message AuthRes {
+  Response result = 1;
+}
+service ApiToken {
+  rpc CheckAuth(AuthReq) returns (AuthRes);
+}

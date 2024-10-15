@@ -50,17 +50,20 @@ func (l *StoreInfoLogic) StoreInfo(req *types.StoreInfoReq) (res *types.Response
 			res.Code = rpcRes.Result.Code
 			res.Message = rpcRes.Result.Message
 
-			resp.StoreId = rpcRes.StoreId
-			resp.Name = rpcRes.Name
-			resp.Avatar = rpcRes.Avatar
-			resp.Contacts = *rpcRes.Contacts
-			resp.StoreUser = types.StoreUser{
-				StoreUserId: rpcRes.StoreUserId,
-				UserId:      rpcRes.UserId,
-				Mobile:      userRpcRes.Mobile,
-				Name:        userRpcRes.Name,
-				Avatar:      userRpcRes.Avatar,
+			if res.Code == xcode.RESPONSE_SUCCESS {
+				resp.StoreId = rpcRes.StoreId
+				resp.Name = rpcRes.Name
+				resp.Avatar = rpcRes.Avatar
+				resp.Contacts = *rpcRes.Contacts
+				resp.StoreUser = types.StoreUser{
+					StoreUserId: rpcRes.StoreUserId,
+					UserId:      rpcRes.UserId,
+					Mobile:      userRpcRes.Mobile,
+					Name:        userRpcRes.Name,
+					Avatar:      userRpcRes.Avatar,
+				}
 			}
+
 		}
 	}()
 	if rpcRes, err = l.svcCtx.ApiRpcCl.Store.Info(ctx, &apistore.StoreInfoReq{StoreId: req.StoreId, UserId: req.UserId}); err != nil {
@@ -69,6 +72,5 @@ func (l *StoreInfoLogic) StoreInfo(req *types.StoreInfoReq) (res *types.Response
 	userRpcRes, err = l.svcCtx.ApiRpcCl.User.Info(ctx, &apiuser.UserInfoReq{
 		UserId: rpcRes.UserId,
 	})
-	rpcRes.Result = userRpcRes.Result
 	return
 }

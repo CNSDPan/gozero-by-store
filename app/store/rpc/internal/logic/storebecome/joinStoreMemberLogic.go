@@ -40,6 +40,10 @@ func (l *JoinStoreMemberLogic) JoinStoreMember(in *store.JoinStoreMemberReq) (re
 			res.Result.ErrMsg = e.Error()
 		}
 	}()
+	if l.svcCtx.StoreMemberModel.GetMemberContacts(in.StoreId) >= 50 {
+		code = xcode.STORE_MEMBER_JOIN_FULL
+		return res, err
+	}
 	has, e = l.svcCtx.StoreMemberModel.MemberJoin(in.StoreId, in.UserId, l.svcCtx.Node.Generate().Int64())
 	if has > 0 {
 		code = xcode.STORE_MEMBER_JOINED

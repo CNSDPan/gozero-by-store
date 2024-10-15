@@ -98,3 +98,13 @@ func (obj *StoresMemberMgr) MemberJoin(storeId int64, userId int64, storeMemberI
 	})
 	return 0, tx.Commit().Error
 }
+
+// GetMemberContacts
+// @Desc：获取店铺会员总数
+// @param：storeId
+// @return：int64
+func (obj *StoresMemberMgr) GetMemberContacts(storeId int64) int64 {
+	var contacts int64
+	obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("store_id = ?", storeId).Count(&contacts)
+	return contacts
+}

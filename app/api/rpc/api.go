@@ -6,6 +6,7 @@ import (
 
 	"store/app/api/rpc/internal/config"
 	apistoreServer "store/app/api/rpc/internal/server/apistore"
+	apitokenServer "store/app/api/rpc/internal/server/apitoken"
 	apiuserServer "store/app/api/rpc/internal/server/apiuser"
 	"store/app/api/rpc/internal/svc"
 	"store/app/api/rpc/pb/api"
@@ -29,6 +30,7 @@ func main() {
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		api.RegisterApiUserServer(grpcServer, apiuserServer.NewApiUserServer(ctx))
 		api.RegisterApiStoreServer(grpcServer, apistoreServer.NewApiStoreServer(ctx))
+		api.RegisterApiTokenServer(grpcServer, apitokenServer.NewApiTokenServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

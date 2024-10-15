@@ -71,7 +71,7 @@ func (l *InfoLogic) Info(in *api.UserInfoReq) (res *api.UserInfoRes, err error) 
 		code = xcode.USER_TOKEN_GET
 		goto Result
 	} else if userIdStr == "" {
-		err = errors.New("")
+		e = errors.New("")
 		code = xcode.USER_TOKEN_FAIL
 		goto Result
 	}
