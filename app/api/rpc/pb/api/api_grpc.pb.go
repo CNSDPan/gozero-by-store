@@ -149,6 +149,7 @@ const (
 	ApiStore_List_FullMethodName           = "/api.ApiStore/List"
 	ApiStore_Info_FullMethodName           = "/api.ApiStore/Info"
 	ApiStore_MemberUserList_FullMethodName = "/api.ApiStore/MemberUserList"
+	ApiStore_MyAllStore_FullMethodName     = "/api.ApiStore/MyAllStore"
 )
 
 // ApiStoreClient is the client API for ApiStore service.
@@ -158,6 +159,7 @@ type ApiStoreClient interface {
 	List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error)
 	Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
 	MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error)
+	MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error)
 }
 
 type apiStoreClient struct {
@@ -195,6 +197,15 @@ func (c *apiStoreClient) MemberUserList(ctx context.Context, in *MemberUsersItem
 	return out, nil
 }
 
+func (c *apiStoreClient) MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error) {
+	out := new(MyAllStoreIdRes)
+	err := c.cc.Invoke(ctx, ApiStore_MyAllStore_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiStoreServer is the server API for ApiStore service.
 // All implementations must embed UnimplementedApiStoreServer
 // for forward compatibility
@@ -202,6 +213,7 @@ type ApiStoreServer interface {
 	List(context.Context, *StoreListReq) (*StoreListRes, error)
 	Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error)
 	MemberUserList(context.Context, *MemberUsersItemReq) (*MemberUsersItemRes, error)
+	MyAllStore(context.Context, *MyAllStoreIdReq) (*MyAllStoreIdRes, error)
 	mustEmbedUnimplementedApiStoreServer()
 }
 
@@ -217,6 +229,9 @@ func (UnimplementedApiStoreServer) Info(context.Context, *StoreInfoReq) (*StoreI
 }
 func (UnimplementedApiStoreServer) MemberUserList(context.Context, *MemberUsersItemReq) (*MemberUsersItemRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MemberUserList not implemented")
+}
+func (UnimplementedApiStoreServer) MyAllStore(context.Context, *MyAllStoreIdReq) (*MyAllStoreIdRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MyAllStore not implemented")
 }
 func (UnimplementedApiStoreServer) mustEmbedUnimplementedApiStoreServer() {}
 
@@ -285,6 +300,24 @@ func _ApiStore_MemberUserList_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiStore_MyAllStore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MyAllStoreIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiStoreServer).MyAllStore(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiStore_MyAllStore_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiStoreServer).MyAllStore(ctx, req.(*MyAllStoreIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApiStore_ServiceDesc is the grpc.ServiceDesc for ApiStore service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -303,6 +336,10 @@ var ApiStore_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MemberUserList",
 			Handler:    _ApiStore_MemberUserList_Handler,
+		},
+		{
+			MethodName: "MyAllStore",
+			Handler:    _ApiStore_MyAllStore_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

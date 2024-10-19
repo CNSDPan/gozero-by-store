@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package api;
+
 option go_package="./api";
 
 message Response{
@@ -102,11 +103,19 @@ message MemberUsersItemRes {
   Response result = 1;
   UsersMap data = 2;
 }
+message MyAllStoreIdReq {
+  int64 userId = 1;
+}
+message MyAllStoreIdRes {
+  Response result = 1;
+  repeated int64 storeId = 2;
+}
 
 service ApiStore{
   rpc List(StoreListReq) returns (StoreListRes);
   rpc Info(StoreInfoReq) returns (StoreInfoRes);
   rpc MemberUserList(MemberUsersItemReq) returns (MemberUsersItemRes);
+  rpc MyAllStore(MyAllStoreIdReq) returns (MyAllStoreIdRes);
 }
 
 message AuthReq {

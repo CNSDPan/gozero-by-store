@@ -36,3 +36,8 @@ func (s *ApiStoreServer) MemberUserList(ctx context.Context, in *api.MemberUsers
 	l := apistorelogic.NewMemberUserListLogic(ctx, s.svcCtx)
 	return l.MemberUserList(in)
 }
+
+func (s *ApiStoreServer) MyAllStore(ctx context.Context, in *api.MyAllStoreIdReq) (*api.MyAllStoreIdRes, error) {
+	l := apistorelogic.NewMyAllStoreLogic(ctx, s.svcCtx)
+	return l.MyAllStore(in)
+}

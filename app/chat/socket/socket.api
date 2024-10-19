@@ -1,0 +1,39 @@
+syntax = "v1"
+
+info (
+	title:   "socket.client" // TODO: add title
+	desc:    "打通即时通讯服务" // TODO: add description
+	version: "v1.0.0"
+)
+
+type Response {
+	ErrMsg  string `json:"errMsg`
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+type (
+	ConnectReq {
+		Token string `json:"token,omitempty"`
+	}
+	UserInfoRes {
+		UserId int64  `json:"userId,string"`
+		Mobile int64  `json:"mobile,string"`
+		Name   string `json:"name"`
+		Avatar string `json:"avatar"`
+	}
+)
+
+@server (
+	jwt:        Auth
+	prefix:     /v1/ws
+	group:      ws
+	timeout:    3s
+	middleware: XHeaderMiddleware,AuthMiddleware
+)
+service ws {
+	@doc "socket 连接"
+	@handler Socket
+	post /socket (ConnectReq) returns (UserInfoRes)
+}
+

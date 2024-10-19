@@ -71,6 +71,9 @@ func (usersA *UsersApi) TableName() string {
 func UsersTableName() string {
 	return "users"
 }
+func UsersJoinTableName() string {
+	return "users as u"
+}
 
 func NewUserMgr(db *gorm.DB) *UsersMgr {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -169,4 +172,18 @@ func (obj *UsersMgr) GetBatchFromUserIDApi(userIDs []int64) (results []*UsersApi
 func (obj *UsersMgr) GetFromMobileApi(mobile int64) (result UsersApi, err error) {
 	err = obj.DB.WithContext(obj.ctx).Model(Users{}).Where("`mobile` = ?", mobile).Find(&result).Error
 	return
+}
+
+func (obj *UsersMgr) MyStoreIds(userId int64) []int64 {
+	var (
+		storeIds    = make([]int64, 0)
+		storeUsers  = make([]int64, 0)
+		storeMember = make([]int64, 0)
+	)
+
+	obj.DB.WithContext(obj.ctx).Table("store_users").Where("`user_id` = ?", userId).Select("store_id").Find(&storeUsers)
+	obj.DB.WithContext(obj.ctx).Table("store_member").Where("`user_id` = ?", userId).Select("store_id").Find(&storeMember)
+	storeIds = append(storeIds, storeUsers...)
+	storeIds = append(storeIds, storeMember...)
+	return storeIds
 }

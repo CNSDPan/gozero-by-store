@@ -5,6 +5,7 @@ go 1.21.9
 require (
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/gorilla/websocket v1.5.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/shopspring/decimal v1.4.0
 	github.com/zeromicro/go-zero v1.7.2

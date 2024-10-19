@@ -14,7 +14,9 @@ var codeMessage = map[string]string{
 	RESPONSE_SECRET_FAIL:       "无效secret",
 	RESPONSE_SIGN_FAIL:         "无效sign",
 
-	/*****************用户模块**********************/
+	SOCKET_UPGRADER_FAIL: "ws无效协议",
+
+	/*****************用户模块 [10100 ~ 10199]**********************/
 	USER_LOGIN_FAIL:         "用户账号密码不正确",
 	USER_LOGINED:            "用户已登录",
 	USER_INFO_FAIL:          "用户信息不存在",
@@ -30,7 +32,7 @@ var codeMessage = map[string]string{
 	USER_INFO_ERR:           "用户信息获取异常",
 	/***************************************/
 
-	/*****************店铺模块**********************/
+	/*****************店铺模块 [10200 ~ 10299]**********************/
 	STORE_CREAT:        "店铺创建失败",
 	STORE_CREATED:      "已创建过店铺",
 	STORE_INFO:         "店铺信息不存在",

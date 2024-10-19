@@ -17,6 +17,8 @@ type (
 	AuthRes            = api.AuthRes
 	MemberUsersItemReq = api.MemberUsersItemReq
 	MemberUsersItemRes = api.MemberUsersItemRes
+	MyAllStoreIdReq    = api.MyAllStoreIdReq
+	MyAllStoreIdRes    = api.MyAllStoreIdRes
 	Response           = api.Response
 	StoreInfoReq       = api.StoreInfoReq
 	StoreInfoRes       = api.StoreInfoRes

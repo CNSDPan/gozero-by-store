@@ -17,6 +17,8 @@ type (
 	AuthRes            = api.AuthRes
 	MemberUsersItemReq = api.MemberUsersItemReq
 	MemberUsersItemRes = api.MemberUsersItemRes
+	MyAllStoreIdReq    = api.MyAllStoreIdReq
+	MyAllStoreIdRes    = api.MyAllStoreIdRes
 	Response           = api.Response
 	StoreInfoReq       = api.StoreInfoReq
 	StoreInfoRes       = api.StoreInfoRes
@@ -35,6 +37,7 @@ type (
 		List(ctx context.Context, in *StoreListReq, opts ...grpc.CallOption) (*StoreListRes, error)
 		Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
 		MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error)
+		MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error)
 	}
 
 	defaultApiStore struct {
@@ -61,4 +64,9 @@ func (m *defaultApiStore) Info(ctx context.Context, in *StoreInfoReq, opts ...gr
 func (m *defaultApiStore) MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error) {
 	client := api.NewApiStoreClient(m.cli.Conn())
 	return client.MemberUserList(ctx, in, opts...)
+}
+
+func (m *defaultApiStore) MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error) {
+	client := api.NewApiStoreClient(m.cli.Conn())
+	return client.MyAllStore(ctx, in, opts...)
 }
