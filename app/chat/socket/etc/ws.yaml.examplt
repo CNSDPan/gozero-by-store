@@ -4,6 +4,7 @@ Port: 6999
 #api.socket接口类型服务ID范围 200~209
 ServiceId: "211" #客户端服务ID
 ServiceName: "API.IM.服务:"
+ServiceIp: ""
 # jwt 配置
 Auth:
   AccessSecret: "8a1895f304359629b647d446447de24d"

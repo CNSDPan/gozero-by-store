@@ -15,7 +15,7 @@ type Client struct {
 	StoreIds     []int64
 	IsRepeatConn string
 	Extend       string
-	HandleClose  chan bool
+	HandleClose  chan int
 	Broadcast    chan types.SocketMsg
 }
 
@@ -34,7 +34,7 @@ func NewClient(wsConn *websocket.Conn, clientId int64, userId int64, userName st
 		UserName:     userName,
 		IsRepeatConn: "",
 		Extend:       "",
-		HandleClose:  make(chan bool, 10),
+		HandleClose:  make(chan int, 10),
 		Broadcast:    make(chan types.SocketMsg, 10000),
 	}
 }

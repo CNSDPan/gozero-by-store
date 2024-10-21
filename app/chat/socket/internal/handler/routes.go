@@ -17,7 +17,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.XHeaderMiddleware, serverCtx.AuthMiddleware},
 			[]rest.Route{
 				{
-					Method:  http.MethodPost,
+					Method:  http.MethodGet,
 					Path:    "/socket",
 					Handler: ws.SocketHandler(serverCtx),
 				},
@@ -25,6 +25,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/ws"),
-		rest.WithTimeout(3000*time.Millisecond),
+		rest.WithTimeout(30000*time.Millisecond),
 	)
 }

@@ -8,8 +8,7 @@ type SocketMsg struct {
 	SendUserId    int64         `json:"sendUserId,string"`
 	ReceiveUserId int64         `json:"ReceiveUserId,string"`
 	Extend        string        `json:"extend"`
-	Body          SocketMsgBody `json:"body"`  // 当socket响应给client的时候使用这里
-	Event         Event         `json:"event"` // 当client发生给socket的时候使用这里
+	Body          SocketMsgBody `json:"body"`
 }
 type SocketMsgBody struct {
 	Operate      int    `json:"operate"`

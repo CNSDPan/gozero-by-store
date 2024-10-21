@@ -27,8 +27,10 @@ func NewBucket(cpu uint) []*Bucket {
 	buckets := make([]*Bucket, cpu)
 	for i := uint(0); i < cpu; i++ {
 		buckets[i] = &Bucket{
-			Clock: sync.RWMutex{},
-			Idx:   uint32(i),
+			Clock:      sync.RWMutex{},
+			UserClient: make(map[int64]*Client, 0),
+			StoresMap:  make(map[int64]*Store, 0),
+			Idx:        uint32(i),
 		}
 	}
 	return buckets

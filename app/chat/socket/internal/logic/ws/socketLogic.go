@@ -32,7 +32,7 @@ func (l *SocketLogic) Socket(req *types.ConnectReq, w http.ResponseWriter, r *ht
 	res = &types.Response{}
 	resp = &types.UserInfoRes{}
 	rpcRes := &apiuser.UserInfoRes{}
-	storeRes := &apiuser.StoreListRes{}
+	storeIdsRes := &apiuser.MyAllStoreIdRes{}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	defer func() {
@@ -56,23 +56,13 @@ func (l *SocketLogic) Socket(req *types.ConnectReq, w http.ResponseWriter, r *ht
 	if err != nil || rpcRes.Result.Code != xcode.RESPONSE_SUCCESS {
 		return
 	}
-	storeRes, err = l.svcCtx.ApiRpcCl.Store.List(ctx, &apiuser.StoreListReq{
-		UserId: rpcRes.UserId,
-	})
-	if err != nil || storeRes.Result.Code != xcode.RESPONSE_SUCCESS {
-		rpcRes.Result.Code = storeRes.Result.Code
-		rpcRes.Result.Message = storeRes.Result.Message
-		rpcRes.Result.ErrMsg = storeRes.Result.ErrMsg
+	storeIdsRes, err = l.svcCtx.ApiRpcCl.Store.MyAllStore(ctx, &apistore.MyAllStoreIdReq{UserId: rpcRes.UserId})
+	if err != nil || storeIdsRes.Result.Code != xcode.RESPONSE_SUCCESS {
+		rpcRes.Result.Code = storeIdsRes.Result.Code
+		rpcRes.Result.Message = storeIdsRes.Result.Message
+		rpcRes.Result.ErrMsg = storeIdsRes.Result.ErrMsg
 		return
 	}
-	storeIdsRes, err := l.svcCtx.ApiRpcCl.Store.MyAllStore(ctx, &apistore.MyAllStoreIdReq{UserId: rpcRes.UserId})
-	if err != nil || storeRes.Result.Code != xcode.RESPONSE_SUCCESS {
-		rpcRes.Result.Code = storeRes.Result.Code
-		rpcRes.Result.Message = storeRes.Result.Message
-		rpcRes.Result.ErrMsg = storeRes.Result.ErrMsg
-		return
-	}
-
 	wsConnect := server.NewConnect()
 	wsConn, err := wsConnect.Run(w, r, l.svcCtx.WsServer.Option.MaxMessageSize, l.svcCtx.WsServer.Option.PongPeriod)
 	if err != nil {

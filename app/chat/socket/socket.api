@@ -28,12 +28,12 @@ type (
 	jwt:        Auth
 	prefix:     /v1/ws
 	group:      ws
-	timeout:    3s
+	timeout:    30s
 	middleware: XHeaderMiddleware,AuthMiddleware
 )
 service ws {
 	@doc "socket 连接"
 	@handler Socket
-	post /socket (ConnectReq) returns (UserInfoRes)
+	get /socket (ConnectReq) returns (UserInfoRes)
 }
 

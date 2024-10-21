@@ -4,7 +4,9 @@ import (
 	"context"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gorilla/websocket"
+	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"io"
 	"store/pkg/types"
 	"store/pkg/util"
 	"strconv"
@@ -77,22 +79,23 @@ func NewServer(serverId string, serverName string, serverIp string, optionsConf 
 // @param：storeIds
 func (s *Server) Run(client *Client, storeIds []int64) {
 	wg := &sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer s.CloseClient(client)
 	defer cancel()
 
+	// 当client关闭时，要通知所以的子协程关闭且清理
+	go func(wg *sync.WaitGroup, client *Client, cancel context.CancelFunc) {
+		defer wg.Done()
+		defer cancel()
+		for range client.HandleClose {
+			return
+		}
+	}(wg, client, cancel)
+
 	// 协程I/O
 	go s.ReadChannel(ctx, wg, client)
 	go s.WriteChan(ctx, wg, client)
-
-	// 当client关闭时，要通知所以的子协程关闭且清理
-	go func() {
-		select {
-		case <-client.HandleClose:
-			cancel()
-		}
-	}()
 
 	// 消息加载我的店铺和入会店铺
 	s.GetBucket(client.UserId).AddBucket(client.UserId, storeIds...)
@@ -115,25 +118,53 @@ func (s *Server) GetBucket(userId int64) *Bucket {
 func (s *Server) CloseClient(client *Client) {
 	_ = client.WsConn.Close()
 	close(client.HandleClose)
-
 	s.Log.Infof("%s client 连接关闭;user:[%d,%s]", s.ServerName, client.UserId, client.UserName)
 }
 
 func (s *Server) WriteChan(ctx context.Context, wg *sync.WaitGroup, client *Client) {
 	var (
-		err    error
-		ticker = time.NewTicker(s.Option.PingPeriod)
+		w           io.WriteCloser
+		err         error
+		ticker      = time.NewTicker(s.Option.PingPeriod)
+		b           []byte
+		clientClose = false
 	)
-	defer wg.Done()
 	defer func() {
-		// 上下文关闭协程的时候，不往管道里写数据
 		if r := recover(); r != nil {
-			s.Log.Errorf("%s 严重异常捕抓 fail:%v", s.ServerName, r)
+			s.Log.Errorf("%s ReadChannel 严重异常捕抓 fail:%v", s.ServerName, r)
 		}
-		client.HandleClose <- true
+	}()
+	defer func() {
+		if !clientClose {
+			client.HandleClose <- 1
+		}
+		wg.Done()
 	}()
 	for {
 		select {
+		case message, ok := <-client.Broadcast:
+			// 每次写之前，都需要设置超时时间，如果只设置一次就会出现总是超时
+			_ = client.WsConn.SetWriteDeadline(time.Now().Add(s.Option.WriteWait))
+			if !ok {
+				s.Log.Errorf("%s 写消息协程无法正常获取消息", s.ServerName)
+				_ = client.WsConn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+			w, err = client.WsConn.NextWriter(websocket.TextMessage)
+			if err != nil {
+				s.Log.Errorf("%s 写消息 fail:%s", s.ServerName, err.Error())
+				return
+			}
+			b, err = jsonx.Marshal(message.Body)
+			if err != nil {
+				s.Log.Errorf("%s 写消息 jsonx.Marshal() :%s", s.ServerName, err.Error())
+				continue
+			}
+			_, _ = w.Write(b)
+			if err = w.Close(); err != nil {
+				s.Log.Errorf("%s 写消息 w.Close() :%s", s.ServerName, err.Error())
+				return
+			}
 		case <-ticker.C:
 			// 心跳检测
 			// 每次写之前，都需要设置超时时间，如果只设置一次就会出现总是超时
@@ -143,6 +174,7 @@ func (s *Server) WriteChan(ctx context.Context, wg *sync.WaitGroup, client *Clie
 				return
 			}
 		case <-ctx.Done():
+			clientClose = true
 			return
 		}
 	}
@@ -150,19 +182,24 @@ func (s *Server) WriteChan(ctx context.Context, wg *sync.WaitGroup, client *Clie
 
 func (s *Server) ReadChannel(ctx context.Context, wg *sync.WaitGroup, client *Client) {
 	var (
-		ticker = time.NewTicker(2 * time.Millisecond)
+		ticker      = time.NewTicker(2 * time.Millisecond)
+		clientClose = false
 	)
-	defer wg.Done()
 	defer func() {
-		// 上下文关闭协程的时候，不往管道里写数据
 		if r := recover(); r != nil {
-			s.Log.Errorf("%s 严重异常捕抓 fail:%v", s.ServerName, r)
+			s.Log.Errorf("%s ReadChannel 严重异常捕抓 fail:%v", s.ServerName, r)
 		}
-		client.HandleClose <- true
+	}()
+	defer func() {
+		if !clientClose {
+			client.HandleClose <- 1
+		}
+		wg.Done()
 	}()
 	for {
 		select {
 		case <-ctx.Done():
+			clientClose = true
 			return
 		case <-ticker.C:
 			messageType, message, err := client.WsConn.ReadMessage()
