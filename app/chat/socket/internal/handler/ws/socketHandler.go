@@ -14,13 +14,12 @@ func SocketHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := r.Header.Get("Authorization")
 		req := types.ConnectReq{
-			Token: auth[len("Bearer "):],
+			Token: auth,
 		}
 		l := ws.NewSocketLogic(r.Context(), svcCtx)
 		res, _, _ := l.Socket(&req, w, r)
 		if res.Code != xcode.RESPONSE_SUCCESS {
 			httpx.ErrorCtx(r.Context(), w, errors.New(res.Message))
-			//response.Response(w, r, res.Code, res.Message, map[string]interface{}{}, res.ErrMsg)
 			return
 		}
 	}

@@ -44,17 +44,17 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	apiRPC := zrpc.MustNewClient(c.ApiRPC)
-
+	ApiRpcCl := ApiRpc{
+		Store: apistore.NewApiStore(apiRPC),
+		User:  apiuser.NewApiUser(apiRPC),
+		Auth:  apitoken.NewApiToken(apiRPC),
+	}
 	return &ServiceContext{
 		Config:            c,
 		Node:              node,
-		AuthMiddleware:    middleware.NewAuthMiddleware().Handle,
+		AuthMiddleware:    middleware.NewAuthMiddleware(ApiRpcCl.Auth).Handle,
 		XHeaderMiddleware: middleware.NewXHeaderMiddleware().Handle,
-		ApiRpcCl: ApiRpc{
-			Store: apistore.NewApiStore(apiRPC),
-			User:  apiuser.NewApiUser(apiRPC),
-			Auth:  apitoken.NewApiToken(apiRPC),
-		},
-		WsServer: server.NewServer(c.ServiceId, c.ServiceName, c.ServiceIp, c.SocketOptions, node, logx.WithContext(context.Background())),
+		ApiRpcCl:          ApiRpcCl,
+		WsServer:          server.NewServer(c.ServiceId, c.ServiceName, c.ServiceIp, c.SocketOptions, node, logx.WithContext(context.Background())),
 	}
 }

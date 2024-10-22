@@ -43,8 +43,8 @@ func (s *Server) RunSocket(clientId int64, userId int64) {
 	conn, res, err := websocket.DefaultDialer.Dial(ws, wsHead)
 
 	if err != nil {
-		_ = conn.Close()
-		panic(fmt.Sprintf("拨号失败:%v fail:%s", res, err.Error()))
+		log.Printf("拨号失败:%v fail:%s", res, err.Error())
+		return
 	}
 	wg := &sync.WaitGroup{}
 	wg.Add(3)
