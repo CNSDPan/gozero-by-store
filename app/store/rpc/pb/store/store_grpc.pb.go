@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	StoreBecome_CreateStore_FullMethodName     = "/store.StoreBecome/CreateStore"
 	StoreBecome_JoinStoreMember_FullMethodName = "/store.StoreBecome/JoinStoreMember"
+	StoreBecome_SaveChatMessage_FullMethodName = "/store.StoreBecome/SaveChatMessage"
 )
 
 // StoreBecomeClient is the client API for StoreBecome service.
@@ -29,6 +30,7 @@ const (
 type StoreBecomeClient interface {
 	CreateStore(ctx context.Context, in *CreateStoreReq, opts ...grpc.CallOption) (*CreateStoreRes, error)
 	JoinStoreMember(ctx context.Context, in *JoinStoreMemberReq, opts ...grpc.CallOption) (*JoinStoreMemberRes, error)
+	SaveChatMessage(ctx context.Context, in *SaveChatReq, opts ...grpc.CallOption) (*Response, error)
 }
 
 type storeBecomeClient struct {
@@ -57,12 +59,22 @@ func (c *storeBecomeClient) JoinStoreMember(ctx context.Context, in *JoinStoreMe
 	return out, nil
 }
 
+func (c *storeBecomeClient) SaveChatMessage(ctx context.Context, in *SaveChatReq, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, StoreBecome_SaveChatMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StoreBecomeServer is the server API for StoreBecome service.
 // All implementations must embed UnimplementedStoreBecomeServer
 // for forward compatibility
 type StoreBecomeServer interface {
 	CreateStore(context.Context, *CreateStoreReq) (*CreateStoreRes, error)
 	JoinStoreMember(context.Context, *JoinStoreMemberReq) (*JoinStoreMemberRes, error)
+	SaveChatMessage(context.Context, *SaveChatReq) (*Response, error)
 	mustEmbedUnimplementedStoreBecomeServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedStoreBecomeServer) CreateStore(context.Context, *CreateStoreR
 }
 func (UnimplementedStoreBecomeServer) JoinStoreMember(context.Context, *JoinStoreMemberReq) (*JoinStoreMemberRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method JoinStoreMember not implemented")
+}
+func (UnimplementedStoreBecomeServer) SaveChatMessage(context.Context, *SaveChatReq) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveChatMessage not implemented")
 }
 func (UnimplementedStoreBecomeServer) mustEmbedUnimplementedStoreBecomeServer() {}
 
@@ -125,6 +140,24 @@ func _StoreBecome_JoinStoreMember_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StoreBecome_SaveChatMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveChatReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoreBecomeServer).SaveChatMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StoreBecome_SaveChatMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoreBecomeServer).SaveChatMessage(ctx, req.(*SaveChatReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StoreBecome_ServiceDesc is the grpc.ServiceDesc for StoreBecome service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var StoreBecome_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "JoinStoreMember",
 			Handler:    _StoreBecome_JoinStoreMember_Handler,
+		},
+		{
+			MethodName: "SaveChatMessage",
+			Handler:    _StoreBecome_SaveChatMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

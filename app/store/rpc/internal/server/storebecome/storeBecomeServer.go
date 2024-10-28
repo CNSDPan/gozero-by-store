@@ -31,3 +31,8 @@ func (s *StoreBecomeServer) JoinStoreMember(ctx context.Context, in *store.JoinS
 	l := storebecomelogic.NewJoinStoreMemberLogic(ctx, s.svcCtx)
 	return l.JoinStoreMember(in)
 }
+
+func (s *StoreBecomeServer) SaveChatMessage(ctx context.Context, in *store.SaveChatReq) (*store.Response, error) {
+	l := storebecomelogic.NewSaveChatMessageLogic(ctx, s.svcCtx)
+	return l.SaveChatMessage(in)
+}

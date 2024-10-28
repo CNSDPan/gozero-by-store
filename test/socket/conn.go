@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"store/app/chat/socket/server"
+	"store/pkg/consts"
 	"store/pkg/types"
 	"sync"
 	"time"
@@ -50,7 +51,7 @@ func (s *Server) RunSocket(clientId int64, userId int64) {
 	wg.Add(3)
 	ctx, cancel := context.WithCancel(context.Background())
 
-	s.Client = server.NewClient(conn, clientId, userId, "测试用户")
+	s.Client = server.NewClient(conn, clientId, userId, "测试用户", []int64{})
 	defer s.CloseClient()
 	defer cancel()
 
@@ -73,15 +74,15 @@ func (s *Server) RunSocket(clientId int64, userId int64) {
 		select {
 		case <-time.After(time.Second * 5):
 			s.Client.Broadcast <- types.SocketMsg{
-				Operate:       3,
-				Method:        "normal",
+				Operate:       consts.OperatePublic,
+				Method:        consts.MethodNormal,
 				StoreId:       1837056807609659392,
 				SendUserId:    1837053720228618240,
 				ReceiveUserId: 0,
 				Extend:        "",
 				Body: types.SocketMsgBody{
-					Operate:      3,
-					Method:       "normal",
+					Operate:      consts.OperatePublic,
+					Method:       consts.MethodNormal,
 					ResponseTime: time.Now().UTC().Format("2006-01-02 15:04:05"),
 					Event: types.Event{
 						Params: fmt.Sprintf("我来了"),
@@ -128,7 +129,7 @@ func (s *Server) Writ(ctx context.Context, wg *sync.WaitGroup) {
 				log.Printf(" 写消息 fail:%s", err.Error())
 				return
 			}
-			b, err = jsonx.Marshal(message.Body)
+			b, err = jsonx.Marshal(message)
 			if err != nil {
 				log.Printf(" 写消息 jsonx.Marshal() fail:%s", err.Error())
 				continue

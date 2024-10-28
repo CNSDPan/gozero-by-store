@@ -30,7 +30,18 @@ message JoinStoreMemberReq{
 message JoinStoreMemberRes{
   Response result = 1;
 }
+/*
+  * 记录聊天消息
+ */
+message SaveChatReq{
+  int64 StoreId = 1;
+  int64 UserId = 2;
+  string Message = 3;
+  string saveTime = 4;
+}
+
 service StoreBecome{
   rpc CreateStore(CreateStoreReq) returns (CreateStoreRes);
   rpc JoinStoreMember(JoinStoreMemberReq) returns (JoinStoreMemberRes);
+  rpc SaveChatMessage(SaveChatReq) returns (Response);
 }

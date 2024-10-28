@@ -1,4 +1,4 @@
-Name: ws
+Name: api.ws
 Host: 0.0.0.0
 Port: 6999
 #api.socket接口类型服务ID范围 200~209
@@ -9,6 +9,11 @@ ServiceIp: ""
 Auth:
   AccessSecret: "8a1895f304359629b647d446447de24d"
   AccessExpire: 604800
+# 业务Redis连接
+BizRedis:
+  Addr: "192.168.33.10:6379"
+  Password:
+  DB: 10
 #socket的配置
 SocketOptions:
   BucketNum: 4 #cpu个数
@@ -23,7 +28,7 @@ SocketRPC:
     Hosts:
       - 192.168.33.10:20001
       - 192.168.33.10:20003
-    Key: store.socket.rpc
+    Key: store.chat.rpc
   NonBlock: true
 #apiRpc的客户端连接服务地址端口-etcd服务发现
 ApiRPC:

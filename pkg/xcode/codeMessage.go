@@ -51,6 +51,12 @@ var codeMessage = map[string]string{
 	STORE_MEMBER_JOINED:    "已是会员",
 	STORE_MEMBER_JOIN_FULL: "店铺会员已满额",
 	/***************************************/
+
+	/*****************socket消息模块 [20000 ~ 2099]**********************/
+	SOCKET_BROADCAST_MSG_FAIL:   "广播消息异常",
+	SOCKET_BROADCAST_MSG_STRING: "广播消息非文字",
+	SOCKET_BROADCAST_MSG_PUB:    "广播消息发布异常",
+	/***************************************/
 }
 
 // GetCodeMessage

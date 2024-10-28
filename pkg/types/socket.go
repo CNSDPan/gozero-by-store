@@ -6,7 +6,7 @@ type SocketMsg struct {
 	Method        string        `json:"method"`
 	StoreId       int64         `json:"storeId,string"`
 	SendUserId    int64         `json:"sendUserId,string"`
-	ReceiveUserId int64         `json:"ReceiveUserId,string"`
+	ReceiveUserId int64         `json:"receiveUserId,string"`
 	Extend        string        `json:"extend"`
 	Body          SocketMsgBody `json:"body"`
 }
@@ -25,20 +25,12 @@ type Event struct {
 	Data   interface{} `json:"data"`   // 响应参数
 }
 
-// DataByEnter 进入房间响应Data结构
-type DataByEnter struct {
-	RoomId   int64  `json:"roomId,string"`   // 房间
-	ClientId int64  `json:"clientId,string"` // clientId
-	UserId   int64  `json:"userId,string"`   // 用户id
-	UserName string `json:"userName"`        // 发送人
-}
-
 // DataByNormal 进入普通消息响应Data结构
 type DataByNormal struct {
-	RoomId        int64  `json:"roomId,string"`     // 房间
-	FromUserId    int64  `json:"fromUserId,string"` // 消息来源用户
-	FrommUserName string `json:"fromUserName"`      // 消息来源用户
-	Message       string `json:"message"`           // 消息内容
+	StoreId       int64  `json:"storeId,string"`       // 店铺
+	SendUserId    int64  `json:"sendUserId,string"`    // 消息来源用户
+	ReceiveUserId int64  `json:"receiveUserId,string"` // 消息指定推送用户
+	Message       string `json:"message"`              // 消息内容
 }
 
 /******************Event 请求&响应结构*********************/

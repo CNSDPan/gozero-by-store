@@ -14,6 +14,7 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+	BizRedis      types.BizRedisConf
 	SocketOptions types.SocketOptionsConf
 	SocketRPC     zrpc.RpcClientConf
 	ApiRPC        zrpc.RpcClientConf

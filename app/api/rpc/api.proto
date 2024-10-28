@@ -111,11 +111,37 @@ message MyAllStoreIdRes {
   repeated int64 storeId = 2;
 }
 
+message StoreChatItem{
+  int64 userId = 1;
+  int64 storeId = 2;
+  string message = 3;
+  string createAt = 4;
+}
+message StoresChatMap{
+  int64 total = 2;
+  int64 page = 3;
+  int64 limit = 4;
+  int64 offset = 5;
+  int64 current = 6;
+  repeated StoreChatItem rows = 7;
+}
+message StoreChatReq {
+  int64 storeId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message StoreChatRes {
+  Response result = 1;
+  StoresChatMap data = 2;
+}
+
+
 service ApiStore{
   rpc List(StoreListReq) returns (StoreListRes);
   rpc Info(StoreInfoReq) returns (StoreInfoRes);
   rpc MemberUserList(MemberUsersItemReq) returns (MemberUsersItemRes);
   rpc MyAllStore(MyAllStoreIdReq) returns (MyAllStoreIdRes);
+  rpc StoresChat(StoreChatReq) returns (StoreChatRes);
 }
 
 message AuthReq {

@@ -18,10 +18,12 @@ type (
 	JoinStoreMemberReq = store.JoinStoreMemberReq
 	JoinStoreMemberRes = store.JoinStoreMemberRes
 	Response           = store.Response
+	SaveChatReq        = store.SaveChatReq
 
 	StoreBecome interface {
 		CreateStore(ctx context.Context, in *CreateStoreReq, opts ...grpc.CallOption) (*CreateStoreRes, error)
 		JoinStoreMember(ctx context.Context, in *JoinStoreMemberReq, opts ...grpc.CallOption) (*JoinStoreMemberRes, error)
+		SaveChatMessage(ctx context.Context, in *SaveChatReq, opts ...grpc.CallOption) (*Response, error)
 	}
 
 	defaultStoreBecome struct {
@@ -43,4 +45,9 @@ func (m *defaultStoreBecome) CreateStore(ctx context.Context, in *CreateStoreReq
 func (m *defaultStoreBecome) JoinStoreMember(ctx context.Context, in *JoinStoreMemberReq, opts ...grpc.CallOption) (*JoinStoreMemberRes, error) {
 	client := store.NewStoreBecomeClient(m.cli.Conn())
 	return client.JoinStoreMember(ctx, in, opts...)
+}
+
+func (m *defaultStoreBecome) SaveChatMessage(ctx context.Context, in *SaveChatReq, opts ...grpc.CallOption) (*Response, error) {
+	client := store.NewStoreBecomeClient(m.cli.Conn())
+	return client.SaveChatMessage(ctx, in, opts...)
 }

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package chat;
+option go_package="./chat";
+
+message Response{
+  string errMsg = 1;
+  string code = 2;
+  string message = 3;
+}
+
+
+/*
+  * 消息推送处理
+ */
+message BroadcastReq {
+  int32 operate = 1;
+  string method = 2;
+  int64 storeId = 3;
+  int64 sendUserId = 4;
+  int64 receiveUserId = 5;
+  string extend = 6;
+  string body = 7;
+}
+
+service Socket {
+  rpc BroadcastMsg(BroadcastReq) returns(Response);
+}

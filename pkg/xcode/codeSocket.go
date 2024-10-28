@@ -1,3 +1,7 @@
 package xcode
 
-const ()
+const (
+	SOCKET_BROADCAST_MSG_FAIL   = "20000"
+	SOCKET_BROADCAST_MSG_STRING = "20001"
+	SOCKET_BROADCAST_MSG_PUB    = "20002"
+)

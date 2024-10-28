@@ -21,6 +21,7 @@ type ServiceContext struct {
 	StoreModel       *sqls.StoresMgr
 	StoreUserModel   *sqls.StoreUsersMgr
 	StoreMemberModel *sqls.StoresMemberMgr
+	ChatLogModel     *sqls.ChatLogMgr
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -46,5 +47,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		StoreModel:       sqls.NewStoresMgr(inital.NewSqlDB(c.Sql, "storeModel")),
 		StoreUserModel:   sqls.NewStoreUsersMgr(inital.NewSqlDB(c.Sql, "storeUserModel")),
 		StoreMemberModel: sqls.NewStoresMemberMgr(inital.NewSqlDB(c.Sql, "storeMemberModel")),
+		ChatLogModel:     sqls.NewChatLogMgr(inital.NewSqlDB(c.Sql, "chatLogModel")),
 	}
 }
