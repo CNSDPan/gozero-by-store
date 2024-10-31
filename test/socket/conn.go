@@ -17,8 +17,6 @@ import (
 
 var ws = "ws://0.0.0.0:6999/v1/ws/socket"
 
-//var ws = "ws://0.0.0.0:6999/ws"
-
 type Server struct {
 	Token  string
 	Client *server.Client
@@ -40,7 +38,7 @@ func (s *Server) RunSocket(clientId int64, userId int64) {
 	wsHead.Set("X-Source", "ws")
 	wsHead.Set("X-Request-Time", time.Now().UTC().Format("2006-01-02T15:04:05Z07:00"))
 	wsHead.Set("Authorization", fmt.Sprintf("Bearer %s", s.Token))
-
+	ws = fmt.Sprintf("%s?Authorization=%s", ws, s.Token)
 	conn, res, err := websocket.DefaultDialer.Dial(ws, wsHead)
 
 	if err != nil {

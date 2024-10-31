@@ -25,7 +25,6 @@ type (
 )
 
 @server (
-	jwt:        Auth
 	prefix:     /v1/ws
 	group:      ws
 	timeout:    30s

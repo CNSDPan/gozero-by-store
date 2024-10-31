@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"log"
 	"net/http"
 	"store/app/api/rpc/api/apitoken"
 	"store/pkg/xcode"
@@ -21,13 +22,16 @@ func NewAuthMiddleware(a apitoken.ApiToken) *AuthMiddleware {
 
 func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("Authorization") == "" {
+		// 获取 GET 参数
+		queryParams := r.URL.Query()
+		auth := queryParams.Get("Authorization")
+		log.Printf("测试前端有没有进来")
+		if auth == "" {
 			_, msg := xcode.GetCodeMessage(xcode.RESPONSE_UNAUTHORIZED)
 			httpx.ErrorCtx(r.Context(), w, errors.New(msg))
 
 			return
 		}
-		auth := r.Header.Get("Authorization")[len("Bearer "):]
 		ctx := context.Background()
 		apiRpcRes, err := m.authClient.CheckAuth(ctx, &apitoken.AuthReq{
 			Token: auth,
