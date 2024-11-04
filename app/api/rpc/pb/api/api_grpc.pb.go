@@ -150,6 +150,8 @@ const (
 	ApiStore_Info_FullMethodName           = "/api.ApiStore/Info"
 	ApiStore_MemberUserList_FullMethodName = "/api.ApiStore/MemberUserList"
 	ApiStore_MyAllStore_FullMethodName     = "/api.ApiStore/MyAllStore"
+	ApiStore_StoresChat_FullMethodName     = "/api.ApiStore/StoresChat"
+	ApiStore_InitChatLog_FullMethodName    = "/api.ApiStore/InitChatLog"
 )
 
 // ApiStoreClient is the client API for ApiStore service.
@@ -160,6 +162,8 @@ type ApiStoreClient interface {
 	Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
 	MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error)
 	MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error)
+	StoresChat(ctx context.Context, in *StoreChatReq, opts ...grpc.CallOption) (*StoreChatRes, error)
+	InitChatLog(ctx context.Context, in *InitChatLogReq, opts ...grpc.CallOption) (*InitChatLogRes, error)
 }
 
 type apiStoreClient struct {
@@ -206,6 +210,24 @@ func (c *apiStoreClient) MyAllStore(ctx context.Context, in *MyAllStoreIdReq, op
 	return out, nil
 }
 
+func (c *apiStoreClient) StoresChat(ctx context.Context, in *StoreChatReq, opts ...grpc.CallOption) (*StoreChatRes, error) {
+	out := new(StoreChatRes)
+	err := c.cc.Invoke(ctx, ApiStore_StoresChat_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiStoreClient) InitChatLog(ctx context.Context, in *InitChatLogReq, opts ...grpc.CallOption) (*InitChatLogRes, error) {
+	out := new(InitChatLogRes)
+	err := c.cc.Invoke(ctx, ApiStore_InitChatLog_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiStoreServer is the server API for ApiStore service.
 // All implementations must embed UnimplementedApiStoreServer
 // for forward compatibility
@@ -214,6 +236,8 @@ type ApiStoreServer interface {
 	Info(context.Context, *StoreInfoReq) (*StoreInfoRes, error)
 	MemberUserList(context.Context, *MemberUsersItemReq) (*MemberUsersItemRes, error)
 	MyAllStore(context.Context, *MyAllStoreIdReq) (*MyAllStoreIdRes, error)
+	StoresChat(context.Context, *StoreChatReq) (*StoreChatRes, error)
+	InitChatLog(context.Context, *InitChatLogReq) (*InitChatLogRes, error)
 	mustEmbedUnimplementedApiStoreServer()
 }
 
@@ -232,6 +256,12 @@ func (UnimplementedApiStoreServer) MemberUserList(context.Context, *MemberUsersI
 }
 func (UnimplementedApiStoreServer) MyAllStore(context.Context, *MyAllStoreIdReq) (*MyAllStoreIdRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MyAllStore not implemented")
+}
+func (UnimplementedApiStoreServer) StoresChat(context.Context, *StoreChatReq) (*StoreChatRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StoresChat not implemented")
+}
+func (UnimplementedApiStoreServer) InitChatLog(context.Context, *InitChatLogReq) (*InitChatLogRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InitChatLog not implemented")
 }
 func (UnimplementedApiStoreServer) mustEmbedUnimplementedApiStoreServer() {}
 
@@ -318,6 +348,42 @@ func _ApiStore_MyAllStore_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiStore_StoresChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoreChatReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiStoreServer).StoresChat(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiStore_StoresChat_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiStoreServer).StoresChat(ctx, req.(*StoreChatReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApiStore_InitChatLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InitChatLogReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiStoreServer).InitChatLog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApiStore_InitChatLog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiStoreServer).InitChatLog(ctx, req.(*InitChatLogReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApiStore_ServiceDesc is the grpc.ServiceDesc for ApiStore service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -340,6 +406,14 @@ var ApiStore_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MyAllStore",
 			Handler:    _ApiStore_MyAllStore_Handler,
+		},
+		{
+			MethodName: "StoresChat",
+			Handler:    _ApiStore_StoresChat_Handler,
+		},
+		{
+			MethodName: "InitChatLog",
+			Handler:    _ApiStore_InitChatLog_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

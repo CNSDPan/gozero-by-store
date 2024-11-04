@@ -36,7 +36,7 @@ message UserInfoRes{
   string avatar = 5;
 }
 message UserItem{
-  int64 userId = 1;
+  string userId = 1;
   string name = 2;
   string avatar = 3;
   int64 mobile = 4;
@@ -59,7 +59,7 @@ service ApiUser{
   * 店铺业务
  */
 message StoreItem{
-  int64 storeId = 1;
+  string storeId = 1;
   string name = 2;
   string avatar = 3;
   string desc = 4;
@@ -112,10 +112,13 @@ message MyAllStoreIdRes {
 }
 
 message StoreChatItem{
-  int64 userId = 1;
-  int64 storeId = 2;
-  string message = 3;
-  string createAt = 4;
+  string userId = 1;
+  optional string userName = 2;
+  string storeId = 3;
+  string storeName = 4;
+  string message = 5;
+  string createAt = 6;
+  string timestamp = 7;
 }
 message StoresChatMap{
   int64 total = 2;
@@ -129,12 +132,21 @@ message StoreChatReq {
   int64 storeId = 1;
   int32 limit = 2;
   int32 offset = 3;
+  int64 timestamp = 4;
 }
 message StoreChatRes {
   Response result = 1;
   StoresChatMap data = 2;
 }
-
+message InitChatLogReq {
+  int64 userId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message InitChatLogRes {
+  Response result = 1;
+  StoresChatMap data = 2;
+}
 
 service ApiStore{
   rpc List(StoreListReq) returns (StoreListRes);
@@ -142,6 +154,7 @@ service ApiStore{
   rpc MemberUserList(MemberUsersItemReq) returns (MemberUsersItemRes);
   rpc MyAllStore(MyAllStoreIdReq) returns (MyAllStoreIdRes);
   rpc StoresChat(StoreChatReq) returns (StoreChatRes);
+  rpc InitChatLog(InitChatLogReq) returns (InitChatLogRes);
 }
 
 message AuthReq {

@@ -9,6 +9,7 @@ import (
 	"store/app/api/rpc/pb/api"
 	sqlsStore "store/app/store/model/sqls"
 	"store/pkg/xcode"
+	"strconv"
 )
 
 type ListLogic struct {
@@ -73,7 +74,7 @@ func (l *ListLogic) List(in *api.StoreListReq) (res *api.StoreListRes, err error
 		rows := make([]*api.StoreItem, len(items.GetRecords().([]sqlsStore.StoresApi)))
 		for k, item := range items.GetRecords().([]sqlsStore.StoresApi) {
 			rows[k] = &api.StoreItem{
-				StoreId:  item.StoreId,
+				StoreId:  strconv.FormatInt(item.StoreId, 10),
 				Name:     item.Name,
 				Avatar:   item.Avatar,
 				Desc:     item.Desc,

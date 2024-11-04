@@ -104,6 +104,31 @@ type (
 		StoreId int64 `json:"storeId,string"`
 	}
 	StoreMemberJoinRes  {}
+	InitChatLogReq {
+		UserId int64 `json:"userId,omitempty,string"`
+		Offset int32 `json:"offset"`
+	}
+	InitChatLogRes {
+		Total   int64       `json:"total"`
+		Page    int64       `json:"page"`
+		Limit   int64       `json:"limit"`
+		Offset  int64       `json:"offset"`
+		Current int64       `json:"current"`
+		Rows    interface{} `json:"rows"`
+	}
+	StoreChatReq {
+		StoreId   int64 `json:"storeId,omitempty,string"`
+		Offset    int32 `json:"offset"`
+		Timestamp int64 `json:"timestamp,omitempty,string"`
+	}
+	StoreChatRes {
+		Total   int64       `json:"total"`
+		Page    int64       `json:"page"`
+		Limit   int64       `json:"limit"`
+		Offset  int64       `json:"offset"`
+		Current int64       `json:"current"`
+		Rows    interface{} `json:"rows"`
+	}
 )
 
 @server (
@@ -162,5 +187,13 @@ service client {
 	@doc "店铺会员加入"
 	@handler StoreMemberJoin
 	post /store/member/join (StoreMemberJoinReq) returns (StoreMemberJoinRes)
+
+	@doc "初始消息中心的店铺列表聊天记录"
+	@handler InitChatLog
+	post /store/chat/init (InitChatLogReq) returns (InitChatLogRes)
+
+	@doc "加载更多店铺聊天记录"
+	@handler StoreChat
+	post /store/chat (StoreChatReq) returns (StoreChatRes)
 }
 

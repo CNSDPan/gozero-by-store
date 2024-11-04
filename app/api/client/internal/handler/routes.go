@@ -24,6 +24,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodPost,
+					Path:    "/store/chat",
+					Handler: store.StoreChatHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/store/chat/init",
+					Handler: store.InitChatLogHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
 					Path:    "/store/info",
 					Handler: store.StoreInfoHandler(serverCtx),
 				},

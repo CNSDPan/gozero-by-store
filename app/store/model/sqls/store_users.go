@@ -108,7 +108,7 @@ func (obj *StoreUsersMgr) GetFromStoreUserIdApi(storeUserId int64) (result Store
 // @param：storeUsers
 // @param：store
 // @return：err
-func (obj *StoreUsersMgr) CreateStoreUser(storeUsers StoreUsers, store Stores) (err error) {
+func (obj *StoreUsersMgr) CreateStoreUser(storeMember StoreMember, storeUsers StoreUsers, store Stores) (err error) {
 	tx := obj.DB.WithContext(obj.ctx).Begin()
 	defer func() {
 		// 防止panic
@@ -126,6 +126,9 @@ func (obj *StoreUsersMgr) CreateStoreUser(storeUsers StoreUsers, store Stores) (
 	if err = tx.Table(StoreUsersTableName()).Create(&storeUsers).Error; err != nil {
 		tx.Rollback()
 		return err
+	}
+
+	if err = tx.Table(StoreMemberTableName()).Create(&storeMember).Error; err != nil {
 	}
 	return tx.Commit().Error
 }

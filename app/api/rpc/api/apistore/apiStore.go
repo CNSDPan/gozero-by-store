@@ -15,16 +15,22 @@ import (
 type (
 	AuthReq            = api.AuthReq
 	AuthRes            = api.AuthRes
+	InitChatLogReq     = api.InitChatLogReq
+	InitChatLogRes     = api.InitChatLogRes
 	MemberUsersItemReq = api.MemberUsersItemReq
 	MemberUsersItemRes = api.MemberUsersItemRes
 	MyAllStoreIdReq    = api.MyAllStoreIdReq
 	MyAllStoreIdRes    = api.MyAllStoreIdRes
 	Response           = api.Response
+	StoreChatItem      = api.StoreChatItem
+	StoreChatReq       = api.StoreChatReq
+	StoreChatRes       = api.StoreChatRes
 	StoreInfoReq       = api.StoreInfoReq
 	StoreInfoRes       = api.StoreInfoRes
 	StoreItem          = api.StoreItem
 	StoreListReq       = api.StoreListReq
 	StoreListRes       = api.StoreListRes
+	StoresChatMap      = api.StoresChatMap
 	StoresMap          = api.StoresMap
 	UserInfoReq        = api.UserInfoReq
 	UserInfoRes        = api.UserInfoRes
@@ -38,6 +44,8 @@ type (
 		Info(ctx context.Context, in *StoreInfoReq, opts ...grpc.CallOption) (*StoreInfoRes, error)
 		MemberUserList(ctx context.Context, in *MemberUsersItemReq, opts ...grpc.CallOption) (*MemberUsersItemRes, error)
 		MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error)
+		StoresChat(ctx context.Context, in *StoreChatReq, opts ...grpc.CallOption) (*StoreChatRes, error)
+		InitChatLog(ctx context.Context, in *InitChatLogReq, opts ...grpc.CallOption) (*InitChatLogRes, error)
 	}
 
 	defaultApiStore struct {
@@ -69,4 +77,14 @@ func (m *defaultApiStore) MemberUserList(ctx context.Context, in *MemberUsersIte
 func (m *defaultApiStore) MyAllStore(ctx context.Context, in *MyAllStoreIdReq, opts ...grpc.CallOption) (*MyAllStoreIdRes, error) {
 	client := api.NewApiStoreClient(m.cli.Conn())
 	return client.MyAllStore(ctx, in, opts...)
+}
+
+func (m *defaultApiStore) StoresChat(ctx context.Context, in *StoreChatReq, opts ...grpc.CallOption) (*StoreChatRes, error) {
+	client := api.NewApiStoreClient(m.cli.Conn())
+	return client.StoresChat(ctx, in, opts...)
+}
+
+func (m *defaultApiStore) InitChatLog(ctx context.Context, in *InitChatLogReq, opts ...grpc.CallOption) (*InitChatLogRes, error) {
+	client := api.NewApiStoreClient(m.cli.Conn())
+	return client.InitChatLog(ctx, in, opts...)
 }

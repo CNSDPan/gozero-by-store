@@ -41,3 +41,13 @@ func (s *ApiStoreServer) MyAllStore(ctx context.Context, in *api.MyAllStoreIdReq
 	l := apistorelogic.NewMyAllStoreLogic(ctx, s.svcCtx)
 	return l.MyAllStore(in)
 }
+
+func (s *ApiStoreServer) StoresChat(ctx context.Context, in *api.StoreChatReq) (*api.StoreChatRes, error) {
+	l := apistorelogic.NewStoresChatLogic(ctx, s.svcCtx)
+	return l.StoresChat(in)
+}
+
+func (s *ApiStoreServer) InitChatLog(ctx context.Context, in *api.InitChatLogReq) (*api.InitChatLogRes, error) {
+	l := apistorelogic.NewInitChatLogLogic(ctx, s.svcCtx)
+	return l.InitChatLog(in)
+}

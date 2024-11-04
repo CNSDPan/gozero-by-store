@@ -50,6 +50,9 @@ var codeMessage = map[string]string{
 	STORE_MEMBER_JOIN_FAIL: "加入会员异常",
 	STORE_MEMBER_JOINED:    "已是会员",
 	STORE_MEMBER_JOIN_FULL: "店铺会员已满额",
+
+	CHAT_LOG_INIT_FAIL: "店铺聊天记录列表获取异常",
+	CHAT_LOG_GET_FAIL:  "聊天记录获取异常",
 	/***************************************/
 
 	/*****************socket消息模块 [20000 ~ 2099]**********************/

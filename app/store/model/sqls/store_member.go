@@ -4,6 +4,7 @@ import (
 	"context"
 	"gorm.io/gorm"
 	sqlsUser "store/app/user/model/sqls"
+	"strconv"
 	"time"
 )
 
@@ -107,4 +108,21 @@ func (obj *StoresMemberMgr) GetMemberContacts(storeId int64) int64 {
 	var contacts int64
 	obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("store_id = ?", storeId).Count(&contacts)
 	return contacts
+}
+
+// MapKeyUserId
+// @Desc： 获取店铺所有会员，并且已map的形式放回
+// @param：storeId
+// @return：map[string]MemberUserItem
+func (obj *StoresMemberMgr) MapKeyUserId(storeId int64) map[string]MemberUserItem {
+	result := make(map[string]MemberUserItem)
+	results := make([]MemberUserItem, 0)
+	query := obj.DB.WithContext(obj.ctx).Model(StoreMember{}).Where("store_id = ?", storeId)
+	query.Preload("User").Find(&results)
+
+	for _, item := range results {
+		key := strconv.FormatInt(item.UserId, 10)
+		result[key] = item
+	}
+	return result
 }

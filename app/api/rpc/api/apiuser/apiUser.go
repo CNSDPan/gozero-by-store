@@ -15,16 +15,22 @@ import (
 type (
 	AuthReq            = api.AuthReq
 	AuthRes            = api.AuthRes
+	InitChatLogReq     = api.InitChatLogReq
+	InitChatLogRes     = api.InitChatLogRes
 	MemberUsersItemReq = api.MemberUsersItemReq
 	MemberUsersItemRes = api.MemberUsersItemRes
 	MyAllStoreIdReq    = api.MyAllStoreIdReq
 	MyAllStoreIdRes    = api.MyAllStoreIdRes
 	Response           = api.Response
+	StoreChatItem      = api.StoreChatItem
+	StoreChatReq       = api.StoreChatReq
+	StoreChatRes       = api.StoreChatRes
 	StoreInfoReq       = api.StoreInfoReq
 	StoreInfoRes       = api.StoreInfoRes
 	StoreItem          = api.StoreItem
 	StoreListReq       = api.StoreListReq
 	StoreListRes       = api.StoreListRes
+	StoresChatMap      = api.StoresChatMap
 	StoresMap          = api.StoresMap
 	UserInfoReq        = api.UserInfoReq
 	UserInfoRes        = api.UserInfoRes

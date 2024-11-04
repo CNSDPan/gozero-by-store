@@ -5,6 +5,7 @@ import (
 	"store/app/api/rpc/api/apistore"
 	sqlsStore "store/app/store/model/sqls"
 	"store/pkg/xcode"
+	"strconv"
 
 	"store/app/api/rpc/internal/svc"
 	"store/app/api/rpc/pb/api"
@@ -58,7 +59,7 @@ func (l *MemberUserListLogic) MemberUserList(in *api.MemberUsersItemReq) (res *a
 		rows := make([]*api.UserItem, len(items.GetRecords().([]sqlsStore.MemberUserItem)))
 		for k, item := range items.GetRecords().([]sqlsStore.MemberUserItem) {
 			rows[k] = &api.UserItem{
-				UserId: item.UserId,
+				UserId: strconv.FormatInt(item.UserId, 10),
 				Name:   item.User.Name,
 				Avatar: item.User.Avatar,
 				Mobile: item.User.Mobile,

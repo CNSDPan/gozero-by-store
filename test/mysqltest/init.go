@@ -10,6 +10,7 @@ type StoreModel struct {
 	StoresMgr       *sqlsStore.StoresMgr
 	StoreUsersMgr   *sqlsStore.StoreUsersMgr
 	StoresMemberMgr *sqlsStore.StoresMemberMgr
+	ChatLogMgr      *sqlsStore.ChatLogMgr
 }
 
 var storeModel StoreModel
@@ -26,5 +27,6 @@ func init() {
 		StoresMgr:       sqlsStore.NewStoresMgr(inital.NewSqlDB(sqlConf, "source.storeModel")),
 		StoreUsersMgr:   sqlsStore.NewStoreUsersMgr(inital.NewSqlDB(sqlConf, "source.storeUsersModel")),
 		StoresMemberMgr: sqlsStore.NewStoresMemberMgr(inital.NewSqlDB(sqlConf, "source.storesMemberModel")),
+		ChatLogMgr:      sqlsStore.NewChatLogMgr(inital.NewSqlDB(sqlConf, "source.chatLogModel")),
 	}
 }

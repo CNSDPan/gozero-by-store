@@ -26,6 +26,10 @@ func Response(w http.ResponseWriter, r *http.Request, code string, msg string, r
 	body.ErrMsg = errMsg
 	body.Code = code
 	body.Message = msg
-	body.Data = resp
+	if resp == nil {
+		body.Data = map[string]interface{}{}
+	} else {
+		body.Data = resp
+	}
 	httpx.OkJsonCtx(r.Context(), w, body)
 }

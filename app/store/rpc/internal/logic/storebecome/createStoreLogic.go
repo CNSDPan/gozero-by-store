@@ -61,7 +61,13 @@ func (l *CreateStoreLogic) CreateStore(in *store.CreateStoreReq) (res *store.Cre
 		StoreId:     stores.StoreId,
 		UserId:      in.UserId,
 	}
-	if e = l.svcCtx.StoreUserModel.CreateStoreUser(storeUsers, stores); e != nil {
+	time.Sleep(5 * time.Millisecond)
+	storeMember := sqls.StoreMember{
+		StoreMemberId: l.svcCtx.Node.Generate().Int64(),
+		StoreId:       stores.StoreId,
+		UserId:        in.UserId,
+	}
+	if e = l.svcCtx.StoreUserModel.CreateStoreUser(storeMember, storeUsers, stores); e != nil {
 		code = xcode.STORE_CREAT
 		return res, err
 	}
