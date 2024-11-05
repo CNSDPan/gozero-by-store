@@ -16,8 +16,8 @@
 
 
 # 演示
-![people.png](https://raw.githubusercontent.com/CNSDPan/store/master/store/static/images/people.png)
+![people.png](https://raw.githubusercontent.com/CNSDPan/store/master/static/images/people.png)
 
-![store.png](https://raw.githubusercontent.com/CNSDPan/store/master/store/static/images/store.png)
+![store.png](https://raw.githubusercontent.com/CNSDPan/store/master/static/images/store.png)
 
-![message.png](https://raw.githubusercontent.com/CNSDPan/store/master/store/static/images/message.png)
+![message.png](https://raw.githubusercontent.com/CNSDPan/store/master/static/images/message.png)
