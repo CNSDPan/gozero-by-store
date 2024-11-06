@@ -116,9 +116,9 @@ message StoreChatItem{
   optional string userName = 2;
   string storeId = 3;
   string storeName = 4;
-  string message = 5;
-  string createAt = 6;
-  string timestamp = 7;
+  optional string message = 5;
+  optional string createAt = 6;
+  optional string timestamp = 7;
 }
 message StoresChatMap{
   int64 total = 2;

@@ -25,12 +25,23 @@ type ChatLogApi struct {
 	CreatedAt string `gorm:"column:created_at" json:"createdAt"`       // 创建时间
 }
 
+type WithChatLog struct {
+	StoreId   int64  `gorm:"column:store_id" json:"storeId,string"`    // 店铺ID
+	Message   string `gorm:"column:message" json:"message"`            // 消息
+	Timestamp int64  `gorm:"column:timestamp" json:"timestamp,string"` // 记录时间;微秒
+	CreatedAt string `gorm:"column:created_at" json:"createdAt"`       // 创建时间
+}
+
 type ChatLogMgr struct {
 	*_BaseMgr
 }
 
 // TableName get sql table name.获取数据库表名
 func (m *ChatLog) TableName() string {
+	return "chat_log"
+}
+
+func (m *WithChatLog) TableName() string {
 	return "chat_log"
 }
 

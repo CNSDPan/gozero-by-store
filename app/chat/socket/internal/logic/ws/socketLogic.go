@@ -70,7 +70,7 @@ func (l *SocketLogic) Socket(req *types.ConnectReq, w http.ResponseWriter, r *ht
 		return
 	}
 
-	wsClient := server.NewClient(wsConn, l.svcCtx.Node.Generate().Int64(), rpcRes.UserId, resp.Name, storeIdsRes.StoreId)
+	wsClient := server.NewClient(wsConn, l.svcCtx.Node.Generate().Int64(), rpcRes.UserId, rpcRes.Name, storeIdsRes.StoreId)
 	// 这里会阻塞,直到socket断开
 	l.svcCtx.WsServer.Run(wsClient, storeIdsRes.StoreId)
 	return

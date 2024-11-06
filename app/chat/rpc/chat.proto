@@ -18,9 +18,10 @@ message BroadcastReq {
   string method = 2;
   int64 storeId = 3;
   int64 sendUserId = 4;
-  int64 receiveUserId = 5;
-  string extend = 6;
-  string body = 7;
+  string sendUserName = 5;
+  int64 receiveUserId = 6;
+  string extend = 7;
+  string body = 8;
 }
 
 service Socket {

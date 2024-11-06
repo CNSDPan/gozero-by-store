@@ -39,6 +39,7 @@ func SubReceive() {
 			Operate:      0,
 			Method:       "",
 			ResponseTime: "",
+			Timestamp:    0,
 			Event: types.Event{
 				Params: "",
 				Data:   types.DataByNormal{},

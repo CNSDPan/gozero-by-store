@@ -128,6 +128,7 @@ func (b *Bucket) RoutineSubscribe() {
 				Operate:      socketMsgBody.Operate,
 				Method:       socketMsgBody.Method,
 				ResponseTime: socketMsgBody.ResponseTime,
+				Timestamp:    socketMsgBody.Timestamp,
 				Event: types.Event{
 					Params: socketMsgBody.Event.Params,
 					Data:   socketMsgBody.Event.Data,

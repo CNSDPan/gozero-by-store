@@ -14,6 +14,7 @@ type SocketMsgBody struct {
 	Operate      int    `json:"operate"`
 	Method       string `json:"method"`
 	ResponseTime string `json:"responseTime"`
+	Timestamp    int64  `json:"timestamp,string"`
 	Event        Event  `json:"event"`
 }
 
@@ -29,6 +30,7 @@ type Event struct {
 type DataByNormal struct {
 	StoreId       int64  `json:"storeId,string"`       // 店铺
 	SendUserId    int64  `json:"sendUserId,string"`    // 消息来源用户
+	SendUserName  string `json:"sendUserName"`         // 消息来源用户
 	ReceiveUserId int64  `json:"receiveUserId,string"` // 消息指定推送用户
 	Message       string `json:"message"`              // 消息内容
 }

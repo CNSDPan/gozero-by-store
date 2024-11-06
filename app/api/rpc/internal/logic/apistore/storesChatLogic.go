@@ -62,32 +62,41 @@ func (l *StoresChatLogic) StoresChat(in *api.StoreChatReq) (res *api.StoreChatRe
 		userItems := l.svcCtx.StoreModel.StoresMemberMgr.MapKeyUserId(
 			in.StoreId,
 		)
-		l.Logger.Errorf("用户：%+v", userItems)
 		rows := make([]*api.StoreChatItem, len(items.GetRecords().([]sqlsStore.ChatLogApi)))
-		for k, item := range items.GetRecords().([]sqlsStore.ChatLogApi) {
-			userId := strconv.FormatInt(item.UserId, 10)
-			parsedTime, _ := time.Parse(time.RFC3339, item.CreatedAt)
+		for k, _ := range items.GetRecords().([]sqlsStore.ChatLogApi) {
+			chat := items.GetRecords().([]sqlsStore.ChatLogApi)[k]
+			userId := strconv.FormatInt(chat.UserId, 10)
 			memberUser, ok := userItems[userId]
+
+			parsedTimeStr := ""
+			timestampStr := "0"
+			if chat.CreatedAt != "" {
+				parsedTime, _ := time.Parse(time.RFC3339, chat.CreatedAt)
+				parsedTimeStr = parsedTime.Format("2006-01-02 15:04:05")
+			}
+			if chat.Timestamp != 0 {
+				timestampStr = strconv.FormatInt(chat.Timestamp, 10)
+			}
 			if ok {
 				rows[k] = &api.StoreChatItem{
 					UserId:    userId,
 					UserName:  &memberUser.User.Name,
-					StoreId:   strconv.FormatInt(item.StoreId, 10),
-					StoreName: item.StoreName,
-					Message:   item.Message,
-					Timestamp: strconv.FormatInt(item.Timestamp, 10),
-					CreateAt:  parsedTime.Format("2006-01-02 15:04:05"),
+					StoreId:   strconv.FormatInt(chat.StoreId, 10),
+					StoreName: chat.StoreName,
+					Message:   &chat.Message,
+					Timestamp: &timestampStr,
+					CreateAt:  &parsedTimeStr,
 				}
 			} else {
 				userName := ""
 				rows[k] = &api.StoreChatItem{
 					UserId:    userId,
 					UserName:  &userName,
-					StoreId:   strconv.FormatInt(item.StoreId, 10),
-					StoreName: item.StoreName,
-					Message:   item.Message,
-					Timestamp: strconv.FormatInt(item.Timestamp, 10),
-					CreateAt:  parsedTime.Format("2006-01-02 15:04:05"),
+					StoreId:   strconv.FormatInt(chat.StoreId, 10),
+					StoreName: chat.StoreName,
+					Message:   &chat.Message,
+					Timestamp: &timestampStr,
+					CreateAt:  &parsedTimeStr,
 				}
 			}
 		}

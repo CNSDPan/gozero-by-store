@@ -245,7 +245,9 @@ func (s *Server) ReadChannel(ctx context.Context, wg *sync.WaitGroup, client *Cl
 				s.Log.Errorf("%s 消息转换指定结构 fail:%s", s.ServerName, err.Error())
 				continue
 			}
-			broadcast.Body.ResponseTime = time.Now().UTC().Format("2006-01-02 15:04:05")
+			t := time.Now()
+			broadcast.Body.ResponseTime = t.UTC().Format("2006-01-02 15:04:05")
+			broadcast.Body.Timestamp = t.UnixMicro()
 
 			switch broadcast.Operate {
 			case consts.OperatePrivate:

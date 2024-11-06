@@ -41,6 +41,7 @@ func (l *BroadcastMsgLogic) BroadcastMsg(in *chat.BroadcastReq) (res *chat.Respo
 			Operate:      0,
 			Method:       "",
 			ResponseTime: "",
+			Timestamp:    0,
 			Event: types.Event{
 				Params: "",
 				Data:   types.DataByNormal{},
@@ -49,6 +50,7 @@ func (l *BroadcastMsgLogic) BroadcastMsg(in *chat.BroadcastReq) (res *chat.Respo
 		dataByNormal = types.DataByNormal{
 			StoreId:       in.StoreId,
 			SendUserId:    in.SendUserId,
+			SendUserName:  in.SendUserName,
 			ReceiveUserId: in.ReceiveUserId,
 			Message:       "",
 		}
@@ -61,6 +63,7 @@ func (l *BroadcastMsgLogic) BroadcastMsg(in *chat.BroadcastReq) (res *chat.Respo
 			res.ErrMsg = e.Error()
 		}
 	}()
+
 	e = jsonx.Unmarshal([]byte(in.Body), &broadcastBody)
 	if e != nil {
 		code = xcode.SOCKET_BROADCAST_MSG_FAIL
@@ -75,7 +78,6 @@ func (l *BroadcastMsgLogic) BroadcastMsg(in *chat.BroadcastReq) (res *chat.Respo
 	broadcastBody.Operate = int(in.Operate)
 	broadcastBody.Method = in.Method
 	broadcastBody.Event.Data = dataByNormal
-
 	b, e = jsonx.Marshal(broadcastBody)
 	if e != nil {
 		code = xcode.SOCKET_BROADCAST_MSG_FAIL

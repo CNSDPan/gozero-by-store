@@ -49,7 +49,7 @@ func (l *InitChatLogLogic) InitChatLog(in *api.InitChatLogReq) (res *api.InitCha
 		Result: &apistore.Response{},
 		Data:   &apistore.StoresChatMap{},
 	}
-	items, e := l.svcCtx.StoreModel.ChatLogMgr.InitChatLog(
+	items, e := l.svcCtx.StoreModel.StoresMemberMgr.InitChatLog(
 		sqlsStore.NewPage(10, 0),
 		in.UserId,
 	)
@@ -57,16 +57,25 @@ func (l *InitChatLogLogic) InitChatLog(in *api.InitChatLogReq) (res *api.InitCha
 		code = xcode.CHAT_LOG_INIT_FAIL
 		return res, nil
 	} else {
-		rows := make([]*api.StoreChatItem, len(items.GetRecords().([]sqlsStore.ChatLogApi)))
-		for k, item := range items.GetRecords().([]sqlsStore.ChatLogApi) {
-			parsedTime, _ := time.Parse(time.RFC3339, item.CreatedAt)
+		rows := make([]*api.StoreChatItem, len(items.GetRecords().([]sqlsStore.MemberChatLog)))
+		for k, _ := range items.GetRecords().([]sqlsStore.MemberChatLog) {
+			chat := items.GetRecords().([]sqlsStore.MemberChatLog)[k]
+			parsedTimeStr := ""
+			timestampStr := "0"
+			if chat.ChatLog.CreatedAt != "" {
+				parsedTime, _ := time.Parse(time.RFC3339, chat.ChatLog.CreatedAt)
+				parsedTimeStr = parsedTime.Format("2006-01-02 15:04:05")
+			}
+			if chat.ChatLog.Timestamp != 0 {
+				timestampStr = strconv.FormatInt(chat.ChatLog.Timestamp, 10)
+			}
 			rows[k] = &api.StoreChatItem{
-				UserId:    strconv.FormatInt(item.UserId, 10),
-				StoreId:   strconv.FormatInt(item.StoreId, 10),
-				StoreName: item.StoreName,
-				Message:   item.Message,
-				Timestamp: strconv.FormatInt(item.Timestamp, 10),
-				CreateAt:  parsedTime.Format("2006-01-02 15:04:05"),
+				UserId:    strconv.FormatInt(chat.UserId, 10),
+				StoreId:   strconv.FormatInt(chat.StoreId, 10),
+				StoreName: chat.StoreName,
+				Message:   &chat.ChatLog.Message,
+				Timestamp: &timestampStr,
+				CreateAt:  &parsedTimeStr,
 			}
 		}
 		res.Data.Limit = items.GetSize()

@@ -25,11 +25,25 @@ type MemberUserItem struct {
 	User          sqlsUser.UsersApi `gorm:"foreignkey:user_id;references:user_id"`
 }
 
+type MemberChatLog struct {
+	StoreName string      `gorm:"column:store_name" json:"storeName"`    // 店铺
+	StoreId   int64       `gorm:"column:store_id" json:"storeId,string"` // 店铺ID
+	UserId    int64       `gorm:"column:user_id" json:"userId,string"`   // 用户ID
+	ChatLog   WithChatLog `gorm:"foreignkey:store_id;references:store_id"`
+}
+
 type StoresMemberMgr struct {
 	*_BaseMgr
 }
 
 func StoreMemberTableName() string {
+	return "store_member"
+}
+func StoreMemberTableNameJoin() string {
+	return "store_member as sm"
+}
+
+func (mcl *MemberChatLog) TableName() string {
 	return "store_member"
 }
 
@@ -125,4 +139,32 @@ func (obj *StoresMemberMgr) MapKeyUserId(storeId int64) map[string]MemberUserIte
 		result[key] = item
 	}
 	return result
+}
+
+// InitChatLog
+// @Desc：获取每个店铺群的10条最新聊天记录,每次最多获取10个店铺
+// @param：page
+// @param：userId
+// @return：resultPage
+// @return：err
+func (obj *StoresMemberMgr) InitChatLog(page IPage, userId int64) (resultPage IPage, err error) {
+	resultPage = page
+	results := make([]MemberChatLog, 0)
+	var count int64 // 统计总的记录数
+	query := obj.DB.WithContext(obj.ctx).Model(MemberChatLog{})
+	query.Select("store_member.store_id,store_member.user_id,stores.name as store_name")
+	query.Joins("join stores on stores.store_id = store_member.store_id")
+	query.Joins("left join chat_log on chat_log.store_id = store_member.store_id")
+	query.Preload("ChatLog")
+	query.Where("store_member.user_id = ?", userId).Group("store_member.store_id")
+	query.Count(&count)
+	resultPage.SetTotal(count)
+
+	if len(page.GetOrederItemsString()) > 0 {
+		query = query.Order(page.GetOrederItemsString())
+	}
+	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Order("timestamp desc").Find(&results).Error
+
+	resultPage.SetRecords(results)
+	return
 }
