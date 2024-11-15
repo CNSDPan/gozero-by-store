@@ -33,12 +33,16 @@ message JoinStoreMemberRes{
 /*
   * 记录聊天消息
  */
-message SaveChatReq{
+message SaveChatItem{
   int64 StoreId = 1;
   int64 UserId = 2;
   string Message = 3;
   string saveTime = 4;
 }
+message SaveChatReq{
+  repeated SaveChatItem list = 7;
+}
+
 
 service StoreBecome{
   rpc CreateStore(CreateStoreReq) returns (CreateStoreRes);

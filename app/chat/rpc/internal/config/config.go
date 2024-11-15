@@ -10,4 +10,5 @@ type Config struct {
 	types.ServerInfoConf
 	BizRedis types.BizRedisConf
 	Sql      types.SqlConf
+	StoreRPC zrpc.RpcClientConf
 }

@@ -114,6 +114,13 @@ func (obj *ChatLogMgr) CreateChatLog(storeId int64, userId int64, message string
 	obj.DB.WithContext(obj.ctx).Model(StoreUsers{}).Create(&chatLog)
 }
 
+// InsertChatLogs
+// @Desc：批量插入
+// @param：chatLogs
+func (obj *ChatLogMgr) InsertChatLogs(chatLogs []ChatLog) error {
+	return obj.DB.WithContext(obj.ctx).Model(ChatLog{}).Create(&chatLogs).Error
+}
+
 // InitChatLog
 // @Desc：获取每个店铺群的10条最新聊天记录,每次最多获取10个店铺
 // @param：page
@@ -124,12 +131,12 @@ func (obj *ChatLogMgr) InitChatLog(page IPage, userId int64) (resultPage IPage, 
 	resultPage = page
 	results := make([]ChatLogApi, 0)
 	// 子查询
-	subQuery := obj.DB.WithContext(obj.ctx).Model(ChatLog{}).Select("store_id, MAX(created_at) AS max_created_at").Group("store_id")
+	subQuery := obj.DB.WithContext(obj.ctx).Model(ChatLog{}).Select("store_id, MAX(timestamp) AS max_timestamp").Group("store_id")
 	var count int64 // 统计总的记录数
 	query := obj.DB.WithContext(obj.ctx).Model(ChatLog{})
 	query.Select("chat_log.*,stores.name as store_name")
 	query.Joins("join stores on stores.store_id = chat_log.store_id")
-	query.Joins("JOIN (?) AS last ON chat_log.store_id = last.store_id AND chat_log.created_at = last.max_created_at", subQuery)
+	query.Joins("JOIN (?) AS last ON chat_log.store_id = last.store_id AND chat_log.timestamp = last.max_timestamp", subQuery)
 	query.Where("user_id = ?", userId)
 	query.Count(&count)
 	resultPage.SetTotal(count)
@@ -137,7 +144,7 @@ func (obj *ChatLogMgr) InitChatLog(page IPage, userId int64) (resultPage IPage, 
 	if len(page.GetOrederItemsString()) > 0 {
 		query = query.Order(page.GetOrederItemsString())
 	}
-	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Order("chat_log.created_at desc").Find(&results).Error
+	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Order("chat_log.timestamp desc").Find(&results).Error
 
 	resultPage.SetRecords(results)
 	return
@@ -158,7 +165,7 @@ func (obj *ChatLogMgr) SelectPageChatLog(page IPage, storeId int64, timestamp in
 	if len(page.GetOrederItemsString()) > 0 {
 		query = query.Order(page.GetOrederItemsString())
 	}
-	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Order("chat_log.created_at desc").Find(&results).Error
+	err = query.Limit(int(page.GetSize())).Offset(int(page.Offset())).Order("chat_log.timestamp desc").Find(&results).Error
 
 	resultPage.SetRecords(results)
 	return

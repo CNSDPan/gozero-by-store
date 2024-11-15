@@ -16,6 +16,14 @@ BizRedis:
   Addr: "192.168.33.10:6379"
   Password:
   DB: 10
+#storeRpc的客户端连接服务地址端口-etcd服务发现
+StoreRPC:
+  Etcd:
+    Hosts:
+      - 192.168.33.10:20001
+      - 192.168.33.10:20003
+    Key: store.store.rpc
+  NonBlock: true
 # mysql配置，兼容读写分离、单机
 Sql:
   Separation: 2 #1-读写分离（需要具备主从库）、2-单个数据库实例

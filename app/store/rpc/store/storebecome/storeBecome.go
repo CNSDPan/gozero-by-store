@@ -18,6 +18,7 @@ type (
 	JoinStoreMemberReq = store.JoinStoreMemberReq
 	JoinStoreMemberRes = store.JoinStoreMemberRes
 	Response           = store.Response
+	SaveChatItem       = store.SaveChatItem
 	SaveChatReq        = store.SaveChatReq
 
 	StoreBecome interface {

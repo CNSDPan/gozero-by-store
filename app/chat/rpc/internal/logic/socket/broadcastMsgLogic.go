@@ -78,6 +78,9 @@ func (l *BroadcastMsgLogic) BroadcastMsg(in *chat.BroadcastReq) (res *chat.Respo
 	broadcastBody.Operate = int(in.Operate)
 	broadcastBody.Method = in.Method
 	broadcastBody.Event.Data = dataByNormal
+	// 记录写入缓冲管道
+	l.svcCtx.WriterHandle.SaveChan(&broadcastBody)
+
 	b, e = jsonx.Marshal(broadcastBody)
 	if e != nil {
 		code = xcode.SOCKET_BROADCAST_MSG_FAIL
