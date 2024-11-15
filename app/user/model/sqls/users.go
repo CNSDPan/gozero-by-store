@@ -181,7 +181,6 @@ func (obj *UsersMgr) MyStoreIds(userId int64) []int64 {
 		storeMember = make([]int64, 0)
 	)
 
-	obj.DB.WithContext(obj.ctx).Table("store_users").Where("`user_id` = ?", userId).Select("store_id").Find(&storeUsers)
 	obj.DB.WithContext(obj.ctx).Table("store_member").Where("`user_id` = ?", userId).Select("store_id").Find(&storeMember)
 	storeIds = append(storeIds, storeUsers...)
 	storeIds = append(storeIds, storeMember...)
