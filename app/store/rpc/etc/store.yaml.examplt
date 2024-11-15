@@ -36,3 +36,12 @@ Sql:
   # 单机数据库实例
   SqlSource:
     Addr: "root:root@tcp(XXX.XXX.XXX:XXX)/store?loc=Local&parseTime=True&charset=utf8mb4"
+
+ #ChatRPC的客户端连接服务地址端口-etcd服务发现
+ ChatRPC:
+   Etcd:
+     Hosts:
+       - XXX.XXX.XXX:XXX
+       - XXX.XXX.XXX:XXX
+     Key: store.chat.rpc
+   NonBlock: true

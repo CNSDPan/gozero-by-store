@@ -2,6 +2,8 @@ package storebecomelogic
 
 import (
 	"context"
+	"store/app/chat/rpc/chat/socket"
+	"store/pkg/consts"
 	"store/pkg/xcode"
 
 	"store/app/store/rpc/internal/svc"
@@ -52,6 +54,24 @@ func (l *JoinStoreMemberLogic) JoinStoreMember(in *store.JoinStoreMemberReq) (re
 		code = xcode.STORE_MEMBER_JOIN_FAIL
 		return res, err
 	}
+	userMap, chatErr := l.svcCtx.CacheConnApi.User.GetInfo(in.UserId)
+	if chatErr != nil {
+		l.Logger.Errorf("%s 获取用户信息失败 fail:%s", l.svcCtx.Config.ServiceName, chatErr.Error())
+		return res, nil
+	}
 
+	_, chatErr = l.svcCtx.ChatRpcCl.Socket.BroadcastBecomeMsg(context.Background(), &socket.BroadcastReq{
+		Operate:       int32(consts.OperatePublic),
+		Method:        consts.MethodBecome,
+		StoreId:       in.StoreId,
+		SendUserId:    in.UserId,
+		SendUserName:  userMap["name"],
+		ReceiveUserId: 0,
+		Extend:        "",
+		Body:          "",
+	})
+	if chatErr != nil {
+		l.Logger.Errorf("%s 广播成为会员消息 fail:%s", l.svcCtx.Config.ServiceName, chatErr.Error())
+	}
 	return res, nil
 }

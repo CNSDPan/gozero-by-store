@@ -26,3 +26,8 @@ func (s *SocketServer) BroadcastMsg(ctx context.Context, in *chat.BroadcastReq) 
 	l := socketlogic.NewBroadcastMsgLogic(ctx, s.svcCtx)
 	return l.BroadcastMsg(in)
 }
+
+func (s *SocketServer) BroadcastBecomeMsg(ctx context.Context, in *chat.BroadcastReq) (*chat.Response, error) {
+	l := socketlogic.NewBroadcastBecomeMsgLogic(ctx, s.svcCtx)
+	return l.BroadcastBecomeMsg(in)
+}

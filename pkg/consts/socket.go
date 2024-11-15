@@ -8,4 +8,6 @@ const (
 
 	// MethodNormal 普通消息业务
 	MethodNormal = "normal"
+	// MethodBecome 成为店铺会员
+	MethodBecome = "become"
 )

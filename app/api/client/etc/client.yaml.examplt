@@ -1,34 +1,34 @@
 Name: client
-Host: 0.0.0.0
-Port: 8888
+Host: XXX.XXX.XXX
+Port: XXX
 #api接口类型服务ID范围 211~219
 ServiceId: "211" #客户端服务ID
 ServiceName: "API.用户端.服务:"
 # jwt 配置
 Auth:
-  AccessSecret: "8a1895f304359629b647d446447de24d"
+  AccessSecret: "XXXXXXXXXXXX"
   AccessExpire: 604800
 #apiRpc的客户端连接服务地址端口-etcd服务发现
 ApiRPC:
   Etcd:
     Hosts:
-      - 192.168.33.10:20001
-      - 192.168.33.10:20003
+      - XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX:XXX
     Key: store.api.rpc
   NonBlock: true
 #storeRpc的客户端连接服务地址端口-etcd服务发现
 StoreRPC:
   Etcd:
     Hosts:
-      - 192.168.33.10:20001
-      - 192.168.33.10:20003
+      - XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX:XXX
     Key: store.store.rpc
   NonBlock: true
 #userRpc的客户端连接服务地址端口-etcd服务发现
 UserRPC:
   Etcd:
     Hosts:
-      - 192.168.33.10:20001
-      - 192.168.33.10:20003
+      - XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX:XXX
     Key: store.user.rpc
   NonBlock: true

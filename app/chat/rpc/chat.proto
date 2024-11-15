@@ -26,4 +26,5 @@ message BroadcastReq {
 
 service Socket {
   rpc BroadcastMsg(BroadcastReq) returns(Response);
+  rpc BroadcastBecomeMsg(BroadcastReq) returns(Response);
 }

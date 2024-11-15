@@ -18,6 +18,7 @@ type (
 
 	Socket interface {
 		BroadcastMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error)
+		BroadcastBecomeMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error)
 	}
 
 	defaultSocket struct {
@@ -34,4 +35,9 @@ func NewSocket(cli zrpc.Client) Socket {
 func (m *defaultSocket) BroadcastMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error) {
 	client := chat.NewSocketClient(m.cli.Conn())
 	return client.BroadcastMsg(ctx, in, opts...)
+}
+
+func (m *defaultSocket) BroadcastBecomeMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error) {
+	client := chat.NewSocketClient(m.cli.Conn())
+	return client.BroadcastBecomeMsg(ctx, in, opts...)
 }

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/bwmarrin/snowflake"
 	"github.com/redis/go-redis/v9"
+	"github.com/zeromicro/go-zero/zrpc"
+	"store/app/chat/rpc/chat/socket"
 	"store/app/store/model/sqls"
 	"store/app/store/rpc/internal/config"
 	"store/pkg/cache"
@@ -22,6 +24,12 @@ type ServiceContext struct {
 	StoreUserModel   *sqls.StoreUsersMgr
 	StoreMemberModel *sqls.StoresMemberMgr
 	ChatLogModel     *sqls.ChatLogMgr
+	// 以下RPC服务
+	ChatRpcCl ChatRpc
+}
+
+type ChatRpc struct {
+	Socket socket.Socket
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -38,6 +46,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	cacheConn := inital.NewCacheRedisConn(c.CacheRedis, c.Name)
 	bizConn := inital.NewBizRedisConn(c.BizRedis, c.Name)
 
+	// chaRPC节点
+	chatRpcConf := zrpc.MustNewClient(c.ChatRpc)
+	chatRpc := ChatRpc{
+		Socket: socket.NewSocket(chatRpcConf),
+	}
+
 	return &ServiceContext{
 		Config:           c,
 		Node:             node,
@@ -48,5 +62,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		StoreUserModel:   sqls.NewStoreUsersMgr(inital.NewSqlDB(c.Sql, "storeUserModel")),
 		StoreMemberModel: sqls.NewStoresMemberMgr(inital.NewSqlDB(c.Sql, "storeMemberModel")),
 		ChatLogModel:     sqls.NewChatLogMgr(inital.NewSqlDB(c.Sql, "chatLogModel")),
+		ChatRpcCl:        chatRpc,
 	}
 }

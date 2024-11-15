@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Socket_BroadcastMsg_FullMethodName = "/chat.Socket/BroadcastMsg"
+	Socket_BroadcastMsg_FullMethodName       = "/chat.Socket/BroadcastMsg"
+	Socket_BroadcastBecomeMsg_FullMethodName = "/chat.Socket/BroadcastBecomeMsg"
 )
 
 // SocketClient is the client API for Socket service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SocketClient interface {
 	BroadcastMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error)
+	BroadcastBecomeMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error)
 }
 
 type socketClient struct {
@@ -46,11 +48,21 @@ func (c *socketClient) BroadcastMsg(ctx context.Context, in *BroadcastReq, opts 
 	return out, nil
 }
 
+func (c *socketClient) BroadcastBecomeMsg(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, Socket_BroadcastBecomeMsg_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SocketServer is the server API for Socket service.
 // All implementations must embed UnimplementedSocketServer
 // for forward compatibility
 type SocketServer interface {
 	BroadcastMsg(context.Context, *BroadcastReq) (*Response, error)
+	BroadcastBecomeMsg(context.Context, *BroadcastReq) (*Response, error)
 	mustEmbedUnimplementedSocketServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedSocketServer struct {
 
 func (UnimplementedSocketServer) BroadcastMsg(context.Context, *BroadcastReq) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BroadcastMsg not implemented")
+}
+func (UnimplementedSocketServer) BroadcastBecomeMsg(context.Context, *BroadcastReq) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BroadcastBecomeMsg not implemented")
 }
 func (UnimplementedSocketServer) mustEmbedUnimplementedSocketServer() {}
 
@@ -92,6 +107,24 @@ func _Socket_BroadcastMsg_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Socket_BroadcastBecomeMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BroadcastReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocketServer).BroadcastBecomeMsg(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Socket_BroadcastBecomeMsg_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocketServer).BroadcastBecomeMsg(ctx, req.(*BroadcastReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Socket_ServiceDesc is the grpc.ServiceDesc for Socket service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var Socket_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BroadcastMsg",
 			Handler:    _Socket_BroadcastMsg_Handler,
+		},
+		{
+			MethodName: "BroadcastBecomeMsg",
+			Handler:    _Socket_BroadcastBecomeMsg_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
