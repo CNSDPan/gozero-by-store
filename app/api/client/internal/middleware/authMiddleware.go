@@ -5,8 +5,8 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 	"store/app/api/client/internal/types"
-	"store/app/api/rpc/api/apitoken"
-	"store/app/api/rpc/api/apiuser"
+	"store/app/rpc/api/client/apitoken"
+	"store/app/rpc/api/client/apiuser"
 	"store/pkg/xcode"
 )
 

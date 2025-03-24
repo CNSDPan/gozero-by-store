@@ -2,14 +2,12 @@ package store
 
 import (
 	"context"
-	"store/app/api/rpc/api/apistore"
-	"store/app/api/rpc/api/apiuser"
-	"store/pkg/xcode"
-
+	"github.com/zeromicro/go-zero/core/logx"
 	"store/app/api/client/internal/svc"
 	"store/app/api/client/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
+	"store/app/rpc/api/client/apistore"
+	"store/app/rpc/api/client/apiuser"
+	"store/pkg/xcode"
 )
 
 type StoreInfoLogic struct {

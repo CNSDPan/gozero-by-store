@@ -10,3 +10,5 @@
 
 /app/user/rpc/etc/*.yaml
 #忽略各模块的配置文件END
+
+/app/user/rpc/etc/*.yaml

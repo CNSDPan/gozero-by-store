@@ -1,9 +1,16 @@
 Name: client
-Host: XXX.XXX.XXX
-Port: XXX
+Host: 0.0.0.0
+Port: 8080
 #api接口类型服务ID范围 211~219
 ServiceId: "211" #客户端服务ID
 ServiceName: "API.用户端.服务:"
+Log:
+  ServiceName: client
+  Encoding: json
+  Mode: file
+  Path: /var/log/client
+  KeepDays: 7
+  Level: info
 # jwt 配置
 Auth:
   AccessSecret: "XXXXXXXXXXXX"
@@ -13,22 +20,16 @@ ApiRPC:
   Etcd:
     Hosts:
       - XXX.XXX.XXX:XXX
-      - XXX.XXX.XXX:XXX
-    Key: store.api.rpc
-  NonBlock: true
+    Key: store.rpc.api
 #storeRpc的客户端连接服务地址端口-etcd服务发现
 StoreRPC:
   Etcd:
     Hosts:
       - XXX.XXX.XXX:XXX
-      - XXX.XXX.XXX:XXX
-    Key: store.store.rpc
-  NonBlock: true
+    Key: store.rpc.store
 #userRpc的客户端连接服务地址端口-etcd服务发现
 UserRPC:
   Etcd:
     Hosts:
       - XXX.XXX.XXX:XXX
-      - XXX.XXX.XXX:XXX
-    Key: store.user.rpc
-  NonBlock: true
+    Key: store.rpc.user

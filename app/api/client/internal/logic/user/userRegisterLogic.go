@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"store/app/user/rpc/pb/user"
+	"store/app/rpc/user/pb/user"
 	"store/pkg/xcode"
 
 	"store/app/api/client/internal/svc"
@@ -64,6 +64,5 @@ func (l *UserRegisterLogic) UserRegister(req *types.RegisterReq) (res *types.Res
 		JwtSecret: l.svcCtx.Config.Auth.AccessSecret,
 		Seconds:   l.svcCtx.Config.Auth.AccessExpire,
 	})
-
 	return
 }

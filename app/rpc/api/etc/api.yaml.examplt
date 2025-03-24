@@ -1,0 +1,46 @@
+Name: store.rpc.api
+ListenOn: 0.0.0.0:8080
+Timeout: 200000
+Log:
+  ServiceName: rpc-api
+  Encoding: json
+  Mode: file
+  Path: /var/log/api
+  KeepDays: 7
+  Level: info
+Etcd:
+  Hosts:
+    - XXX.XXX.XXX.XXX:XXX
+  Key: store.rpc.api
+  Timeout: 200000
+# apiRPC类型服务ID范围 152
+ServiceId: "152" #客户端服务ID
+ServiceName: "API.RPC.服务:"
+# 业务Redis连接
+BizRedis:
+  Addr: "192.168.33.10:6379"
+  Password:
+  DB: 10
+# 缓存Redis连接
+CacheRedis:
+  Addr: "192.168.33.10:6379"
+  Password:
+  DB: 11
+# 缓存Redis 有效时间
+CacheSeconds: 604800
+# mysql配置，只有用读权限
+Sql:
+  Separation: 2 #1-读写分离（需要具备主从库）、2-单个数据库实例
+  # 读写分离（需要具备主从库）
+  MasterSlave:
+    MasterAddr: "root:root@tcp(XXX.XXX.XXX:XXX)/XXX?loc=Local&parseTime=True&charset=utf8mb4"
+    SlaveAddr:
+      Tag:
+        - "replicate-1"
+        - "replicate-2"
+      Connect:
+        - "root:root@tcp(XXX.XXX.XXX:XXX)/XXX?loc=Local&parseTime=True&charset=utf8mb4"
+        - "root:root@tcp(XXX.XXX.XXX:XXX)/XXX?loc=Local&parseTime=True&charset=utf8mb4"
+  # 单机数据库实例
+  SqlSource:
+    Addr: "root:root@tcp(XXX.XXX.XXX:XXX)/XXX?loc=Local&parseTime=True&charset=utf8mb4"

@@ -5,11 +5,11 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"store/app/api/client/internal/config"
 	"store/app/api/client/internal/middleware"
-	"store/app/api/rpc/api/apistore"
-	"store/app/api/rpc/api/apitoken"
-	"store/app/api/rpc/api/apiuser"
-	"store/app/store/rpc/store/storebecome"
-	"store/app/user/rpc/user/userRegister"
+	"store/app/rpc/api/client/apistore"
+	"store/app/rpc/api/client/apitoken"
+	"store/app/rpc/api/client/apiuser"
+	"store/app/rpc/store/client/storebecome"
+	"store/app/rpc/user/client/userregister"
 )
 
 type ServiceContext struct {

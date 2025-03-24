@@ -1,0 +1,42 @@
+Name: store.api.ws
+Host: 0.0.0.0
+Port: 6999
+#api.socket接口类型服务ID范围 200~209
+ServiceId: "211" #客户端服务ID
+ServiceName: "API.IM.服务:"
+ServiceIp: ""
+# jwt 配置
+Auth:
+  AccessSecret: "8a1895f304359629b647d446447de24d"
+  AccessExpire: 604800
+# 业务Redis连接
+BizRedis:
+  Addr: "XXX.XXX.XXX.XXX:XXX"
+  Password:
+  DB: 10
+#socket的配置
+SocketOptions:
+  BucketNum: 4 #cpu个数
+  MaxMessageSize: 8192 #消息最大字节
+  PingPeriod: 30 #每次ping的间隔时长
+  PongPeriod: 54 #每次pong的间隔时长，可以是PingPeriod的一倍|两倍
+  WriteWait: 5 #client的写入等待超时时长
+  ReadWait: 60 #client的读取等待超时时长
+#socketRpc的客户端连接服务地址端口-etcd服务发现
+SocketRPC:
+  Etcd:
+    Hosts:
+      - XXX.XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX.XXX:XXX
+    Key: store.rpc.im
+  NonBlock: true
+#apiRpc的客户端连接服务地址端口-etcd服务发现
+ApiRPC:
+  Etcd:
+    Hosts:
+      - XXX.XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX.XXX:XXX
+      - XXX.XXX.XXX.XXX:XXX
+    Key: store.rpc.api
+  NonBlock: true

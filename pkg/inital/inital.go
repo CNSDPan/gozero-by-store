@@ -6,7 +6,10 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
+	"log"
+	"os"
 	"store/pkg/types"
 	"sync"
 	"time"
@@ -31,7 +34,14 @@ func NewSqlDB(sqlConf types.SqlConf, model string) *gorm.DB {
 	if sqlConf.Separation == 1 {
 		dbConn, err := gorm.Open(mysql.New(mysql.Config{
 			DSN: sqlConf.MasterSlave.MasterAddr,
-		}), &gorm.Config{})
+		}), &gorm.Config{
+			Logger: logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
+				SlowThreshold:             200 * time.Millisecond,
+				LogLevel:                  logger.Info,
+				IgnoreRecordNotFoundError: true,
+				Colorful:                  false,
+			}),
+		})
 		if err != nil {
 			panic(fmt.Sprintf("gorm 初始化master失败:%s", err.Error()))
 		}
@@ -56,7 +66,15 @@ func NewSqlDB(sqlConf types.SqlConf, model string) *gorm.DB {
 	} else {
 		dbConn, err := gorm.Open(mysql.New(mysql.Config{
 			DSN: sqlConf.SqlSource.Addr,
-		}), &gorm.Config{})
+		}), &gorm.Config{
+			Logger: logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
+				SlowThreshold:             200 * time.Millisecond,
+				LogLevel:                  logger.Info,
+				IgnoreRecordNotFoundError: true,
+				ParameterizedQueries:      true,
+				Colorful:                  false,
+			}),
+		})
 		if err != nil {
 			panic(fmt.Sprintf("gorm 初始化数据库实例失败:%s", err.Error()))
 		}

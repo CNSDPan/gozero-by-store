@@ -1,0 +1,46 @@
+Name: store.rpc.user
+ListenOn: 0.0.0.0:8080
+Timeout: 200000
+Log:
+  ServiceName: rpc-user
+  Encoding: json
+  Mode: file
+  Path: /var/log/store/rpc/user
+  KeepDays: 7
+  Level: info
+Etcd:
+  Hosts:
+    - host.docker.internal:23791
+    - host.docker.internal:23792
+    - host.docker.internal:23793
+  Key: store.rpc.user
+  Timeout: 200000
+# userRPC类型服务ID范围 150
+ServiceId: "150" #客户端服务ID
+ServiceName: "USER.RPC.服务:"
+# 业务Redis连接
+BizRedis:
+  Addr: "host.docker.internal:6379"
+  Password: "root"
+  DB: 10
+# 缓存Redis连接
+CacheRedis:
+  Addr: "host.docker.internal:6379"
+  Password: "root"
+  DB: 11
+# mysql配置，兼容读写分离、单机
+Sql:
+  Separation: 2 #1-读写分离（需要具备主从库）、2-单个数据库实例
+  # 读写分离（需要具备主从库）
+  MasterSlave:
+    MasterAddr: "root:root@tcp(XXX.XXX.XXX:XXX)/store?loc=Local&parseTime=True&charset=utf8mb4"
+    SlaveAddr:
+      Tag:
+        - "replicate-1"
+        - "replicate-2"
+      Connect:
+        - "root:root@tcp(XXX.XXX.XXX:XXX)/store?loc=Local&parseTime=True&charset=utf8mb4"
+        - "root:root@tcp(XXX.XXX.XXX:XXX)/store?loc=Local&parseTime=True&charset=utf8mb4"
+  # 单机数据库实例
+  SqlSource:
+    Addr: "root:root@tcp(host.docker.internal)/store?loc=Local&parseTime=True&charset=utf8mb4"
