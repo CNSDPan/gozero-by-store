@@ -11,9 +11,15 @@ import (
 )
 
 func TestUser1(t *testing.T) {
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzA2ODk1OTMsImlhdCI6MTczMDA4NDc5MywidXNlcklkIjoxODM3MDUzNzIwMjI4NjE4MjQwfQ.dLw_jwWyDgJF8sTzv2med_vVirWyFVIbZTJefjyBYRo"
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDM0OTIxNDgsImlhdCI6MTc0Mjg4NzM0OCwidXNlcklkIjoxODk4OTIwMTMxNjY1OTQ0NTc2fQ.gCCdRQSqDY8O3bxjx6JlxJZy-rJ6NN4z_f3-I2LZMwc"
 	s := NewServer(token)
-	s.RunSocket(1837056807609659392, 1837053720228618240)
+	s.RunSocket(1837056807609659392, 1898920131665944576)
+}
+
+func TestUser2(t *testing.T) {
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDM0OTI5MTksImlhdCI6MTc0Mjg4ODExOSwidXNlcklkIjoxODk4OTE5MjA2Nzc5OTY5NTM2fQ.pntwHSj83lz5x4OxCirpm5pmNELygFaoiEb5lHR1EhE"
+	s := NewServer(token)
+	s.RunSocket(1837056807609659392, 1898919206779969536)
 }
 
 func TestWrite(t *testing.T) {

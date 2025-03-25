@@ -7,4 +7,4 @@
 #### 生成Dockerfile
     goctl docker --go=user.go --tz=Asia/Shanghai --version=1.21.9
 #### 编译镜像
-    docker build -f app/rpc/user/Dockerfile -t store-rpc-user:0.0.1 .
+    docker build -f app/rpc/user/Dockerfile -t store-user:0.0.1 .

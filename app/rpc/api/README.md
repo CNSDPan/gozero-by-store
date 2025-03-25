@@ -14,4 +14,4 @@
 #### 生成Dockerfile
     goctl docker --go=api.go --tz=Asia/Shanghai --version=1.21.9
 #### 编译镜像
-    docker build -f app/rpc/api/Dockerfile -t store-rpc-api:0.0.1 .
+    docker build -f app/rpc/api/Dockerfile -t store-api:0.0.1 .

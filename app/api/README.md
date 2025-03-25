@@ -8,7 +8,7 @@
    #### 生成Dockerfile
         goctl docker --go=client.go --tz=Asia/Shanghai --version=1.21.9
    #### 编译镜像
-        docker build -f app/api/client/Dockerfile -t store-api-client:0.0.1 .
+        docker build -f app/api/client/Dockerfile -t store-client:0.0.1 .
 
 ## ws目录
    ### ws入口
@@ -19,7 +19,7 @@
    #### 生成Dockerfile
         goctl docker --go=ws.go --tz=Asia/Shanghai --version=1.21.9
    #### 编译镜像
-        docker build -f app/api/im/Dockerfile -t store-api-ws:0.0.1 .
+        docker build -f app/api/im/Dockerfile -t store-ws:0.0.1 .
 
 ## store目录
    ### 店主接口

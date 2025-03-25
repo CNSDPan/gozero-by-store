@@ -16,4 +16,4 @@
 /app/rpc/im/etc/*.yaml
 /app/rpc/api/etc/*.yaml
 
-
+/docker-build.sh

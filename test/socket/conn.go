@@ -8,7 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"store/app/chat/socket/server"
+	"store/app/api/im/server"
 	"store/pkg/consts"
 	"store/pkg/types"
 	"sync"

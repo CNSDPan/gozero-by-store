@@ -7,4 +7,4 @@
 #### 生成Dockerfile
     goctl docker --go=im.go --tz=Asia/Shanghai --version=1.21.9
 #### 编译镜像
-    docker build -f app/rpc/im/Dockerfile -t store-rpc-im:0.0.1 .
+    docker build -f app/rpc/im/Dockerfile -t store-im:0.0.1 .

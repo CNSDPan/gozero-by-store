@@ -1,0 +1,103 @@
+version: "3.5"
+
+services:
+  store-user:
+    container_name: store-user
+    image: store-user:${RpcUserVersion}
+    restart: always
+    ports:
+      - "17080:8080"
+    volumes:
+      - ${RpcUserConfigFile}:/app/etc/user.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.50
+  store-store:
+    container_name: store-store
+    image: store-store:${RpcStoreVersion}
+    restart: always
+    ports:
+      - "17081:8080"
+    volumes:
+      - ${RpcStoreConfigFile}:/app/etc/store.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.51
+  store-api:
+    container_name: store-api
+    image: store-api:${RpcApiVersion}
+    restart: always
+    ports:
+      - "17082:8080"
+    volumes:
+      - ${RpcApiConfigFile}:/app/etc/api.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.52
+  store-im:
+    container_name: store-im
+    image: store-im:${RpcImVersion}
+    restart: always
+    ports:
+      - "17083:8080"
+    volumes:
+      - ${RpcImConfigFile}:/app/etc/im.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.53
+  store-client:
+    container_name: store-client
+    image: store-client:${ApiClientVersion}
+    restart: always
+    depends_on:
+      - store-user
+      - store-store
+      - store-api
+      - store-im
+    ports:
+      - "17180:8080"
+    volumes:
+      - ${ApiClientConfigFile}:/app/etc/client.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.10
+  store-ws:
+    container_name: store-ws
+    image: store-ws:${WsClientVersion}
+    restart: always
+    depends_on:
+      - store-user
+      - store-store
+      - store-api
+      - store-im
+    ports:
+      - "6999:6999"
+    volumes:
+      - ${WsClientConfigFile}:/app/etc/ws.yaml
+      - ${LogPath}:/var/log/
+    environment:
+      TZ: ${TZ}
+    networks:
+      store:
+        ipv4_address: 172.22.4.11
+networks:
+  store:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.4.0/24
