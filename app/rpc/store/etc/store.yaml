@@ -14,7 +14,6 @@ Etcd:
     - host.docker.internal:23792
     - host.docker.internal:23793
   Key: store.rpc.store
-  Timeout: 200000
 # storeRPC类型服务ID范围 151
 ServiceId: "151" #客户端服务ID
 ServiceName: "STORE.RPC.STORE 服务:"
@@ -46,13 +45,11 @@ Sql:
   # 单机数据库实例
   SqlSource:
     Addr: "root:root@tcp(host.docker.internal)/store?loc=Local&parseTime=True&charset=utf8mb4"
-
-  #ChatRPC的客户端连接服务地址端口-etcd服务发现
-#  ChatRPC:
-#    Etcd:
-#      Hosts:
-#        - host.docker.internal:23791
-#        - host.docker.internal:23795
-#        - host.docker.internal:23799
-#      Key: store.rpc.chat
-#    NonBlock: true
+#ImRPC的客户端连接服务地址端口-etcd服务发现
+ImRPC:
+  Etcd:
+    Hosts:
+      - host.docker.internal:23791
+      - host.docker.internal:23792
+      - host.docker.internal:23793
+    Key: store.rpc.im

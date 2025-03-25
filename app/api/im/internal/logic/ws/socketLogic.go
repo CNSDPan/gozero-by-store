@@ -2,14 +2,14 @@ package ws
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
+	"net/http"
+	"store/app/api/im/internal/svc"
+	"store/app/api/im/internal/types"
+	"store/app/api/im/server"
 	"store/app/rpc/api/client/apistore"
 	"store/app/rpc/api/client/apiuser"
 	"store/pkg/xcode"
-
-	"store/app/api/im/internal/svc"
-	"store/app/api/im/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type SocketLogic struct {
@@ -27,7 +27,7 @@ func NewSocketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SocketLogi
 	}
 }
 
-func (l *SocketLogic) Socket(req *types.ConnectReq) (res *types.Response, resp *types.UserInfoRes, err error) {
+func (l *SocketLogic) Socket(req *types.ConnectReq, w http.ResponseWriter, r *http.Request) (res *types.Response, resp *types.UserInfoRes, err error) {
 	code := ""
 	res = &types.Response{}
 	resp = &types.UserInfoRes{}

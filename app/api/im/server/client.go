@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-zero/core/jsonx"
-	"store/app/chat/rpc/chat/socket"
+	"store/app/rpc/im/client/socket"
 	"store/pkg/types"
 	"store/pkg/xcode"
 	"time"

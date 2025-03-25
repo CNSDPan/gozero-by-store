@@ -7,7 +7,7 @@ import (
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
-	"store/app/chat/rpc/chat/socket"
+	"store/app/rpc/im/client/socket"
 	"store/pkg/consts"
 	"store/pkg/types"
 	"store/pkg/util"

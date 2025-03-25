@@ -3,8 +3,10 @@ package storebecomelogic
 import (
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
+	"store/app/rpc/im/client/socket"
 	"store/app/rpc/store/internal/svc"
 	"store/app/rpc/store/pb/store"
+	"store/pkg/consts"
 	"store/pkg/xcode"
 )
 
@@ -50,24 +52,24 @@ func (l *JoinStoreMemberLogic) JoinStoreMember(in *store.JoinStoreMemberReq) (re
 		code = xcode.STORE_MEMBER_JOIN_FAIL
 		return res, err
 	}
-	//userMap, chatErr := l.svcCtx.CacheConnApi.User.GetInfo(in.UserId)
-	//if chatErr != nil {
-	//	l.Logger.Errorf("%s 获取用户信息失败 fail:%s", l.svcCtx.Config.ServiceName, chatErr.Error())
-	//	return res, nil
-	//}
+	userMap, imErr := l.svcCtx.CacheConnApi.User.GetInfo(in.UserId)
+	if imErr != nil {
+		l.Logger.Errorf("%s 获取用户信息失败 fail:%s", l.svcCtx.Config.ServiceName, imErr.Error())
+		return res, nil
+	}
 
-	//_, chatErr = l.svcCtx.ChatRpcCl.Socket.BroadcastBecomeMsg(context.Background(), &socket.BroadcastReq{
-	//	Operate:       int32(consts.OperatePublic),
-	//	Method:        consts.MethodBecome,
-	//	StoreId:       in.StoreId,
-	//	SendUserId:    in.UserId,
-	//	SendUserName:  userMap["name"],
-	//	ReceiveUserId: 0,
-	//	Extend:        "",
-	//	Body:          "",
-	//})
-	//if chatErr != nil {
-	//	l.Logger.Errorf("%s 广播成为会员消息 fail:%s", l.svcCtx.Config.ServiceName, chatErr.Error())
-	//}
+	_, imErr = l.svcCtx.ImRpcCl.Socket.BroadcastBecomeMsg(context.Background(), &socket.BroadcastReq{
+		Operate:       int32(consts.OperatePublic),
+		Method:        consts.MethodBecome,
+		StoreId:       in.StoreId,
+		SendUserId:    in.UserId,
+		SendUserName:  userMap["name"],
+		ReceiveUserId: 0,
+		Extend:        "",
+		Body:          "",
+	})
+	if imErr != nil {
+		l.Logger.Errorf("%s 广播成为会员消息 fail:%s", l.svcCtx.Config.ServiceName, imErr.Error())
+	}
 	return res, nil
 }

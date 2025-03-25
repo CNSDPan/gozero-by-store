@@ -16,6 +16,6 @@ type Config struct {
 	}
 	BizRedis      types.BizRedisConf
 	SocketOptions types.SocketOptionsConf
-	SocketRPC     zrpc.RpcClientConf
+	ImRPC         zrpc.RpcClientConf
 	ApiRPC        zrpc.RpcClientConf
 }

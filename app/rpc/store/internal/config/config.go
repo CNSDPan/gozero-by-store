@@ -12,5 +12,5 @@ type Config struct {
 	CacheRedis   types.CacheRedisConf
 	CacheSeconds int64
 	Sql          types.SqlConf
-	ChatRpc      zrpc.RpcClientConf
+	ImRpc        zrpc.RpcClientConf
 }
