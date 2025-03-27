@@ -11,6 +11,7 @@
 /app/user/rpc/etc/*.yaml
 #忽略各模块的配置文件END
 
+/app/api/im/etc/*.yaml
 /app/rpc/user/etc/*.yaml
 /app/rpc/store/etc/*.yaml
 /app/rpc/im/etc/*.yaml

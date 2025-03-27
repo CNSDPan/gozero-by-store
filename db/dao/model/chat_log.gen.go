@@ -37,9 +37,13 @@ type WithChatLog struct {
 }
 
 // TableName ChatLog's table name
-func (*ChatLog) TableName() string {
+func (cl *ChatLog) TableName() string {
 	return TableNameChatLog
 }
 func ChatLogTableName() string {
+	return TableNameChatLog
+}
+
+func (wcl *WithChatLog) TableName() string {
 	return TableNameChatLog
 }
