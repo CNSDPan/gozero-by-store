@@ -16,8 +16,11 @@
 ## 镜像仓库打包&上传
 ### docker-build-dev.sh 看个人需求
 
+# 演示地址
+http://8.135.237.23:8081/login
 
 # 演示
+
 ![people.png](https://raw.githubusercontent.com/CNSDPan/store/master/static/images/people.png)
 
 ![store.png](https://raw.githubusercontent.com/CNSDPan/store/master/static/images/store.png)
