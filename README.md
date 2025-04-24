@@ -1,20 +1,29 @@
-# store
-分布式店铺系统（api、chat、user、store）服务
-### 描述
-项目持续迭代中，socket服务基础功能已实现已实现【web端已介入，但未处理消息】
-
+# GoZero 构建企业级微服务 + WebSocket 实时通信 + Docker 全流程部署
+## 🔥项目亮点
+* 全栈教学：代码 + Docker + 文档，覆盖开发到部署全流程
+* docker容器部署：docker-compose
+* 实战场景：集成 WebSocket 实现实时消息推送（含身份鉴权）
+* 最佳实践：模块化拆分、配置管理、性能优化技巧
+* 基于 context + WaitGroup 的协程优雅退出机制
 ## 目录架构
-### app     系统服务代码
-* api
-* chat
-* user
-* store
-### builds  构建服务目录
-### db  数据表
-### pkg 扩展包
-
-## 镜像仓库打包&上传
-### docker-build-dev.sh 看个人需求
+```
+.
+├── app/
+│   ├── api/              # API
+│       ├── client/       # 会员服务
+│       ├── im/           # 即使通信服务（websocket）
+│       └── store/        # 
+│   └── rpc/              # GRPC
+│       ├── api/          #  
+│       ├── im/           # 消息广播服务
+│       ├── store/        # 
+│       └── user/         # 
+├── db/                   # gorm & gentool
+├── doc/                  # 表结构
+├── docker/               # docker-compose.yaml,容器搭建
+├── pkg/                  # 工具
+└── docker-build-dev.sh/  # 各服务的镜像打包
+```
 
 # 演示地址
 http://8.135.237.23:8081/login
