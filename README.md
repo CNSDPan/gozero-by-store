@@ -4,7 +4,7 @@
 * docker容器部署：docker-compose
 * 实战场景：集成 WebSocket 实现实时消息推送（含身份鉴权）
 * 最佳实践：模块化拆分、配置管理、性能优化技巧
-* 基于 context + WaitGroup 的协程优雅退出机制
+* 断开socket 基于 context + WaitGroup 的协程优雅退出机制
 ## 目录架构
 ```
 .
